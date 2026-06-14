@@ -85,7 +85,7 @@ def build_public(out_dir: str, seed: int, generated: str, bench_dir: str = BENCH
   (out / "README.md").write_text(assets.README, encoding="utf-8")
   (out / "SUBMISSION.md").write_text(assets.SUBMISSION, encoding="utf-8")
 
-  # worked-example overlays (optional; curated by hand — see find_scored.py)
+  # worked-example overlays (optional; curated by hand into benchmarks/internal/worked/)
   (out / "worked_examples").mkdir(parents=True, exist_ok=True)
   wd = Path(worked_dir)
   if wd.exists():

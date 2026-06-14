@@ -40,13 +40,12 @@ vendor name or private path. That `dist/public/` tree is what gets pushed to the
 
 ```bash
 python -m scripts.release.validate_release          # release invariants (27/108, showcase public, ...)
-python -m scripts.release.find_scored <CASE_ID>     # locate scored runs to curate a worked example
 python -m pytest tests/release/ -q                  # test suite
 ```
 
 ## Layout
 
-- `scripts/release/` — the pipeline (lanes, split_selector, manifest, assets, build_public, submit, validate_release, find_scored)
+- `scripts/release/` — the pipeline (lanes, split_selector, manifest, assets, build_public, build_explainer, submit, validate_release)
 - `release_clean/` — curated **blinded** methodology artifacts shipped into the public tree (vendor names redacted, no private paths)
 - `tests/release/` — test suite (counts, no-leak, determinism, blinding, gate-catches-violations)
 - `docs/EVOLUTION.md` — history of the benchmark + literature it builds on

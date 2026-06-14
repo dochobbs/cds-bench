@@ -41,6 +41,6 @@ relocated into `release_clean/scoring/`).
 ## Notes / TODO for full standalone operation
 
 - Create a dedicated venv: `python -m venv .venv && .venv/bin/pip install pytest` (only dev dep; runtime is stdlib-only).
-- `scripts/release/find_scored.py` reads `results/internal/` (a cds-eval dir not copied) — it's a curation helper that simply returns nothing here; wire it to your scored-run location when curating worked examples.
+- Worked-example overlays are curated by hand into `benchmarks/internal/worked/<ID>.json` (gitignored) when scored transcripts are available.
 - The cds-eval branch `feature/cds-bench-public-release` is left intact as the source of record; decide separately whether to retire it.
 - Publish target: push `dist/public/` to the public `cds-bench` GitHub repo (the held-out cases stay here, private).
