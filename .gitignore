@@ -15,3 +15,8 @@ benchmarks/internal/
 
 # macOS
 .DS_Store
+
+# internal-only (maintainer local; never published)
+MIGRATION_MANIFEST.md
+docs/superpowers/
+release_clean/vendor_denylist.txt

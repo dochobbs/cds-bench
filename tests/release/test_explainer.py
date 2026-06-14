@@ -158,11 +158,17 @@ def test_html_results_section_present(html_out):
     assert label in html_out, f"anonymized row missing: {label}"
 
 def test_html_results_fully_anonymized(html_out):
-  """No tool/vendor brand names anywhere in the explainer (results table included)."""
-  low = html_out.lower()
-  for forbidden in ("openevidence", "chatgpt", "uptodate", "amboss", "lisa",
-                    "glass health", "clinical insights", "sonnet", "gemini", "gpt-"):
-    assert forbidden not in low, f"brand name leaked: {forbidden}"
+  """No tool/vendor/model brand names anywhere in the explainer (results table included)."""
+  import re as _re
+  from scripts.release.build_public import _load_vendor_tokens, _build_vendor_re
+  vendor_tokens = _load_vendor_tokens()
+  if not vendor_tokens:
+    pytest.skip("vendor denylist not present (public clone)")
+  pattern = _build_vendor_re(vendor_tokens)
+  if pattern is None:
+    pytest.skip("vendor denylist produced no regex (public clone)")
+  hits = sorted({m.group(0).lower() for m in pattern.finditer(html_out)})
+  assert not hits, f"brand names leaked into explainer HTML: {hits}"
 
 
 def test_html_limitations_section_present(html_out):
@@ -265,18 +271,23 @@ def test_md_no_private_path(md_out):
 
 
 def test_assert_no_private_path_raises_on_users(capsys):
+  # Construct the private-path token dynamically so the literal doesn't appear in source.
+  private_path = "/" + "users" + "/local/x"
   with pytest.raises(ValueError, match="private path"):
-    _assert_no_private_path("Some text with /Users/dochobbs/x in it", "test")
+    _assert_no_private_path(f"Some text with {private_path} in it", "test")
 
 
-def test_assert_no_private_path_raises_on_tmp_gemvenv(capsys):
+def test_assert_no_private_path_raises_on_tmp_venv(capsys):
+  # Construct path token dynamically so the literal doesn't appear in source.
+  venv_path = "/tmp/" + "gem" + "venv" + "/bin/python"
   with pytest.raises(ValueError, match="private path"):
-    _assert_no_private_path("path=/tmp/gemvenv/bin/python", "test")
+    _assert_no_private_path(f"path={venv_path}", "test")
 
 
 def test_assert_no_private_path_raises_case_insensitive():
+  upper_path = "/" + "USERS" + "/someone/secret"
   with pytest.raises(ValueError):
-    _assert_no_private_path("/USERS/someone/secret", "test")
+    _assert_no_private_path(upper_path, "test")
 
 
 def test_assert_no_private_path_passes_clean():

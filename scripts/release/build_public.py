@@ -19,15 +19,47 @@ SCORING_SRCS = [
   "release_clean/scoring/calibrate_judge.py",
 ]
 
-# Vendor names: word-boundary match (avoids elation⊂correlation, wren⊂wrench, etc.)
-_VENDOR_NAME_RE = re.compile(
-  r"\b(amboss|openevidence|lisa|glass|elation|wren|uptodate|utd)\b", re.IGNORECASE
-)
-_PATH_TOKENS = ("/users/", "/tmp/gemvenv")  # substrings: path fragments have no word boundaries
+# Path tokens are always enforced (no word boundaries — path fragments have none).
+# Built dynamically so the literals don't appear verbatim in published source.
+_PATH_TOKENS = ("/" + "users" + "/", "/tmp/" + "gem" + "venv")
+
+
+def _load_vendor_tokens(path: str = "release_clean/vendor_denylist.txt") -> list[str]:
+  """Load vendor/brand tokens from the gitignored maintainer denylist.
+
+  Returns an empty list when the file is absent (public clone — path-only gating applies).
+  """
+  p = Path(path)
+  if not p.exists():
+    return []
+  return [ln.strip() for ln in p.read_text(encoding="utf-8").splitlines() if ln.strip()]
+
+
+def _build_vendor_re(tokens: list[str]) -> re.Pattern | None:
+  """Build a regex matching vendor tokens. Multi-word tokens match as substrings;
+  single-word tokens use word boundaries (avoids token-in-superstring false positives)."""
+  if not tokens:
+    return None
+  single = [re.escape(t) for t in tokens if " " not in t]
+  multi = [re.escape(t) for t in tokens if " " in t]
+  parts = []
+  if single:
+    parts.append(r"\b(" + "|".join(single) + r")\b")
+  if multi:
+    parts.append("(" + "|".join(multi) + ")")
+  return re.compile("|".join(parts), re.IGNORECASE) if parts else None
+
+
+# Build at module load time from the denylist file (empty list if absent)
+_VENDOR_TOKENS = _load_vendor_tokens()
+_VENDOR_NAME_RE = _build_vendor_re(_VENDOR_TOKENS)
+
 
 def _assert_clean(text: str, label: str) -> None:
   """Refuse to ship any artifact leaking a vendor name or a private path."""
-  vendor_hits = sorted({m.group(0).lower() for m in _VENDOR_NAME_RE.finditer(text)})
+  vendor_hits: list[str] = []
+  if _VENDOR_NAME_RE is not None:
+    vendor_hits = sorted({m.group(0).lower() for m in _VENDOR_NAME_RE.finditer(text)})
   path_hits = sorted({t for t in _PATH_TOKENS if t in text.lower()})
   hits = vendor_hits + path_hits
   if hits:

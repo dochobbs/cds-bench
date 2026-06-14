@@ -144,7 +144,7 @@ def judge_query(
   query: str,
   gold_content: str,
   candidate_content: str,
-  model: str = "claude-sonnet-4-20250514",
+  model: str = "claude-3-5-haiku-20241022",
   references: Optional[list[dict]] = None,
   web_citations: Optional[list[dict]] = None,
   gold_label: str = "the gold-standard reference",

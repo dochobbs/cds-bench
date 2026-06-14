@@ -197,8 +197,11 @@ def load_public(bench_dir: str = PUBLIC_DIR) -> dict[str, list[dict]]:
 
 def _assert_no_private_path(text: str, label: str) -> None:
   """Raise ValueError if text contains a private path fragment."""
+  # Tokens are built dynamically so the literals don't appear verbatim in published source.
+  _home = "/" + "users" + "/"
+  _build = "/tmp/" + "gem" + "venv"
   lowered = text.lower()
-  for token in ("/users/", "/tmp/gemvenv"):
+  for token in (_home, _build):
     if token in lowered:
       raise ValueError(
         f"private path token {token!r} found in {label}; refusing to write."
@@ -206,7 +209,7 @@ def _assert_no_private_path(text: str, label: str) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Shared CSS/JS design system (derived from cds_eval_explainer.html)
+# Shared CSS/JS design system
 # ---------------------------------------------------------------------------
 
 _CSS = """

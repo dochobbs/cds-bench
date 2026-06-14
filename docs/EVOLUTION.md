@@ -1,6 +1,6 @@
 # Evolution of cds-bench
 
-*Postmarks in the development of this family-medicine CDS working benchmark (Feb–Jun 2026), and the prior work it builds on. The full field report lives in the originating cds-eval repository.*
+*Postmarks in the development of this family-medicine CDS working benchmark (Feb–Jun 2026), and the prior work it builds on. The full field report lives in the originating internal evaluation program.*
 
 ---
 

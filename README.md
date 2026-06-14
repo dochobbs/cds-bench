@@ -55,8 +55,6 @@ python -m pytest tests/release/ -q                  # test suite
 - `release_clean/` — curated **blinded** methodology artifacts shipped into the public tree (vendor names redacted, no private paths)
 - `tests/release/` — test suite (counts, no-leak, determinism, blinding, gate-catches-violations)
 - `docs/EVOLUTION.md` — history of the benchmark + literature it builds on
-- `docs/superpowers/` — design specs
-- `MIGRATION_MANIFEST.md` — how this repo was extracted from the cds-eval monorepo
 
 ## Held-out evaluation
 

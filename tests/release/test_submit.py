@@ -23,12 +23,16 @@ def test_score_submission_blinds_and_aggregates():
   assert card["per_lane"]["golden"]["mean"] == 1.0
 
 def test_scorecard_contains_no_vendor_identities():
+  from scripts.release.build_public import _load_vendor_tokens
+  vendor_tokens = _load_vendor_tokens()
+  if not vendor_tokens:
+    pytest.skip("vendor denylist not present (public clone)")
   hidden = load_hidden()
   transcripts = {h["id"]: "x" for h in hidden}
   card = score_submission(transcripts, scorer=lambda c, a, l: 0.5, system_alias="X")
   blob = str(card).lower()
-  for forbidden in ("openevidence", "amboss", "lisa", "glass", "elation"):
-    assert forbidden not in blob
+  for token in vendor_tokens:
+    assert token.lower() not in blob, f"vendor token {token!r} leaked into scorecard"
   assert all(isinstance(v["mean"], (int, float, type(None))) for v in card["per_lane"].values())
   assert all(isinstance(v["n"], int) for v in card["per_lane"].values())
 
