@@ -1,0 +1,8 @@
+{
+  "benchmark": "cds-bench (internal fam-med CDS)",
+  "hidden_count": 108,
+  "merkle_root": "d837c0a8a4f50c9924d1a5277579c262d4116e20a8636786493b5a2d1f48eeb7",
+  "seed": 20260614,
+  "generated": "2026-06-14",
+  "hash": "sha256 over canonical JSON, split/validated excluded"
+}

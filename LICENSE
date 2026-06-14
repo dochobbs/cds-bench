@@ -1,0 +1,12 @@
+cds-bench license
+
+DATA (everything under public/ and worked_examples/, and the rubrics/):
+  Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International
+  (CC BY-NC-ND 4.0). https://creativecommons.org/licenses/by-nc-nd/4.0/
+  You may share with attribution for non-commercial purposes without modification.
+  You may NOT use this data, or derivatives, as model training or fine-tuning data.
+
+CODE (everything under scoring/):
+  MIT License. Permissive reuse with attribution.
+
+The held-out test set is not distributed under any license; it is not included here.
