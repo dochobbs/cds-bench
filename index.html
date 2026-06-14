@@ -229,9 +229,10 @@ footer{border-top:1px solid var(--line-soft);padding:48px 0 60px;margin-top:80px
       <tr><th>Source</th><th class="num">Core /100</th><th class="num">Edge /100</th><th class="num">Fresh /2</th><th class="num">Halluc P/PR/F</th></tr>
     </thead>
     <tbody>
-      <tr><td>Frontier model + structured prompt + 3 web searches</td><td class="score"><strong>92.6</strong></td><td class="score"><strong>95.5</strong></td><td class="score">1.80</td><td class="score">25/4/1</td></tr>
-      <tr><td>Frontier model + structured prompt + 1 web search</td><td class="score">87.9</td><td class="score">91.7</td><td class="score">1.77</td><td class="score"><strong>27/3/0</strong></td></tr>
+      <tr><td>Frontier model &mdash; no prompt (baseline)</td><td class="score">72.0</td><td class="score">&mdash;</td><td class="score">&mdash;</td><td class="score">&mdash;</td></tr>
       <tr><td>Frontier model + structured prompt (no retrieval)</td><td class="score">88.8</td><td class="score">84.7</td><td class="score">1.37</td><td class="score"><strong>27/3/0</strong></td></tr>
+      <tr><td>Frontier model + structured prompt + 1 web search</td><td class="score">87.9</td><td class="score">91.7</td><td class="score">1.77</td><td class="score"><strong>27/3/0</strong></td></tr>
+      <tr><td>Frontier model + structured prompt + 3 web searches</td><td class="score"><strong>92.6</strong></td><td class="score"><strong>95.5</strong></td><td class="score">1.80</td><td class="score">25/4/1</td></tr>
       <tr><td>Commercial CDS tool A</td><td class="score">85.9</td><td class="score">91.4</td><td class="score">1.83</td><td class="score">22/6/2</td></tr>
       <tr><td>Commercial CDS tool B</td><td class="score">84.7</td><td class="score">84.7</td><td class="score"><strong>1.87</strong></td><td class="score">21/8/1</td></tr>
       <tr><td>Commercial CDS tool C</td><td class="score">65.4</td><td class="score">69.1</td><td class="score">1.70</td><td class="score">20/9/1</td></tr>
@@ -240,7 +241,8 @@ footer{border-top:1px solid var(--line-soft);padding:48px 0 60px;margin-top:80px
   </div>
   <p class="muted small">Core/Edge: independent frontier-model judge vs a curated reference (0&ndash;115 normalized to 100).
   Freshness 0&ndash;2. Hallucination = PASS / PARTIAL / FAIL over 30 false-premise traps. Higher is better except FAIL.
-  Commercial tools are anonymized (A/B/C); the A/B/C assignment is fixed but undisclosed.</p>
+  Commercial tools are anonymized (A/B/C); the A/B/C assignment is fixed but undisclosed.
+  The no-prompt baseline was scored on Core only.</p>
 
   <h4>What it shows</h4>
   <ul>
