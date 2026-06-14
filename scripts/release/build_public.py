@@ -10,6 +10,7 @@ from scripts.release.lanes import LANES, BENCH_DIR, WORKED_DIR
 from scripts.release.canary import stamp_case
 from scripts.release import assets
 from scripts.release.manifest import build_manifest
+from scripts.release.build_explainer import load_public, render_html, render_markdown
 
 # MIT-shipped methodology artifacts (spec §8): reference scorer, prompt template, calibration runner
 RUBRIC_CLEAN_DIR = "release_clean/rubrics"
@@ -86,6 +87,18 @@ def build_public(out_dir: str, seed: int, generated: str, bench_dir: str = BENCH
 
   # hidden manifest
   build_manifest(str(out), seed=seed, generated=generated, bench_dir=bench_dir)
+
+  # interactive explainer + readable markdown (shared renderers — no duplicated logic)
+  pub = load_public(bench_dir)
+  rubrics_for_render: dict[str, str] = {}
+  for lane_name, lane in LANES.items():
+    if lane.judge_rubric:
+      rubric_path = out / "rubrics" / f"{lane_name}.txt"
+      if rubric_path.exists():
+        rubrics_for_render[lane_name] = rubric_path.read_text(encoding="utf-8")
+  (out / "index.html").write_text(render_html(pub, rubrics=rubrics_for_render), encoding="utf-8")
+  (out / "PUBLIC_CASES.md").write_text(render_markdown(pub), encoding="utf-8")
+
   return counts
 
 def main() -> int:
