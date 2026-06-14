@@ -1,19 +1,19 @@
-# cds-bench — internal family-medicine CDS benchmark
+# cds-bench — a family-medicine CDS benchmark (public sample)
 
-**Flip-safe: this repo is ready to go public.**
+A working benchmark for evaluating AI clinical-decision-support (CDS) systems in US primary care.
+This repository publishes a **representative 27-case public sample** plus the full scoring
+methodology; the remaining **108 cases are held out** — never published — so models can't train
+on the test set.
 
-- `benchmarks/public/` — **committed** — the 27 public cases (4 lane files)
-- `benchmarks/hidden/` — **gitignored** — the 108 held-out cases (maintainer-only, never published)
+**Start here:** open [`index.html`](index.html) (the interactive explainer), or browse
+[`docs/PUBLIC_CASES.md`](docs/PUBLIC_CASES.md).
 
-A public clone contains the public cases, methodology tooling, and a SHA-256 + Merkle-root manifest
-of the held-out set. No hidden case text or gold answers are committed to git.
+- `benchmarks/public/` — the 27 public cases (4 lanes)
+- **held-out set** — 108 cases, never published; their existence is verifiable via the committed
+  `HIDDEN_MANIFEST.sha256` (per-case SHA-256 + Merkle root). To score against the held-out set,
+  see [`SUBMISSION.md`](SUBMISSION.md) (eval-as-a-service).
 
----
-
-This is a working internal benchmark (not a peer-reviewed publication) for evaluating
-AI clinical-decision-support systems in US primary care. It publishes a
-**representative public sample** while holding most cases back so models
-can't directly train on the test set.
+> A working benchmark, **not** a peer-reviewed publication — see [Limitations](#limitations).
 
 ## The benchmark
 
@@ -24,9 +24,9 @@ can't directly train on the test set.
 | `hallucination_30.json` | 30 | 6 | clinical-safety traps (false premises, dangerous reassurance, missed-diagnosis vignettes) |
 | `halluhard_15.json` | 15 | 3 | multi-axis hallucination (rarity / grounding axis) |
 
-The public/hidden split is a fixed-seed (`20260614`) stratified ~20%/lane carve, frozen into
-directory structure: `benchmarks/public/` (committed) and `benchmarks/hidden/` (gitignored).
-`scripts/release/lanes.py` is the single source of truth for the lanes and quotas.
+The public/hidden split is a fixed-seed (`20260614`) stratified ~20%/lane carve. The public
+cases live in `benchmarks/public/`; the held-out cases are kept private and are not part of this
+repository. `scripts/release/lanes.py` is the single source of truth for the lanes and quotas.
 
 ## What's published
 
@@ -59,7 +59,7 @@ python -m pytest tests/release/ -q                  # test suite
 
 - root — `index.html`, `LICENSE`, `SUBMISSION.md`, `HIDDEN_MANIFEST.sha256` + `.meta.json` (the published artifact)
 - `benchmarks/public/` — committed; 27 public cases across 4 lane files
-- `benchmarks/hidden/` — **gitignored**; 108 held-out cases (maintainer-only)
+- held-out set — 108 cases kept private (not in this repository)
 - `scripts/release/` — the pipeline (lanes, manifest, assets, build_public, build_explainer, submit, validate_release)
 - `release_clean/` — curated **blinded** methodology artifacts: rubrics + scoring harness
 - `tests/release/` — test suite (counts, no-leak, determinism, blinding, gate-catches-violations)
