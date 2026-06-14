@@ -106,37 +106,29 @@ def test_html_contains_all_27_public_ids(html_out, public):
       assert cid in html_out, f"Public id {cid!r} missing from HTML"
 
 
-def test_html_contains_no_hidden_golden_ids(html_out):
-  """Known hidden golden ids must not appear in the HTML."""
-  # Verified hidden from test run: G01, G02, G03, G05, G06 are hidden
-  for hidden_id in ("G01", "G02", "G03", "G05", "G06"):
-    assert hidden_id not in html_out, (
-      f"Hidden golden id {hidden_id!r} found in HTML — leak!"
-    )
+def test_html_contains_no_hidden_ids(html_out):
+  """No held-out case id may appear in the public HTML.
 
-
-def test_html_contains_no_hidden_freshness_ids(html_out):
-  # F02, F04, F05 are hidden (public are F01, F03, F09, F17, F19, F21)
-  for hidden_id in ("F02", "F04", "F05"):
-    assert hidden_id not in html_out, (
-      f"Hidden freshness id {hidden_id!r} found in HTML — leak!"
-    )
-
-
-def test_html_contains_no_hidden_hallucination_ids(html_out):
-  # H01, H02, H03 are hidden
-  for hidden_id in ("H01", "H02", "H03"):
-    assert hidden_id not in html_out, (
-      f"Hidden hallucination id {hidden_id!r} found in HTML — leak!"
-    )
-
-
-def test_html_contains_no_hidden_halluhard_ids(html_out):
-  # HH01, HH02, HH03 are hidden (public are HH04, HH08, HH12)
-  for hidden_id in ("HH01", "HH02", "HH03"):
-    assert hidden_id not in html_out, (
-      f"Hidden halluhard id {hidden_id!r} found in HTML — leak!"
-    )
+  Hidden ids are derived at runtime from the local (gitignored) hidden set, so no
+  hidden id is hardcoded/committed in this test. Skipped in a public clone where the
+  hidden set is absent by design.
+  """
+  import re
+  from pathlib import Path
+  from scripts.release.lanes import HIDDEN_DIR
+  if not Path(HIDDEN_DIR).exists():
+    pytest.skip("hidden set not present (public clone)")
+  checked = 0
+  for lane in LANES.values():
+    p = Path(HIDDEN_DIR, lane.filename)
+    if not p.exists():
+      continue
+    for c in json.loads(p.read_text(encoding="utf-8")):
+      cid = c.get(lane.id_field)
+      assert cid and not re.search(rf"\b{re.escape(cid)}\b", html_out), \
+        f"hidden id {cid!r} leaked into the public HTML"
+      checked += 1
+  assert checked == 108, f"expected to check 108 hidden ids, checked {checked}"
 
 
 # ---------------------------------------------------------------------------
