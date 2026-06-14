@@ -75,6 +75,6 @@ release time.
 
 ## Limitations
 
-This is a working internal benchmark with known limitations — see `docs/EVOLUTION.md` for
+This is a working benchmark with known limitations — see `docs/EVOLUTION.md` for
 the full list. Key ones: single-author curation, small n per lane, LLM-as-judge is a screening
 tool, freshness items perish, gold may overlap models' training sources.
