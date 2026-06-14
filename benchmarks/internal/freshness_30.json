@@ -2,11 +2,12 @@
   {
     "id": "F01",
     "query": "How many diseases are on the CDC universal childhood immunization schedule?",
-    "old_answer": "16 diseases on the universal schedule including HepA, HepB, RSV, MenACWY, MenB",
+    "old_answer": "17 diseases on the universal schedule including HepA, HepB, RSV, MenACWY, MenB",
     "new_answer": "11 diseases on the universal schedule; HepA, HepB, RSV, dengue, MenACWY, MenB moved to risk-based/shared decision-making",
     "source": "CDC/ACIP January 2026",
     "category": "immunizations",
-    "split": "public"
+    "split": "public",
+    "validated": "2026-06-14"
   },
   {
     "id": "F02",
@@ -15,7 +16,8 @@
     "new_answer": "Shared decision-making for infants born to HBsAg-negative mothers; universal dose no longer automatic",
     "source": "CDC/ACIP December 2025",
     "category": "immunizations",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F03",
@@ -24,7 +26,8 @@
     "new_answer": "GLP-1 RA or GIP/GLP-1 RA preferred as first-line, especially with established CVD, obesity, or high-risk",
     "source": "ADA Standards of Care 2025-2026",
     "category": "diabetes",
-    "split": "public"
+    "split": "public",
+    "validated": "2026-06-14"
   },
   {
     "id": "F04",
@@ -33,7 +36,8 @@
     "new_answer": "PREVENT equations incorporated into 2025 ACC/AHA guidelines alongside or replacing PCE",
     "source": "2025 ACC/AHA Guidelines",
     "category": "cardiovascular",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F05",
@@ -42,7 +46,8 @@
     "new_answer": "<55 mg/dL per 2026 ACC/AHA dyslipidemia guideline update",
     "source": "2026 ACC/AHA Dyslipidemia Guidelines",
     "category": "cardiovascular",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F06",
@@ -51,7 +56,8 @@
     "new_answer": "Age 40 (USPSTF 2024 update)",
     "source": "USPSTF 2024",
     "category": "screening",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F07",
@@ -60,7 +66,8 @@
     "new_answer": "MMRV is acceptable for dose 1; ACIP September 2025 guidance updated to allow either",
     "source": "ACIP September 2025",
     "category": "immunizations",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F08",
@@ -69,7 +76,8 @@
     "new_answer": "Emerging evidence supports classifying young male cystitis without risk factors as uncomplicated",
     "source": "EAU/IDSA evolving guidance 2025",
     "category": "infectious_disease",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F09",
@@ -78,7 +86,8 @@
     "new_answer": "Epinephrine auto-injector OR nasal epinephrine spray (Neffy), FDA-approved March 2025 for children 4+ weighing 33-66 lbs",
     "source": "FDA March 2025",
     "category": "allergy",
-    "split": "public"
+    "split": "public",
+    "validated": "2026-06-14"
   },
   {
     "id": "F10",
@@ -87,7 +96,8 @@
     "new_answer": "Weight faltering, per AAP March 2026 clinical report recommending terminology change",
     "source": "AAP March 2026",
     "category": "pediatric",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F11",
@@ -96,7 +106,8 @@
     "new_answer": "Nirsevimab (Beyfortus) single dose for all infants <8 months entering first RSV season",
     "source": "ACIP/AAP 2023-2024",
     "category": "immunizations",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F12",
@@ -105,7 +116,8 @@
     "new_answer": "FDA approved December 2024 for adolescents age 12+ with obesity",
     "source": "FDA December 2024",
     "category": "obesity",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F13",
@@ -114,7 +126,8 @@
     "new_answer": "Age 45 per USPSTF 2021 update",
     "source": "USPSTF 2021",
     "category": "screening",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F14",
@@ -123,7 +136,8 @@
     "new_answer": "20 pack-years per USPSTF 2021 update",
     "source": "USPSTF 2021",
     "category": "screening",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F15",
@@ -132,7 +146,8 @@
     "new_answer": "Universal screening for all adults aged 18-79 (USPSTF Grade B recommendation)",
     "source": "USPSTF 2020",
     "category": "screening",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F16",
@@ -141,7 +156,8 @@
     "new_answer": "Age 35 per USPSTF 2021 update (or earlier with risk factors including BMI >=25)",
     "source": "USPSTF 2021",
     "category": "screening",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F17",
@@ -150,7 +166,8 @@
     "new_answer": "Against routine aspirin for primary prevention at any age; individualized decision only for 40-59 with >=10% risk (USPSTF 2022 Grade C)",
     "source": "USPSTF 2022",
     "category": "cardiovascular",
-    "split": "public"
+    "split": "public",
+    "validated": "2026-06-14"
   },
   {
     "id": "F18",
@@ -159,7 +176,8 @@
     "new_answer": "Screen all adults under 65 for anxiety disorders (USPSTF 2023 Grade B recommendation)",
     "source": "USPSTF 2023",
     "category": "mental_health",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F19",
@@ -168,7 +186,8 @@
     "new_answer": ">=130/80 mmHg (2017 ACC/AHA guidelines, reaffirmed)",
     "source": "2017 ACC/AHA",
     "category": "hypertension",
-    "split": "public"
+    "split": "public",
+    "validated": "2026-06-14"
   },
   {
     "id": "F20",
@@ -177,16 +196,18 @@
     "new_answer": "Direct oral amoxicillin challenge for low-risk patients (no anaphylaxis history); most reported allergies are not true allergies. AAAAI 2024 practice parameter supports delabeling.",
     "source": "AAAAI 2024",
     "category": "allergy",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F21",
     "query": "At what age is dupilumab (Dupixent) approved for treatment of moderate-to-severe atopic dermatitis?",
     "old_answer": "Age 6 years and older",
-    "new_answer": "Age 6 months and older (FDA 2024 age expansion)",
-    "source": "FDA 2024",
+    "new_answer": "Age 6 months and older (FDA June 2022 age expansion)",
+    "source": "FDA June 2022",
     "category": "dermatology",
-    "split": "public"
+    "split": "public",
+    "validated": "2026-06-14"
   },
   {
     "id": "F22",
@@ -195,7 +216,8 @@
     "new_answer": "Consider pharmacotherapy (including GLP-1 RA) for children age 12+ with obesity; early intensive treatment recommended per AAP 2023 CPG",
     "source": "AAP 2023 Clinical Practice Guideline",
     "category": "obesity",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F23",
@@ -204,7 +226,8 @@
     "new_answer": "Simplified to 1 dose of updated (2025-2026) vaccine for most previously vaccinated children; unvaccinated may need 2 doses",
     "source": "CDC/ACIP 2025-2026",
     "category": "immunizations",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F24",
@@ -213,7 +236,8 @@
     "new_answer": "Approved for both: Mounjaro for T2DM (2022) and Zepbound for chronic weight management (November 2023)",
     "source": "FDA November 2023",
     "category": "obesity",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F25",
@@ -222,7 +246,8 @@
     "new_answer": "USPSTF 2024: I statement (insufficient evidence), but ADA recommends screening children >=10 or at onset of puberty with BMI >=85th percentile + risk factors",
     "source": "USPSTF 2024, ADA 2025",
     "category": "screening",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F26",
@@ -231,7 +256,8 @@
     "new_answer": "ACIP 2024: routine risk-based JYNNEOS vaccination for adults at risk (MSM, sex workers, lab workers)",
     "source": "ACIP 2024",
     "category": "immunizations",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F27",
@@ -240,7 +266,8 @@
     "new_answer": "Still <7.0% for most adults, BUT ADA 2025 emphasizes individualization with <6.5% for select patients and <8.0% for elderly/frail. Time-in-range (TIR >70%) increasingly used alongside A1c.",
     "source": "ADA Standards of Care 2025",
     "category": "diabetes",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F28",
@@ -249,7 +276,8 @@
     "new_answer": "Same — catch-up through 26, shared decision 27-45. No change, but worth confirming sources reflect current ACIP 2024 reaffirmation.",
     "source": "ACIP 2024 reaffirmed",
     "category": "immunizations",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F29",
@@ -258,7 +286,8 @@
     "new_answer": "Same — each pregnancy, 27-36 weeks. No change, but confirms source freshness.",
     "source": "ACIP reaffirmed 2024",
     "category": "immunizations",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   },
   {
     "id": "F30",
@@ -267,6 +296,7 @@
     "new_answer": "ABE grouping: Groups A and B unchanged, Group E replaces C+D (LABA+LAMA preferred, add ICS if eos >=300)",
     "source": "GOLD 2023/2024",
     "category": "respiratory",
-    "split": "hidden"
+    "split": "hidden",
+    "validated": "2026-06-14"
   }
 ]

@@ -2,421 +2,361 @@
   {
     "search_id": "G01",
     "category": "immunizations",
-    "amboss_query": "What is the recommended immunization schedule for a 12-year-old per AAP/ACIP guidelines?",
-    "original_query": "What is the recommended immunization schedule for a 12-year-old per AAP/ACIP guidelines?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the recommended immunization schedule for a 12-year-old per AAP/ACIP guidelines?"
   },
   {
     "search_id": "G02",
     "category": "immunizations",
-    "amboss_query": "When should the HPV vaccine series be started and how many doses are needed?",
-    "original_query": "When should the HPV vaccine series be started and how many doses are needed?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "When should the HPV vaccine series be started and how many doses are needed?"
   },
   {
     "search_id": "G03",
     "category": "immunizations",
-    "amboss_query": "What are the catch-up vaccination recommendations for an unvaccinated 5-year-old?",
-    "original_query": "What are the catch-up vaccination recommendations for an unvaccinated 5-year-old?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the catch-up vaccination recommendations for an unvaccinated 5-year-old?"
   },
   {
     "search_id": "G04",
     "category": "drug_dosing",
-    "amboss_query": "What is the recommended dosing of metformin for type 2 diabetes in adults?",
-    "original_query": "What is the recommended dosing of metformin for type 2 diabetes in adults?",
-    "split": "public"
+    "split": "public",
+    "query": "What is the recommended dosing of metformin for type 2 diabetes in adults?"
   },
   {
     "search_id": "G05",
     "category": "drug_dosing",
-    "amboss_query": "What is the pediatric dosing of amoxicillin for acute otitis media?",
-    "original_query": "What is the pediatric dosing of amoxicillin for acute otitis media?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the pediatric dosing of amoxicillin for acute otitis media?"
   },
   {
     "search_id": "G06",
     "category": "drug_dosing",
-    "amboss_query": "What are the dose adjustments for lisinopril in patients with renal impairment?",
-    "original_query": "What are the dose adjustments for lisinopril in patients with renal impairment?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the dose adjustments for lisinopril in patients with renal impairment?"
   },
   {
     "search_id": "G07",
     "category": "screening",
-    "amboss_query": "What are the USPSTF recommendations for colorectal cancer screening?",
-    "original_query": "What are the USPSTF recommendations for colorectal cancer screening?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the USPSTF recommendations for colorectal cancer screening?"
   },
   {
     "search_id": "G08",
     "category": "screening",
-    "amboss_query": "When should lipid panel screening begin in adults and at what intervals, based on current US clinical practice guidelines?",
-    "original_query": "When should lipid panel screening begin in adults and at what intervals, based on current US clinical practice guidelines?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "When should lipid panel screening begin in adults and at what intervals, based on current US clinical practice guidelines?"
   },
   {
     "search_id": "G09",
     "category": "screening",
-    "amboss_query": "What are the current cervical cancer screening guidelines for women aged 21-65 per USPSTF and ACOG guidelines?",
-    "original_query": "What are the current cervical cancer screening guidelines for women aged 21-65 per USPSTF and ACOG guidelines?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the current cervical cancer screening guidelines for women aged 21-65 per USPSTF and ACOG guidelines?"
   },
   {
     "search_id": "G10",
     "category": "hypertension",
-    "amboss_query": "What are the current blood pressure targets for adults with hypertension per AHA guidelines?",
-    "original_query": "What are the current blood pressure targets for adults with hypertension per AHA guidelines?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the current blood pressure targets for adults with hypertension per AHA guidelines?"
   },
   {
     "search_id": "G11",
     "category": "hypertension",
-    "amboss_query": "What is the first-line pharmacotherapy for stage 1 hypertension in a non-diabetic adult?",
-    "original_query": "What is the first-line pharmacotherapy for stage 1 hypertension in a non-diabetic adult?",
-    "split": "public"
+    "split": "public",
+    "query": "What is the first-line pharmacotherapy for stage 1 hypertension in a non-diabetic adult?"
   },
   {
     "search_id": "G12",
     "category": "hypertension",
-    "amboss_query": "What defines hypertension in children and adolescents per AAP 2017 guidelines, and when should further evaluation be initiated?",
-    "original_query": "What defines hypertension in children and adolescents per AAP 2017 guidelines, and when should further evaluation be initiated?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What defines hypertension in children and adolescents per AAP 2017 guidelines, and when should further evaluation be initiated?"
   },
   {
     "search_id": "G13",
     "category": "diabetes",
-    "amboss_query": "What is the target HbA1c for most adults with type 2 diabetes?",
-    "original_query": "What is the target HbA1c for most adults with type 2 diabetes?",
-    "split": "public"
+    "split": "public",
+    "query": "What is the target HbA1c for most adults with type 2 diabetes?"
   },
   {
     "search_id": "G14",
     "category": "diabetes",
-    "amboss_query": "What is the stepwise pharmacologic management of type 2 diabetes after metformin per ADA Standards of Care?",
-    "original_query": "What is the stepwise pharmacologic management of type 2 diabetes after metformin per ADA Standards of Care?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the stepwise pharmacologic management of type 2 diabetes after metformin per ADA Standards of Care?"
   },
   {
     "search_id": "G15",
     "category": "diabetes",
-    "amboss_query": "What screening tests are recommended for diabetic nephropathy and how often?",
-    "original_query": "What screening tests are recommended for diabetic nephropathy and how often?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What screening tests are recommended for diabetic nephropathy and how often?"
   },
   {
     "search_id": "G16",
     "category": "pediatric_acute",
-    "amboss_query": "What is the recommended management of fever without source in infants under 3 months?",
-    "original_query": "What is the recommended management of fever without source in infants under 3 months?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the recommended management of fever without source in infants under 3 months?"
   },
   {
     "search_id": "G17",
     "category": "pediatric_acute",
-    "amboss_query": "What are the diagnostic criteria and treatment for pediatric urinary tract infection?",
-    "original_query": "What are the diagnostic criteria and treatment for pediatric urinary tract infection?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the diagnostic criteria and treatment for pediatric urinary tract infection?"
   },
   {
     "search_id": "G18",
     "category": "pediatric_acute",
-    "amboss_query": "What is the stepwise management of a pediatric asthma exacerbation?",
-    "original_query": "What is the stepwise management of a pediatric asthma exacerbation?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the stepwise management of a pediatric asthma exacerbation?"
   },
   {
     "search_id": "G19",
     "category": "cardiovascular",
-    "amboss_query": "What CHA2DS2-VASc score threshold warrants anticoagulation in non-valvular atrial fibrillation per AHA/ACC guidelines?",
-    "original_query": "What CHA2DS2-VASc score threshold warrants anticoagulation in non-valvular atrial fibrillation per AHA/ACC guidelines?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What CHA2DS2-VASc score threshold warrants anticoagulation in non-valvular atrial fibrillation per AHA/ACC guidelines?"
   },
   {
     "search_id": "G20",
     "category": "cardiovascular",
-    "amboss_query": "What are the guideline-directed medical therapies for heart failure with reduced ejection fraction?",
-    "original_query": "What are the guideline-directed medical therapies for heart failure with reduced ejection fraction?",
-    "split": "public"
+    "split": "public",
+    "query": "What are the guideline-directed medical therapies for heart failure with reduced ejection fraction?"
   },
   {
     "search_id": "G21",
     "category": "cardiovascular",
-    "amboss_query": "What is the recommended statin therapy for secondary prevention after myocardial infarction?",
-    "original_query": "What is the recommended statin therapy for secondary prevention after myocardial infarction?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the recommended statin therapy for secondary prevention after myocardial infarction?"
   },
   {
     "search_id": "G22",
     "category": "infectious_disease",
-    "amboss_query": "What is the empiric antibiotic therapy for community-acquired pneumonia in adults per ATS/IDSA guidelines?",
-    "original_query": "What is the empiric antibiotic therapy for community-acquired pneumonia in adults per ATS/IDSA guidelines?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the empiric antibiotic therapy for community-acquired pneumonia in adults per ATS/IDSA guidelines?"
   },
   {
     "search_id": "G23",
     "category": "infectious_disease",
-    "amboss_query": "What is the recommended treatment for uncomplicated lower urinary tract infection in women?",
-    "original_query": "What is the recommended treatment for uncomplicated lower urinary tract infection in women?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the recommended treatment for uncomplicated lower urinary tract infection in women?"
   },
   {
     "search_id": "G24",
     "category": "infectious_disease",
-    "amboss_query": "What is the current recommended treatment for Helicobacter pylori infection per ACG guidelines?",
-    "original_query": "What is the current recommended treatment for Helicobacter pylori infection per ACG guidelines?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the current recommended treatment for Helicobacter pylori infection per ACG guidelines?"
   },
   {
     "search_id": "G25",
     "category": "mental_health",
-    "amboss_query": "What is the first-line pharmacotherapy for major depressive disorder in adults?",
-    "original_query": "What is the first-line pharmacotherapy for major depressive disorder in adults?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the first-line pharmacotherapy for major depressive disorder in adults?"
   },
   {
     "search_id": "G26",
     "category": "mental_health",
-    "amboss_query": "What are the PHQ-9 scoring thresholds and their clinical implications?",
-    "original_query": "What are the PHQ-9 scoring thresholds and their clinical implications?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the PHQ-9 scoring thresholds and their clinical implications?"
   },
   {
     "search_id": "G27",
     "category": "mental_health",
-    "amboss_query": "What is the recommended treatment approach for generalized anxiety disorder in US primary care practice?",
-    "original_query": "What is the recommended treatment approach for generalized anxiety disorder in US primary care practice?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the recommended treatment approach for generalized anxiety disorder in US primary care practice?"
   },
   {
     "search_id": "G28",
     "category": "womens_health",
-    "amboss_query": "What prenatal labs should be ordered at the first obstetric visit?",
-    "original_query": "What prenatal labs should be ordered at the first obstetric visit?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What prenatal labs should be ordered at the first obstetric visit?"
   },
   {
     "search_id": "G29",
     "category": "womens_health",
-    "amboss_query": "What is the recommended management of gestational diabetes mellitus?",
-    "original_query": "What is the recommended management of gestational diabetes mellitus?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the recommended management of gestational diabetes mellitus?"
   },
   {
     "search_id": "G30",
     "category": "womens_health",
-    "amboss_query": "What are the current guidelines for osteoporosis screening in postmenopausal women?",
-    "original_query": "What are the current guidelines for osteoporosis screening in postmenopausal women?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the current guidelines for osteoporosis screening in postmenopausal women?"
   },
   {
     "search_id": "G31",
     "category": "obesity",
-    "amboss_query": "What are the BMI classification thresholds for overweight, obesity class I, II, and III in adults?",
-    "original_query": "What are the BMI classification thresholds for overweight, obesity class I, II, and III in adults?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the BMI classification thresholds for overweight, obesity class I, II, and III in adults?"
   },
   {
     "search_id": "G33",
     "category": "thyroid",
-    "amboss_query": "What is the recommended workup and management of newly diagnosed hypothyroidism in adults?",
-    "original_query": "What is the recommended workup and management of newly diagnosed hypothyroidism in adults?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the recommended workup and management of newly diagnosed hypothyroidism in adults?"
   },
   {
     "search_id": "G34",
     "category": "thyroid",
-    "amboss_query": "How should a newly discovered thyroid nodule be evaluated in a primary care setting?",
-    "original_query": "How should a newly discovered thyroid nodule be evaluated in a primary care setting?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "How should a newly discovered thyroid nodule be evaluated in a primary care setting?"
   },
   {
     "search_id": "G35",
     "category": "respiratory",
-    "amboss_query": "What is the stepwise approach to pharmacologic management of persistent asthma in adults?",
-    "original_query": "What is the stepwise approach to pharmacologic management of persistent asthma in adults?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the stepwise approach to pharmacologic management of persistent asthma in adults?"
   },
   {
     "search_id": "G36",
     "category": "respiratory",
-    "amboss_query": "What is the GOLD classification for COPD and what are the recommended initial treatments by group?",
-    "original_query": "What is the GOLD classification for COPD and what are the recommended initial treatments by group?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the GOLD classification for COPD and what are the recommended initial treatments by group?"
   },
   {
     "search_id": "G37",
     "category": "musculoskeletal",
-    "amboss_query": "What are the current guidelines for the initial management of acute low back pain in adults per ACP guidelines?",
-    "original_query": "What are the current guidelines for the initial management of acute low back pain in adults per ACP guidelines?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the current guidelines for the initial management of acute low back pain in adults per ACP guidelines?"
   },
   {
     "search_id": "G38",
     "category": "musculoskeletal",
-    "amboss_query": "What is the recommended stepwise treatment for osteoarthritis of the knee?",
-    "original_query": "What is the recommended stepwise treatment for osteoarthritis of the knee?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the recommended stepwise treatment for osteoarthritis of the knee?"
   },
   {
     "search_id": "G39",
     "category": "gastrointestinal",
-    "amboss_query": "What is the recommended management of GERD in adults including lifestyle modifications and pharmacotherapy?",
-    "original_query": "What is the recommended management of GERD in adults including lifestyle modifications and pharmacotherapy?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the recommended management of GERD in adults including lifestyle modifications and pharmacotherapy?"
   },
   {
     "search_id": "G40",
     "category": "gastrointestinal",
-    "amboss_query": "What are the Rome IV diagnostic criteria for irritable bowel syndrome and what are the first-line treatments?",
-    "original_query": "What are the Rome IV diagnostic criteria for irritable bowel syndrome and what are the first-line treatments?",
-    "split": "public"
+    "split": "public",
+    "query": "What are the Rome IV diagnostic criteria for irritable bowel syndrome and what are the first-line treatments?"
   },
   {
     "search_id": "G41",
     "category": "dermatology",
-    "amboss_query": "What is the stepwise treatment approach for atopic dermatitis in children and adults?",
-    "original_query": "What is the stepwise treatment approach for atopic dermatitis in children and adults?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the stepwise treatment approach for atopic dermatitis in children and adults?"
   },
   {
     "search_id": "G42",
     "category": "dermatology",
-    "amboss_query": "What are the current guidelines for the treatment of acne vulgaris by severity per AAD guidelines?",
-    "original_query": "What are the current guidelines for the treatment of acne vulgaris by severity per AAD guidelines?",
-    "split": "public"
+    "split": "public",
+    "query": "What are the current guidelines for the treatment of acne vulgaris by severity per AAD guidelines?"
   },
   {
     "search_id": "G43",
     "category": "preventive",
-    "amboss_query": "What are the recommended USPSTF screening tests for a healthy 50-year-old male at a preventive visit?",
-    "original_query": "What are the recommended USPSTF screening tests for a healthy 50-year-old male at a preventive visit?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the recommended USPSTF screening tests for a healthy 50-year-old male at a preventive visit?"
   },
   {
     "search_id": "G44",
     "category": "preventive",
-    "amboss_query": "What are the current guidelines for tobacco cessation counseling and pharmacotherapy in primary care?",
-    "original_query": "What are the current guidelines for tobacco cessation counseling and pharmacotherapy in primary care?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the current guidelines for tobacco cessation counseling and pharmacotherapy in primary care?"
   },
   {
     "search_id": "G45",
     "category": "contraception_sti",
-    "amboss_query": "What are the CDC recommended screening guidelines for chlamydia and gonorrhea by age and risk group?",
-    "original_query": "What are the CDC recommended screening guidelines for chlamydia and gonorrhea by age and risk group?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the CDC recommended screening guidelines for chlamydia and gonorrhea by age and risk group?"
   },
   {
     "search_id": "G46",
     "category": "contraception_sti",
-    "amboss_query": "What are the categories of contraceptive options and their typical-use failure rates?",
-    "original_query": "What are the categories of contraceptive options and their typical-use failure rates?",
-    "split": "public"
+    "split": "public",
+    "query": "What are the categories of contraceptive options and their typical-use failure rates?"
   },
   {
     "search_id": "G47",
     "category": "anemia",
-    "amboss_query": "What is the recommended workup for iron deficiency anemia in adults including labs and evaluation?",
-    "original_query": "What is the recommended workup for iron deficiency anemia in adults including labs and evaluation?",
-    "split": "public"
+    "split": "public",
+    "query": "What is the recommended workup for iron deficiency anemia in adults including labs and evaluation?"
   },
   {
     "search_id": "G48",
     "category": "anemia",
-    "amboss_query": "What are the indications for initiating oral iron supplementation and what is the recommended dosing?",
-    "original_query": "What are the indications for initiating oral iron supplementation and what is the recommended dosing?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the indications for initiating oral iron supplementation and what is the recommended dosing?"
   },
   {
     "search_id": "G49",
     "category": "headache",
-    "amboss_query": "What are the diagnostic criteria for migraine and what are the first-line acute and preventive treatments?",
-    "original_query": "What are the diagnostic criteria for migraine and what are the first-line acute and preventive treatments?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the diagnostic criteria for migraine and what are the first-line acute and preventive treatments?"
   },
   {
     "search_id": "G50",
     "category": "headache",
-    "amboss_query": "What are the red flag features in headache evaluation that require urgent imaging or referral?",
-    "original_query": "What are the red flag features in headache evaluation that require urgent imaging or referral?",
-    "split": "public"
+    "split": "public",
+    "query": "What are the red flag features in headache evaluation that require urgent imaging or referral?"
   },
   {
     "search_id": "G51",
     "category": "glp1_obesity",
-    "amboss_query": "What are the eligibility criteria for prescribing semaglutide (Wegovy) for weight management?",
-    "original_query": "What are the eligibility criteria for prescribing semaglutide (Wegovy) for weight management?",
-    "split": "public"
+    "split": "public",
+    "query": "What are the eligibility criteria for prescribing semaglutide (Wegovy) for weight management?"
   },
   {
     "search_id": "G52",
     "category": "glp1_obesity",
-    "amboss_query": "What is the recommended dose titration schedule for tirzepatide (Zepbound) for weight management in adults?",
-    "original_query": "What is the recommended dose titration schedule for tirzepatide (Zepbound) for weight management in adults?",
-    "split": "public"
+    "split": "public",
+    "query": "What is the recommended dose titration schedule for tirzepatide (Zepbound) for weight management in adults?"
   },
   {
     "search_id": "G53",
     "category": "glp1_obesity",
-    "amboss_query": "What clinical factors should guide the decision to switch from semaglutide to tirzepatide for weight management, and what starting dose of tirzepatide is recommended?",
-    "original_query": "What clinical factors should guide the decision to switch from semaglutide to tirzepatide for weight management, and what starting dose of tirzepatide is recommended?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What clinical factors should guide the decision to switch from semaglutide to tirzepatide for weight management, and what starting dose of tirzepatide is recommended?"
   },
   {
     "search_id": "G54",
     "category": "glp1_obesity",
-    "amboss_query": "What comorbidities qualify a patient with BMI 27-30 for GLP-1 agonist therapy for weight loss?",
-    "original_query": "What comorbidities qualify a patient with BMI 27-30 for GLP-1 agonist therapy for weight loss?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What comorbidities qualify a patient with BMI 27-30 for GLP-1 agonist therapy for weight loss?"
   },
   {
     "search_id": "G55",
     "category": "glp1_obesity",
-    "amboss_query": "What lab monitoring is recommended before and during GLP-1 agonist therapy for obesity?",
-    "original_query": "What lab monitoring is recommended before and during GLP-1 agonist therapy for obesity?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What lab monitoring is recommended before and during GLP-1 agonist therapy for obesity?"
   },
   {
     "search_id": "G56",
     "category": "glp1_obesity",
-    "amboss_query": "What are the contraindications to GLP-1 receptor agonists including family history of medullary thyroid carcinoma?",
-    "original_query": "What are the contraindications to GLP-1 receptor agonists including family history of medullary thyroid carcinoma?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the contraindications to GLP-1 receptor agonists including family history of medullary thyroid carcinoma?"
   },
   {
     "search_id": "G57",
     "category": "glp1_obesity",
-    "amboss_query": "What is the expected weight loss with semaglutide 2.4mg weekly based on clinical trial data, and what does the Endocrine Society recommend as a threshold for inadequate response?",
-    "original_query": "What is the expected weight loss with semaglutide 2.4mg weekly based on clinical trial data, and what does the Endocrine Society recommend as a threshold for inadequate response?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the expected weight loss with semaglutide 2.4mg weekly based on clinical trial data, and what does the Endocrine Society recommend as a threshold for inadequate response?"
   },
   {
     "search_id": "G58",
     "category": "glp1_obesity",
-    "amboss_query": "What are the current guidelines for using phentermine, naltrexone-bupropion, or orlistat as alternatives to GLP-1 agonists?",
-    "original_query": "What are the current guidelines for using phentermine, naltrexone-bupropion, or orlistat as alternatives to GLP-1 agonists?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What are the current guidelines for using phentermine, naltrexone-bupropion, or orlistat as alternatives to GLP-1 agonists?"
   },
   {
     "search_id": "G59",
     "category": "ascvd_risk",
-    "amboss_query": "What are the inputs and scoring thresholds for the 2013 ACC/AHA ASCVD pooled cohort equations 10-year risk calculator?",
-    "original_query": "What are the inputs and scoring thresholds for the 2013 ACC/AHA ASCVD pooled cohort equations 10-year risk calculator?",
-    "split": "public"
+    "split": "public",
+    "query": "What are the inputs and scoring thresholds for the 2013 ACC/AHA ASCVD pooled cohort equations 10-year risk calculator?"
   },
   {
     "search_id": "G60",
     "category": "ascvd_risk",
-    "amboss_query": "At what 10-year ASCVD risk threshold should statin therapy be initiated and what intensity is recommended at each level?",
-    "original_query": "At what 10-year ASCVD risk threshold should statin therapy be initiated and what intensity is recommended at each level?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "At what 10-year ASCVD risk threshold should statin therapy be initiated and what intensity is recommended at each level?"
   },
   {
     "search_id": "G61",
     "category": "ascvd_risk",
-    "amboss_query": "What is the AHA PREVENT cardiovascular risk calculator and how does it differ from the 2013 pooled cohort equations?",
-    "original_query": "What is the AHA PREVENT cardiovascular risk calculator and how does it differ from the 2013 pooled cohort equations?",
-    "split": "hidden"
+    "split": "hidden",
+    "query": "What is the AHA PREVENT cardiovascular risk calculator and how does it differ from the 2013 pooled cohort equations?"
   }
 ]
