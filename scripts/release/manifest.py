@@ -32,21 +32,31 @@ def merkle_root(leaves_hex: list[str]) -> str:
     level = [hashlib.sha256(level[i] + level[i + 1]).digest() for i in range(0, len(level), 2)]
   return level[0].hex()
 
-from scripts.release.lanes import LANES, BENCH_DIR
+from scripts.release.lanes import LANES, HIDDEN_DIR
 
-def collect_hidden(bench_dir: str = BENCH_DIR) -> list[tuple[str, str]]:
-  """Return ordered [(name, hash)] for every hidden case, name = '<lane>/<id>', sorted by name."""
+def collect_hidden(hidden_dir: str = HIDDEN_DIR) -> list[tuple[str, str]]:
+  """Return ordered [(name, hash)] for every hidden case, name = '<lane>/<id>', sorted by name.
+
+  Raises FileNotFoundError with a clear message if hidden_dir is absent — this is the expected
+  state in a public clone where the held-out cases are maintainer-private.
+  """
+  hdir = Path(hidden_dir)
+  if not hdir.exists():
+    raise FileNotFoundError(
+      f"hidden set not present at {hidden_dir!r} — this looks like a public clone; "
+      "the held-out cases are maintainer-private"
+    )
   rows: list[tuple[str, str]] = []
   for lane in LANES.values():
-    cases = json.load(open(Path(bench_dir) / lane.filename))
+    cases = json.load(open(hdir / lane.filename))
     for c in cases:
-      if c.get("split") == "hidden":
-        rows.append((f"{lane.name}/{c[lane.id_field]}", case_hash(c)))
+      # All cases in hidden_dir are hidden by construction; split field kept for integrity check
+      rows.append((f"{lane.name}/{c[lane.id_field]}", case_hash(c)))
   rows.sort(key=lambda r: r[0])
   return rows
 
-def build_manifest(out_dir: str, seed: int, generated: str, bench_dir: str = BENCH_DIR) -> dict:
-  rows = collect_hidden(bench_dir)
+def build_manifest(out_dir: str, seed: int, generated: str, hidden_dir: str = HIDDEN_DIR) -> dict:
+  rows = collect_hidden(hidden_dir)
   out = Path(out_dir)
   (out / "HIDDEN_MANIFEST.sha256").write_text(
     "".join(f"{h}  {name}\n" for name, h in rows), encoding="utf-8")

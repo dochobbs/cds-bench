@@ -343,7 +343,7 @@ def test_md_halluhard_grounding_axis_present(md_out, public):
 # ---------------------------------------------------------------------------
 
 def test_html_contains_zero_hidden_ids_exhaustive(html_out):
-  """Load every hidden id and assert none appears in the static card HTML.
+  """Load every hidden id from HIDDEN_DIR and assert none appears in the static card HTML.
 
   We scan the case-card blocks in the static HTML. Hidden ids in .case-card
   data attributes or content is a genuine data leak.
@@ -351,15 +351,14 @@ def test_html_contains_zero_hidden_ids_exhaustive(html_out):
   import json as _json
   import re as _re
   from pathlib import Path
+  from scripts.release.lanes import HIDDEN_DIR
 
   hidden_ids: set[str] = set()
   for lane in LANES.values():
-    raw = _json.loads(Path(
-      lane.filename if "/" in lane.filename else f"benchmarks/internal/{lane.filename}"
-    ).read_text())
+    path = Path(HIDDEN_DIR) / lane.filename
+    raw = _json.loads(path.read_text())
     for c in raw:
-      if c.get("split") == "hidden":
-        hidden_ids.add(c[lane.id_field])
+      hidden_ids.add(c[lane.id_field])
 
   # Find all case-card blocks in static HTML and extract their IDs
   # Each card has: <span class="case-id">XXXX</span>

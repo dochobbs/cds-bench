@@ -6,7 +6,7 @@ Run: python -m scripts.release.build_public --out ../cds-bench --seed 20260614 -
 from __future__ import annotations
 import argparse, json, re, shutil
 from pathlib import Path
-from scripts.release.lanes import LANES, BENCH_DIR, WORKED_DIR
+from scripts.release.lanes import LANES, PUBLIC_DIR, HIDDEN_DIR, WORKED_DIR
 from scripts.release import assets
 from scripts.release.manifest import build_manifest
 from scripts.release.build_explainer import load_public, render_html, render_markdown
@@ -42,7 +42,9 @@ def _emit_public_case(c: dict) -> dict:
   out = {k: v for k, v in c.items() if k not in ("split", "validated")}
   return out
 
-def build_public(out_dir: str, seed: int, generated: str, bench_dir: str = BENCH_DIR, worked_dir: str = WORKED_DIR) -> dict:
+def build_public(out_dir: str, seed: int, generated: str,
+                 public_dir: str = PUBLIC_DIR, hidden_dir: str = HIDDEN_DIR,
+                 worked_dir: str = WORKED_DIR) -> dict:
   out = Path(out_dir)
   if out.exists():
     contents = {p.name for p in out.iterdir()}
@@ -57,7 +59,8 @@ def build_public(out_dir: str, seed: int, generated: str, bench_dir: str = BENCH
 
   counts = {}
   for lane in LANES.values():
-    cases = json.load(open(Path(bench_dir) / lane.filename))
+    cases = json.load(open(Path(public_dir) / lane.filename))
+    # All cases in public_dir are public by construction; filter by split field for safety
     public = [c for c in cases if c.get("split") == "public"]
     counts[lane.name] = len(public)
     for c in public:
@@ -94,10 +97,10 @@ def build_public(out_dir: str, seed: int, generated: str, bench_dir: str = BENCH
       shutil.copy(f, out / "worked_examples" / f.name)
 
   # hidden manifest
-  build_manifest(str(out), seed=seed, generated=generated, bench_dir=bench_dir)
+  build_manifest(str(out), seed=seed, generated=generated, hidden_dir=hidden_dir)
 
   # interactive explainer + readable markdown (shared renderers — no duplicated logic)
-  pub = load_public(bench_dir)
+  pub = load_public(public_dir)
   rubrics_for_render: dict[str, str] = {}
   for lane_name, lane in LANES.items():
     if lane.judge_rubric:

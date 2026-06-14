@@ -3,7 +3,11 @@
 from __future__ import annotations
 from dataclasses import dataclass
 
-BENCH_DIR = "benchmarks/internal"
+PUBLIC_DIR = "benchmarks/public"   # committed — the 27 public cases
+HIDDEN_DIR = "benchmarks/hidden"   # gitignored — the 108 held-out cases (maintainer-only)
+
+# Backward-compat alias; callers that need the distinction should use PUBLIC_DIR / HIDDEN_DIR directly.
+BENCH_DIR = PUBLIC_DIR
 
 @dataclass(frozen=True)
 class Lane:

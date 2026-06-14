@@ -50,6 +50,7 @@ def test_merkle_root_single_leaf_equals_leaf():
 
 import json as _json, pathlib
 from scripts.release.manifest import build_manifest
+from scripts.release.lanes import HIDDEN_DIR
 
 def test_build_manifest_hidden_only(tmp_path):
   out = tmp_path / "cds-bench"
@@ -73,3 +74,10 @@ def test_manifest_lists_no_public_ids(tmp_path):
   names = {ln.split("  ", 1)[1].split("/", 1)[1] for ln in lines}
   for fp_id in ("G52", "F19", "H11", "HH08"):
     assert fp_id not in names, f"forced-public {fp_id} appeared in hidden manifest"
+
+def test_collect_hidden_raises_clear_error_when_dir_missing(tmp_path):
+  """A public clone without hidden dir gets a clear error, not a cryptic FileNotFoundError."""
+  from scripts.release.manifest import collect_hidden
+  import pytest
+  with pytest.raises(FileNotFoundError, match="public clone"):
+    collect_hidden(hidden_dir=str(tmp_path / "nonexistent"))

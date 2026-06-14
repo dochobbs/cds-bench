@@ -1,0 +1,62 @@
+[
+  {
+    "id": "F01",
+    "query": "How many diseases are on the CDC universal childhood immunization schedule?",
+    "old_answer": "17 diseases on the universal schedule including HepA, HepB, RSV, MenACWY, MenB",
+    "new_answer": "11 diseases on the universal schedule; HepA, HepB, RSV, dengue, MenACWY, MenB moved to risk-based/shared decision-making",
+    "source": "CDC/ACIP January 2026",
+    "category": "immunizations",
+    "split": "public",
+    "validated": "2026-06-14"
+  },
+  {
+    "id": "F03",
+    "query": "What is first-line pharmacotherapy for a newly diagnosed type 2 diabetes patient with obesity?",
+    "old_answer": "Metformin monotherapy",
+    "new_answer": "GLP-1 RA or GIP/GLP-1 RA preferred as first-line, especially with established CVD, obesity, or high-risk",
+    "source": "ADA Standards of Care 2025-2026",
+    "category": "diabetes",
+    "split": "public",
+    "validated": "2026-06-14"
+  },
+  {
+    "id": "F09",
+    "query": "What are the options for epinephrine delivery in a 5-year-old with peanut allergy and anaphylaxis risk?",
+    "old_answer": "Epinephrine auto-injector (EpiPen Jr) only",
+    "new_answer": "Epinephrine auto-injector OR nasal epinephrine spray (Neffy), FDA-approved March 2025 for children 4+ weighing 33-66 lbs",
+    "source": "FDA March 2025",
+    "category": "allergy",
+    "split": "public",
+    "validated": "2026-06-14"
+  },
+  {
+    "id": "F17",
+    "query": "Should low-dose aspirin be recommended for primary prevention of cardiovascular disease in adults aged 40-59?",
+    "old_answer": "Consider aspirin for adults 50-59 with >=10% 10-year CVD risk (USPSTF 2016 Grade B)",
+    "new_answer": "Against routine aspirin for primary prevention at any age; individualized decision only for 40-59 with >=10% risk (USPSTF 2022 Grade C)",
+    "source": "USPSTF 2022",
+    "category": "cardiovascular",
+    "split": "public",
+    "validated": "2026-06-14"
+  },
+  {
+    "id": "F19",
+    "query": "What is the blood pressure threshold for diagnosing hypertension in adults?",
+    "old_answer": ">=140/90 mmHg (JNC 8)",
+    "new_answer": ">=130/80 mmHg (2017 ACC/AHA guidelines, reaffirmed)",
+    "source": "2017 ACC/AHA",
+    "category": "hypertension",
+    "split": "public",
+    "validated": "2026-06-14"
+  },
+  {
+    "id": "F21",
+    "query": "At what age is dupilumab (Dupixent) approved for treatment of moderate-to-severe atopic dermatitis?",
+    "old_answer": "Age 6 years and older",
+    "new_answer": "Age 6 months and older (FDA June 2022 age expansion)",
+    "source": "FDA June 2022",
+    "category": "dermatology",
+    "split": "public",
+    "validated": "2026-06-14"
+  }
+]

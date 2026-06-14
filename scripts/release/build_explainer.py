@@ -13,7 +13,7 @@ import html
 import json
 from pathlib import Path
 
-from scripts.release.lanes import BENCH_DIR, LANES
+from scripts.release.lanes import PUBLIC_DIR, LANES
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -176,9 +176,12 @@ LANE_META: list[dict] = [
 # Public loader
 # ---------------------------------------------------------------------------
 
-def load_public(bench_dir: str = BENCH_DIR) -> dict[str, list[dict]]:
-  """Return {lane_name: [case, ...]} for split=='public' cases only.
+def load_public(bench_dir: str = PUBLIC_DIR) -> dict[str, list[dict]]:
+  """Return {lane_name: [case, ...]} for all cases in the public directory.
 
+  All cases in PUBLIC_DIR are public by construction (split by directory, not field).
+  The split=='public' field filter is kept for backward compatibility with tests that
+  assert every returned case carries split=='public'.
   Mirrors scripts.release.submit.load_hidden in structure.
   """
   result: dict[str, list[dict]] = {}

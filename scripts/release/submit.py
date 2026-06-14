@@ -9,24 +9,33 @@ import json
 from pathlib import Path
 from statistics import mean
 from typing import Callable
-from scripts.release.lanes import LANES, BENCH_DIR
+from scripts.release.lanes import LANES, HIDDEN_DIR
 
 Scorer = Callable[[dict, str, str], float]
 
-def load_hidden(bench_dir: str = BENCH_DIR) -> list[dict]:
-  """Load the 116 hidden cases as [{lane, id, case}]. INTERNAL — the raw `case` includes
-  gold answers; never return this to submitters, only feed it to a server-side scorer."""
+def load_hidden(hidden_dir: str = HIDDEN_DIR) -> list[dict]:
+  """Load the 108 hidden cases as [{lane, id, case}]. INTERNAL — the raw `case` includes
+  gold answers; never return this to submitters, only feed it to a server-side scorer.
+
+  Raises FileNotFoundError with a clear message if hidden_dir is absent — this is the expected
+  state in a public clone where the held-out cases are maintainer-private.
+  """
+  hdir = Path(hidden_dir)
+  if not hdir.exists():
+    raise FileNotFoundError(
+      f"hidden set not present at {hidden_dir!r} — this looks like a public clone; "
+      "the held-out cases are maintainer-private"
+    )
   out = []
   for lane in LANES.values():
-    cases = json.load(open(Path(bench_dir) / lane.filename))
+    cases = json.load(open(hdir / lane.filename))
     for c in cases:
-      if c.get("split") == "hidden":
-        out.append({"lane": lane.name, "id": c[lane.id_field], "case": c})
+      out.append({"lane": lane.name, "id": c[lane.id_field], "case": c})
   return out
 
 def score_submission(transcripts: dict[str, str], scorer: Scorer,
-                     system_alias: str, bench_dir: str = BENCH_DIR) -> dict:
-  hidden = load_hidden(bench_dir)
+                     system_alias: str, hidden_dir: str = HIDDEN_DIR) -> dict:
+  hidden = load_hidden(hidden_dir)
   by_lane: dict[str, list[float]] = {l: [] for l in LANES}
   missing = []
   for h in hidden:

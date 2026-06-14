@@ -15,7 +15,8 @@ branch it was developed on. PEARL never touched `benchmarks/internal/`, so the e
 | `scripts/release/` | `scripts/release/` |
 | `tests/release/` | `tests/release/` |
 | `release_clean/` | `release_clean/` |
-| `benchmarks/internal/*.json` (split applied) | `benchmarks/internal/` |
+| `benchmarks/internal/*.json` public cases | `benchmarks/public/` *(committed)* |
+| `benchmarks/internal/*.json` hidden cases | `benchmarks/hidden/` *(gitignored, maintainer-only)* |
 | `eval/prompts/cds_ws2.txt` | `release_clean/scoring/cds_ws2.txt` *(relocated)* |
 | `docs/superpowers/specs/2026-06-04-…` , `…/2026-06-14-…design.md` | `docs/superpowers/specs/` |
 | `docs/superpowers/plans/2026-06-14-…` | `docs/superpowers/plans/` |

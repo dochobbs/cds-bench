@@ -24,7 +24,7 @@
 
 - **Lineage.** Register (parent- vs clinician-facing) and rubric design were informed by **HealthBench** and **HealthBench Professional** (Arora, Wei et al., OpenAI, 2025). cds-bench is the narrow, freshness- and safety-opinionated, held-out counterpart.
 
-- **June 2026 — working release.** Split **27 public / 108 held-out** (proportional ~20%/lane, fixed-seed stratified, 4 lanes; calc lane removed). This is a working internal benchmark, not a formally peer-reviewed publication. SHA-256 + Merkle-root manifest of the held-out set; eval-as-a-service for hidden-set scoring.
+- **June 2026 — working release.** Split **27 public / 108 held-out** (proportional ~20%/lane, fixed-seed stratified, 4 lanes; calc lane removed). This is a working internal benchmark, not a formally peer-reviewed publication. SHA-256 + Merkle-root manifest of the held-out set; eval-as-a-service for hidden-set scoring. The public/hidden split was a fixed-seed (20260614) stratified ~20%/lane carve, now frozen as the `benchmarks/public/` and `benchmarks/hidden/` directories (previously encoded by a `split` field in a single mixed-case file; `split_selector.py` generated it but is no longer needed).
 
 ---
 

@@ -1,10 +1,16 @@
 # tests/release/test_submit.py
+import pytest
 from scripts.release.submit import load_hidden, score_submission
 
 def test_load_hidden_returns_108():
   hidden = load_hidden()
   assert len(hidden) == 108  # 48+24+24+12 (golden+freshness+hallucination+halluhard)
   assert all("lane" in h and "id" in h and "case" in h for h in hidden)
+
+def test_load_hidden_raises_clear_error_when_dir_missing(tmp_path):
+  """A public clone without hidden dir gets a clear error, not a cryptic FileNotFoundError."""
+  with pytest.raises(FileNotFoundError, match="public clone"):
+    load_hidden(hidden_dir=str(tmp_path / "nonexistent"))
 
 def test_score_submission_blinds_and_aggregates():
   hidden = load_hidden()

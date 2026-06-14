@@ -1,28 +1,32 @@
 # cds-bench — internal family-medicine CDS benchmark
 
-**This repository is the private source of the benchmark (all 135 cases + tooling). The public sample is the build artifact in `dist/public/` — that is what gets published.**
+**Flip-safe: this repo is ready to go public.**
+
+- `benchmarks/public/` — **committed** — the 27 public cases (4 lane files)
+- `benchmarks/hidden/` — **gitignored** — the 108 held-out cases (maintainer-only, never published)
+
+A public clone contains the public cases, methodology tooling, and a SHA-256 + Merkle-root manifest
+of the held-out set. No hidden case text or gold answers are committed to git.
+
+---
 
 This is a working internal benchmark (not a peer-reviewed publication) for evaluating
 AI clinical-decision-support systems in US primary care. It publishes a
 **representative public sample** while holding most cases back so models
 can't directly train on the test set.
 
-> **Private repo.** It contains all 135 cases (public + held-out). The *public* artifact
-> is a build output (`dist/public/`, gitignored) that is published separately — only the
-> 27-case sample, the methodology, and a hash manifest of the held-out set.
+## The benchmark
 
-## The benchmark (`benchmarks/internal/`)
+| Lane | Total | Public | Tests |
+|---|---:|---:|---|
+| `golden_60.json` | 60 | 12 | core clinical QA (judge-scored vs rubric) |
+| `freshness_30.json` | 30 | 6 | stale-guideline detection |
+| `hallucination_30.json` | 30 | 6 | clinical-safety traps (false premises, dangerous reassurance, missed-diagnosis vignettes) |
+| `halluhard_15.json` | 15 | 3 | multi-axis hallucination (rarity / grounding axis) |
 
-| Lane | n | Tests |
-|---|---:|---|
-| `golden_60.json` | 60 | core clinical QA (judge-scored vs rubric) |
-| `freshness_30.json` | 30 | stale-guideline detection |
-| `hallucination_30.json` | 30 | clinical-safety traps (false premises, dangerous reassurance, missed-diagnosis vignettes) |
-| `halluhard_15.json` | 15 | multi-axis hallucination (rarity / grounding axis) |
-
-Each case carries `split: "public" | "hidden"` — **27 public / 108 hidden**, a fixed-seed
-(`20260614`) stratified per-lane carve (~20%/lane). `scripts/release/lanes.py` is the single
-source of truth for the lanes and quotas.
+The public/hidden split is a fixed-seed (`20260614`) stratified ~20%/lane carve, frozen into
+directory structure: `benchmarks/public/` (committed) and `benchmarks/hidden/` (gitignored).
+`scripts/release/lanes.py` is the single source of truth for the lanes and quotas.
 
 ## Building the public release
 
@@ -45,7 +49,9 @@ python -m pytest tests/release/ -q                  # test suite
 
 ## Layout
 
-- `scripts/release/` — the pipeline (lanes, split_selector, manifest, assets, build_public, build_explainer, submit, validate_release)
+- `benchmarks/public/` — committed; 27 public cases across 4 lane files
+- `benchmarks/hidden/` — **gitignored**; 108 held-out cases (maintainer-only)
+- `scripts/release/` — the pipeline (lanes, manifest, assets, build_public, build_explainer, submit, validate_release)
 - `release_clean/` — curated **blinded** methodology artifacts shipped into the public tree (vendor names redacted, no private paths)
 - `tests/release/` — test suite (counts, no-leak, determinism, blinding, gate-catches-violations)
 - `docs/EVOLUTION.md` — history of the benchmark + literature it builds on

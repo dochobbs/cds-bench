@@ -7,8 +7,11 @@ __pycache__/
 .venv/
 .pytest_cache/
 
-# curated worked-example overlays are added at curation time
-benchmarks/internal/worked/
+# held-out (hidden) benchmark cases — NEVER committed
+benchmarks/hidden/
+
+# legacy mixed-case dir (now superseded by public/ + hidden/); includes worked/ overlays
+benchmarks/internal/
 
 # macOS
 .DS_Store

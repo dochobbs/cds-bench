@@ -1,0 +1,74 @@
+[
+  {
+    "search_id": "G04",
+    "category": "drug_dosing",
+    "split": "public",
+    "query": "What is the recommended dosing of metformin for type 2 diabetes in adults?"
+  },
+  {
+    "search_id": "G11",
+    "category": "hypertension",
+    "split": "public",
+    "query": "What is the first-line pharmacotherapy for stage 1 hypertension in a non-diabetic adult?"
+  },
+  {
+    "search_id": "G13",
+    "category": "diabetes",
+    "split": "public",
+    "query": "What is the target HbA1c for most adults with type 2 diabetes?"
+  },
+  {
+    "search_id": "G20",
+    "category": "cardiovascular",
+    "split": "public",
+    "query": "What are the guideline-directed medical therapies for heart failure with reduced ejection fraction?"
+  },
+  {
+    "search_id": "G40",
+    "category": "gastrointestinal",
+    "split": "public",
+    "query": "What are the Rome IV diagnostic criteria for irritable bowel syndrome and what are the first-line treatments?"
+  },
+  {
+    "search_id": "G42",
+    "category": "dermatology",
+    "split": "public",
+    "query": "What are the current guidelines for the treatment of acne vulgaris by severity per AAD guidelines?"
+  },
+  {
+    "search_id": "G46",
+    "category": "contraception_sti",
+    "split": "public",
+    "query": "What are the categories of contraceptive options and their typical-use failure rates?"
+  },
+  {
+    "search_id": "G47",
+    "category": "anemia",
+    "split": "public",
+    "query": "What is the recommended workup for iron deficiency anemia in adults including labs and evaluation?"
+  },
+  {
+    "search_id": "G50",
+    "category": "headache",
+    "split": "public",
+    "query": "What are the red flag features in headache evaluation that require urgent imaging or referral?"
+  },
+  {
+    "search_id": "G51",
+    "category": "glp1_obesity",
+    "split": "public",
+    "query": "What are the eligibility criteria for prescribing semaglutide (Wegovy) for weight management?"
+  },
+  {
+    "search_id": "G52",
+    "category": "glp1_obesity",
+    "split": "public",
+    "query": "What is the recommended dose titration schedule for tirzepatide (Zepbound) for weight management in adults?"
+  },
+  {
+    "search_id": "G59",
+    "category": "ascvd_risk",
+    "split": "public",
+    "query": "What are the inputs and scoring thresholds for the 2013 ACC/AHA ASCVD pooled cohort equations 10-year risk calculator?"
+  }
+]
