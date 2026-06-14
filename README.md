@@ -28,17 +28,25 @@ The public/hidden split is a fixed-seed (`20260614`) stratified ~20%/lane carve,
 directory structure: `benchmarks/public/` (committed) and `benchmarks/hidden/` (gitignored).
 `scripts/release/lanes.py` is the single source of truth for the lanes and quotas.
 
-## Building the public release
+## What's published
+
+This repository **is** the public artifact — these are committed at the root:
+
+- `index.html` — interactive explainer (**open this first**)
+- `docs/PUBLIC_CASES.md` — the 27 public cases as readable Markdown
+- `benchmarks/public/` — the 27 public cases (JSON)
+- `release_clean/` — the 4 blinded judge rubrics + scoring harness
+- `LICENSE` (CC-BY-NC-ND data / MIT code) · `SUBMISSION.md` (eval-as-a-service)
+- `HIDDEN_MANIFEST.sha256` + `.meta.json` — SHA-256 + Merkle root of the 108 held-out cases
+
+To regenerate these (after editing rubrics/cases), or to produce a standalone copy:
 
 ```bash
-python -m scripts.release.build_public --out dist/public --date YYYY-MM-DD
+python -m scripts.release.build_explainer                                   # index.html + docs/PUBLIC_CASES.md
+python -m scripts.release.build_public --out dist/public --date YYYY-MM-DD  # standalone public tree
 ```
 
-Emits `dist/public/` containing: the 27 public cases, the 4 blinded judge
-rubrics, the scoring harness, `LICENSE` (CC-BY-NC-ND data / MIT code),
-`SUBMISSION.md`, and `HIDDEN_MANIFEST.sha256` + `.meta.json` (per-case SHA-256 + Merkle root
-of the 108 held-out cases). A cleanliness gate refuses to ship any artifact containing a
-vendor name or private path. That `dist/public/` tree is what gets pushed to the public repo.
+A cleanliness gate refuses to emit any artifact containing a vendor name or private path.
 
 ## Other commands
 
@@ -49,12 +57,14 @@ python -m pytest tests/release/ -q                  # test suite
 
 ## Layout
 
+- root — `index.html`, `LICENSE`, `SUBMISSION.md`, `HIDDEN_MANIFEST.sha256` + `.meta.json` (the published artifact)
 - `benchmarks/public/` — committed; 27 public cases across 4 lane files
 - `benchmarks/hidden/` — **gitignored**; 108 held-out cases (maintainer-only)
 - `scripts/release/` — the pipeline (lanes, manifest, assets, build_public, build_explainer, submit, validate_release)
-- `release_clean/` — curated **blinded** methodology artifacts shipped into the public tree (vendor names redacted, no private paths)
+- `release_clean/` — curated **blinded** methodology artifacts: rubrics + scoring harness
 - `tests/release/` — test suite (counts, no-leak, determinism, blinding, gate-catches-violations)
 - `docs/EVOLUTION.md` — history of the benchmark + literature it builds on
+- `docs/PUBLIC_CASES.md` — the 27 public cases as readable Markdown
 
 ## Held-out evaluation
 
