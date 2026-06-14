@@ -643,32 +643,33 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
       <tr><th>Source</th><th class="num">Core /100</th><th class="num">Edge /100</th><th class="num">Fresh /2</th><th class="num">Halluc P/PR/F</th></tr>
     </thead>
     <tbody>
-      <tr><td>Sonnet 4.6 + prompt + 3 web searches</td><td class="score"><strong>92.6</strong></td><td class="score"><strong>95.5</strong></td><td class="score">1.80</td><td class="score">25/4/1</td></tr>
-      <tr><td>Sonnet 4.6 + prompt + 1 web search</td><td class="score">87.9</td><td class="score">91.7</td><td class="score">1.77</td><td class="score"><strong>27/3/0</strong></td></tr>
-      <tr><td>Sonnet 4.6 + prompt (no search)</td><td class="score">88.8</td><td class="score">84.7</td><td class="score">1.37</td><td class="score"><strong>27/3/0</strong></td></tr>
-      <tr><td>OpenEvidence</td><td class="score">85.9</td><td class="score">91.4</td><td class="score">1.83</td><td class="score">22/6/2</td></tr>
-      <tr><td>ChatGPT for Clinicians</td><td class="score">84.7</td><td class="score">84.7</td><td class="score"><strong>1.87</strong></td><td class="score">21/8/1</td></tr>
-      <tr><td>UpToDate Expert AI</td><td class="score">65.4</td><td class="score">69.1</td><td class="score">1.70</td><td class="score">20/9/1</td></tr>
+      <tr><td>Frontier model + structured prompt + 3 web searches</td><td class="score"><strong>92.6</strong></td><td class="score"><strong>95.5</strong></td><td class="score">1.80</td><td class="score">25/4/1</td></tr>
+      <tr><td>Frontier model + structured prompt + 1 web search</td><td class="score">87.9</td><td class="score">91.7</td><td class="score">1.77</td><td class="score"><strong>27/3/0</strong></td></tr>
+      <tr><td>Frontier model + structured prompt (no retrieval)</td><td class="score">88.8</td><td class="score">84.7</td><td class="score">1.37</td><td class="score"><strong>27/3/0</strong></td></tr>
+      <tr><td>Commercial CDS tool A</td><td class="score">85.9</td><td class="score">91.4</td><td class="score">1.83</td><td class="score">22/6/2</td></tr>
+      <tr><td>Commercial CDS tool B</td><td class="score">84.7</td><td class="score">84.7</td><td class="score"><strong>1.87</strong></td><td class="score">21/8/1</td></tr>
+      <tr><td>Commercial CDS tool C</td><td class="score">65.4</td><td class="score">69.1</td><td class="score">1.70</td><td class="score">20/9/1</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="muted small">Core/Edge: independent Sonnet 4.6 judge vs a curated reference (0&ndash;115 normalized to 100).
-  Freshness 0&ndash;2. Hallucination = PASS / PARTIAL / FAIL over 30 false-premise traps. Higher is better except FAIL.</p>
+  <p class="muted small">Core/Edge: independent frontier-model judge vs a curated reference (0&ndash;115 normalized to 100).
+  Freshness 0&ndash;2. Hallucination = PASS / PARTIAL / FAIL over 30 false-premise traps. Higher is better except FAIL.
+  Commercial tools are anonymized (A/B/C); the A/B/C assignment is fixed but undisclosed.</p>
 
   <h4>What it shows</h4>
   <ul>
-    <li><strong>The structured prompt is the biggest single lever</strong> &mdash; raw model &rarr; model + clinical prompt is <strong>+17 on Core</strong> (reproduces on GPT-5.4 +20, Opus 4.6 +17, Gemini 3.1 +12). Pick the prompt before the model.</li>
+    <li><strong>The structured prompt is the biggest single lever</strong> &mdash; raw model &rarr; model + clinical prompt is <strong>+17 on Core</strong> (reproduces across frontier models, +12 to +20). Pick the prompt before the model.</li>
     <li><strong>One web search is the best value</strong> &mdash; Core stays flat, but Freshness +0.4 and Edge +7. The third search buys a little quality and costs the zero-hallucination floor.</li>
-    <li><strong>OpenEvidence and ChatGPT for Clinicians are clinical-quality peers</strong> (~85 Core); <strong>ChatGPT for Clinicians leads freshness (1.87)</strong>. OE is bimodal (mostly 85&ndash;100, ~5% catastrophic misses), so its full-sample mean is below the outlier-trimmed "92" sometimes quoted.</li>
-    <li><strong>UpToDate Expert AI trails by ~20 points on Core/Edge</strong> &mdash; partly a real gap, partly a style penalty (its concise-bullet surface scores lower on a prose-oriented rubric; see caveats).</li>
-    <li>Only the no-search and 1-search prompt configs held the <strong>0-hallucination floor</strong> at n=30; every retrieval-heavy tool (incl. OE, ChatGPT for Clinicians, UpToDate) picked up at least one fail.</li>
+    <li><strong>Two commercial tools (A, B) are clinical-quality peers</strong> (~85 Core); <strong>tool B leads freshness (1.87)</strong>. Tool A is bimodal (mostly 85&ndash;100, ~5% catastrophic misses), so its full-sample mean is below the outlier-trimmed score sometimes quoted for it.</li>
+    <li><strong>Commercial tool C trails by ~20 points on Core/Edge</strong> &mdash; partly a real gap, partly a style penalty (its concise-bullet surface scores lower on a prose-oriented rubric; see caveats).</li>
+    <li>Only the no-search and 1-search prompt configs held the <strong>0-hallucination floor</strong> at n=30; every retrieval-heavy tool (A, B, C) picked up at least one fail.</li>
   </ul>
 
   <div class="callout warn">
     <span class="tag">Caveats</span>
     <p>May-2026 snapshot; models, harnesses, and guidelines all move &mdash; rankings shift on re-run.</p>
     <p>n=30 on freshness/hallucination: differences of 5+ on Core or 0.10+ on Freshness are reliable; tighter ones aren't. The hallucination set is 30 constructed traps &mdash; a relative comparison, not a generic lie-rate.</p>
-    <p>Single LLM judge (Sonnet 4.6, ~93% physician-panel agreement) against a prose-style curated reference &mdash; this favors prose tools and penalizes UpToDate's concise-bullet output. Web tools tested through one personal subscription each.</p>
+    <p>Single frontier-model judge (~93% physician-panel agreement) against a prose-style curated reference &mdash; this favors prose tools and penalizes a concise-bullet tool's output (tool C). Web tools tested through one personal subscription each.</p>
     <p style="margin-bottom:0">These results come from the internal eval program cds-bench derives from (its suite included an Edge set); the public cds-bench sample ships the Golden, Freshness, Hallucination, and HalluHard lanes.</p>
   </div>
 </div>
