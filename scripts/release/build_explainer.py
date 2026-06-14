@@ -348,6 +348,7 @@ td.num,th.num{text-align:right;font-family:var(--mono);font-size:14px;font-varia
 
 /* worked examples */
 .worked-card{background:var(--card);border:1.5px solid var(--teal);border-radius:6px;padding:26px 28px;margin:28px 0;box-shadow:4px 4px 0 var(--teal-wash)}
+.worked-card.hidden{display:none}
 .worked-card h4{color:var(--teal-deep);margin-top:0}
 .rubric-block{background:var(--paper-deep);border:1px solid var(--line);border-radius:4px;padding:14px 18px;margin:14px 0;font-size:13.5px;line-height:1.55;white-space:pre-wrap;font-family:var(--mono);max-height:320px;overflow-y:auto}
 .rubric-toggle{font-family:var(--serif);font-size:13.5px;font-weight:700;color:var(--teal-deep);background:none;border:1px solid var(--teal);border-radius:4px;padding:5px 14px;cursor:pointer;margin-bottom:10px;transition:all .15s}
@@ -474,6 +475,7 @@ def _js_case_browser(total: int) -> str:
 // With JS off, all cards are visible (no .hidden class set).
 const grid = document.getElementById('case-grid');
 const cards = Array.from(grid.querySelectorAll('.case-card'));
+const worked = Array.from(document.querySelectorAll('.worked-card'));
 const countEl = document.getElementById('case-count');
 let activeFilter = 'all';
 let searchVal = '';
@@ -487,6 +489,8 @@ function render() {{
     card.classList.toggle('hidden', !visible);
     if (visible) shown++;
   }});
+  // Lane pills also filter the worked examples (by lane only, not search).
+  worked.forEach(w => w.classList.toggle('hidden', activeFilter !== 'all' && w.dataset.lane !== activeFilter));
   countEl.textContent = shown + ' of {total} cases';
 }}
 
@@ -943,7 +947,7 @@ def _build_worked_html(public: dict, rubrics: dict[str, str]) -> str:
         overlay_html = '<p class="muted small"><em>Overlay parse error.</em></p>'
 
     cards += f"""
-<div class="worked-card">
+<div class="worked-card" data-lane="{html.escape(lane_name)}">
   <div class="case-header">
     <span class="case-id">{html.escape(cid)}</span>
     <span class="pill {color}">{html.escape(label)}</span>

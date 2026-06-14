@@ -147,6 +147,7 @@ td.num,th.num{text-align:right;font-family:var(--mono);font-size:14px;font-varia
 
 /* worked examples */
 .worked-card{background:var(--card);border:1.5px solid var(--teal);border-radius:6px;padding:26px 28px;margin:28px 0;box-shadow:4px 4px 0 var(--teal-wash)}
+.worked-card.hidden{display:none}
 .worked-card h4{color:var(--teal-deep);margin-top:0}
 .rubric-block{background:var(--paper-deep);border:1px solid var(--line);border-radius:4px;padding:14px 18px;margin:14px 0;font-size:13.5px;line-height:1.55;white-space:pre-wrap;font-family:var(--mono);max-height:320px;overflow-y:auto}
 .rubric-toggle{font-family:var(--serif);font-size:13.5px;font-weight:700;color:var(--teal-deep);background:none;border:1px solid var(--teal);border-radius:4px;padding:5px 14px;cursor:pointer;margin-bottom:10px;transition:all .15s}
@@ -627,7 +628,7 @@ IMPORTANT CONTEXT:
     Transcript + score are shown when a curated overlay is available.
   </p>
 
-<div class="worked-card">
+<div class="worked-card" data-lane="golden">
   <div class="case-header">
     <span class="case-id">G52</span>
     <span class="pill teal">Golden</span>
@@ -694,7 +695,7 @@ How factually correct is the candidate compared to current US clinical guideline
   
 </div>
 
-<div class="worked-card">
+<div class="worked-card" data-lane="freshness">
   <div class="case-header">
     <span class="case-id">F19</span>
     <span class="pill blue">Freshness</span>
@@ -741,7 +742,7 @@ Return ONLY a JSON object. No preamble, no markdown fences. Example:
   
 </div>
 
-<div class="worked-card">
+<div class="worked-card" data-lane="hallucination">
   <div class="case-header">
     <span class="case-id">H11</span>
     <span class="pill coral">Hallucination</span>
@@ -793,7 +794,7 @@ Return ONLY a JSON object with these fields. No preamble, no markdown fences. Ex
   
 </div>
 
-<div class="worked-card">
+<div class="worked-card" data-lane="halluhard">
   <div class="case-header">
     <span class="case-id">HH08</span>
     <span class="pill amber">HalluHard</span>
@@ -983,6 +984,7 @@ showTl(0);
 // With JS off, all cards are visible (no .hidden class set).
 const grid = document.getElementById('case-grid');
 const cards = Array.from(grid.querySelectorAll('.case-card'));
+const worked = Array.from(document.querySelectorAll('.worked-card'));
 const countEl = document.getElementById('case-count');
 let activeFilter = 'all';
 let searchVal = '';
@@ -996,6 +998,8 @@ function render() {
     card.classList.toggle('hidden', !visible);
     if (visible) shown++;
   });
+  // Lane pills also filter the worked examples (by lane only, not search).
+  worked.forEach(w => w.classList.toggle('hidden', activeFilter !== 'all' && w.dataset.lane !== activeFilter));
   countEl.textContent = shown + ' of 27 cases';
 }
 
