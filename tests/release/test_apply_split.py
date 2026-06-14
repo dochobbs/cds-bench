@@ -27,4 +27,4 @@ def test_apply_writes_split_field_and_is_idempotent(tmp_path):
 def test_totals(tmp_path):
   d = _fixture(tmp_path)
   counts = apply_split(20260614, d)
-  assert sum(counts.values()) == 29
+  assert sum(counts.values()) == 27

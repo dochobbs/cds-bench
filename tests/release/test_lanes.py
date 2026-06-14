@@ -2,8 +2,12 @@
 from scripts.release.lanes import LANES, BENCH_DIR
 
 def test_quota_totals():
-  assert sum(l.total for l in LANES.values()) == 145
-  assert sum(l.public_count for l in LANES.values()) == 29
+  assert sum(l.total for l in LANES.values()) == 135
+  assert sum(l.public_count for l in LANES.values()) == 27
+
+def test_four_lanes():
+  """Exactly 4 lanes: golden, freshness, hallucination, halluhard."""
+  assert set(LANES.keys()) == {"golden", "freshness", "hallucination", "halluhard"}
 
 def test_each_lane_file_exists_and_counts_match():
   import json, pathlib

@@ -52,9 +52,9 @@ def md_out(public):
 # load_public tests
 # ---------------------------------------------------------------------------
 
-def test_load_public_total_29(public):
+def test_load_public_total_27(public):
   total = sum(len(v) for v in public.values())
-  assert total == 29, f"Expected 29 public cases, got {total}"
+  assert total == 27, f"Expected 27 public cases, got {total}"
 
 
 def test_load_public_per_lane(public):
@@ -63,12 +63,16 @@ def test_load_public_per_lane(public):
     "freshness": 6,
     "hallucination": 6,
     "halluhard": 3,
-    "calc": 2,
   }
   for lane_name, count in expected.items():
     assert lane_name in public, f"Lane {lane_name!r} missing from load_public()"
     got = len(public[lane_name])
     assert got == count, f"{lane_name}: expected {count} public cases, got {got}"
+
+
+def test_load_public_no_calc_lane(public):
+  """calc lane was removed; must not be present."""
+  assert "calc" not in public, "calc lane should not be present in 4-lane bench"
 
 
 def test_load_public_case_dicts_have_split_public(public):
@@ -94,7 +98,7 @@ def test_load_public_case_has_id_field(public):
 # render_html — id presence / absence
 # ---------------------------------------------------------------------------
 
-def test_html_contains_all_29_public_ids(html_out, public):
+def test_html_contains_all_27_public_ids(html_out, public):
   for lane_name, cases in public.items():
     lane = LANES[lane_name]
     for c in cases:
@@ -135,28 +139,58 @@ def test_html_contains_no_hidden_halluhard_ids(html_out):
     )
 
 
-def test_html_contains_no_hidden_calc_ids(html_out):
-  # C03 onward are hidden (public are C01, C02)
-  for hidden_id in ("C03", "C04", "C05"):
-    assert hidden_id not in html_out, (
-      f"Hidden calc id {hidden_id!r} found in HTML — leak!"
-    )
-
-
 # ---------------------------------------------------------------------------
 # render_html — structure
 # ---------------------------------------------------------------------------
 
-def test_html_all_five_lane_labels_present(html_out):
-  for label in ("Golden", "Freshness", "Hallucination", "HalluHard", "Calc"):
+def test_html_four_lane_labels_present(html_out):
+  for label in ("Golden", "Freshness", "Hallucination", "HalluHard"):
     assert label in html_out, f"Lane label {label!r} missing from HTML"
+
+
+def test_html_no_canary_present(html_out):
+  """Canary GUID must not appear in the HTML."""
+  assert "CDS-BENCH-CANARY" not in html_out, "Canary GUID found in HTML — should be removed"
+  assert "DO-NOT-TRAIN" not in html_out, "DO-NOT-TRAIN text found in HTML — should be removed"
+
+
+def test_html_data_use_request_present(html_out):
+  """Data use request phrasing must be present."""
+  assert "Please don" in html_out or "data use request" in html_out.lower() or "training data" in html_out.lower()
+
+
+def test_html_results_section_present(html_out):
+  """Results section with blinded scores must be present."""
+  assert "82.5" in html_out, "Frontier model + prompt score missing"
+  assert "69.7" in html_out, "Raw frontier model score missing"
+  assert "Specialized clinical tool" in html_out, "Blinded tool label missing"
+
+
+def test_html_limitations_section_present(html_out):
+  """Limitations section must be present."""
+  assert "Limitations" in html_out
+
+
+def test_html_no_publication_grade(html_out):
+  """Must not claim publication-grade."""
+  assert "publication-grade" not in html_out.lower()
+  assert "publishable" not in html_out.lower()
+
+
+def test_html_fresh_counts(html_out):
+  """HTML must contain the correct 27/108/135/4 counts, not old 29/116/145/5."""
+  assert "135" in html_out
+  assert "27" in html_out
+  assert "108" in html_out
+  # Old counts must not appear
+  assert "145" not in html_out
+  assert "116" not in html_out
 
 
 def test_html_freshness_gold_fields_present(html_out, public):
   """A freshness case must show its new_answer in the HTML."""
   f_cases = public["freshness"]
   assert f_cases, "No freshness public cases found"
-  # Check that at least one new_answer text appears
   found_any = False
   for c in f_cases:
     if c.get("new_answer") and c["new_answer"] in html_out:
@@ -189,42 +223,34 @@ def test_html_hallucination_trap_present(html_out, public):
   assert found_any, "No hallucination trap value found in HTML"
 
 
-def test_html_calc_calculator_present(html_out, public):
-  """A calc case must show its calculator field."""
-  c_cases = public["calc"]
-  assert c_cases
-  found_any = False
-  for c in c_cases:
-    if c.get("calculator") and c["calculator"] in html_out:
-      found_any = True
-      break
-  assert found_any, "No calc calculator field found in HTML"
-
-
-def test_html_canary_present(html_out):
-  from scripts.release.canary import CANARY
-  assert CANARY in html_out, "Canary GUID missing from HTML"
-
-
-def test_html_do_not_train_notice_present(html_out):
-  # Check a distinctive substring of the notice
-  assert "Do NOT use it" in html_out or "do not train" in html_out.lower(), (
-    "Do-not-train notice missing from HTML"
-  )
+def test_html_static_case_cards_present(html_out, public):
+  """Static case cards must be in the HTML (no-JS readable)."""
+  count = html_out.count('class="case-card"')
+  total = sum(len(v) for v in public.values())
+  assert count == total, f"Expected {total} static case cards in HTML, got {count}"
 
 
 def test_html_is_self_contained(html_out):
   """No external CDN src/href/url links."""
   import re
-  # Must not load any external asset via src= or href= pointing to http(s)
   external_src = re.findall(r'(?:src|href)=["\']https?://', html_out, re.IGNORECASE)
-  # Allow data: URIs but nothing else
   assert not external_src, f"External asset references found: {external_src}"
 
 
 def test_html_no_cdn_link_tag(html_out):
   """No <link rel=stylesheet href=http..."""
   assert "rel=stylesheet href=http" not in html_out.lower()
+
+
+def test_html_filter_buttons_have_aria_pressed(html_out):
+  """Filter buttons must have aria-pressed attribute."""
+  assert 'aria-pressed="true"' in html_out
+  assert 'aria-pressed="false"' in html_out
+
+
+def test_html_focus_visible_rule(html_out):
+  """CSS must include a :focus-visible rule."""
+  assert ":focus-visible" in html_out
 
 
 # ---------------------------------------------------------------------------
@@ -262,13 +288,13 @@ def test_assert_no_private_path_passes_clean():
 # render_markdown tests
 # ---------------------------------------------------------------------------
 
-def test_md_lists_29_cases(md_out):
+def test_md_lists_27_cases(md_out):
   """Count ### headings (one per case)."""
   count = md_out.count("\n### ")
-  assert count == 29, f"Expected 29 case headings in Markdown, got {count}"
+  assert count == 27, f"Expected 27 case headings in Markdown, got {count}"
 
 
-def test_md_contains_all_29_public_ids(md_out, public):
+def test_md_contains_all_27_public_ids(md_out, public):
   for lane_name, cases in public.items():
     lane = LANES[lane_name]
     for c in cases:
@@ -276,12 +302,16 @@ def test_md_contains_all_29_public_ids(md_out, public):
       assert cid in md_out, f"Public id {cid!r} missing from Markdown"
 
 
-def test_md_header_contains_do_not_train(md_out):
-  assert "do not train" in md_out.lower(), "do-not-train notice missing from Markdown header"
+def test_md_header_contains_data_use_request(md_out):
+  assert "training data" in md_out.lower() or "data use request" in md_out.lower()
 
 
-def test_md_has_five_lane_sections(md_out):
-  for label in ("Golden", "Freshness", "Hallucination", "HalluHard", "Calc"):
+def test_md_no_canary(md_out):
+  assert "CDS-BENCH-CANARY" not in md_out
+
+
+def test_md_has_four_lane_sections(md_out):
+  for label in ("Golden", "Freshness", "Hallucination", "HalluHard"):
     assert f"## {label}" in md_out, f"Lane section ## {label} missing from Markdown"
 
 
@@ -302,16 +332,14 @@ def test_md_halluhard_grounding_axis_present(md_out, public):
 
 
 # ---------------------------------------------------------------------------
-# Cross-check: hidden ids not in HTML (loaded from actual bench files)
+# Cross-check: hidden ids not in HTML
 # ---------------------------------------------------------------------------
 
 def test_html_contains_zero_hidden_ids_exhaustive(html_out):
-  """Load every hidden id and assert none appears in the embedded JSON blob.
+  """Load every hidden id and assert none appears in the static card HTML.
 
-  We check the cases-data JSON blob specifically (not full HTML substring) to
-  avoid false positives where short hidden IDs like 'H04' appear as a substring
-  of a legitimate public ID like 'HH04'. The JSON blob contains explicit "id"
-  values; a hidden id in the blob is a genuine leak.
+  We scan the case-card blocks in the static HTML. Hidden ids in .case-card
+  data attributes or content is a genuine data leak.
   """
   import json as _json
   import re as _re
@@ -326,15 +354,9 @@ def test_html_contains_zero_hidden_ids_exhaustive(html_out):
       if c.get("split") == "hidden":
         hidden_ids.add(c[lane.id_field])
 
-  # Extract the embedded JSON blob to check for actual data-level leaks
-  m = _re.search(
-    r'<script[^>]+id=["\']cases-data["\'][^>]*>(.*?)</script>',
-    html_out,
-    _re.DOTALL,
-  )
-  assert m, "cases-data script block not found in HTML"
-  blob = _json.loads(m.group(1))
-  blob_ids = {entry.get("id") or entry.get("search_id") for entry in blob}
+  # Find all case-card blocks in static HTML and extract their IDs
+  # Each card has: <span class="case-id">XXXX</span>
+  blob_ids = set(_re.findall(r'<span class="case-id">([^<]+)</span>', html_out))
 
   leaked = [hid for hid in hidden_ids if hid in blob_ids]
-  assert not leaked, f"Hidden ids leaked into cases-data JSON blob: {leaked}"
+  assert not leaked, f"Hidden ids leaked into static case cards: {leaked}"

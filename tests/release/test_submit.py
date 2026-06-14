@@ -1,9 +1,9 @@
 # tests/release/test_submit.py
 from scripts.release.submit import load_hidden, score_submission
 
-def test_load_hidden_returns_116():
+def test_load_hidden_returns_108():
   hidden = load_hidden()
-  assert len(hidden) == 116  # 48+24+24+12+8
+  assert len(hidden) == 108  # 48+24+24+12 (golden+freshness+hallucination+halluhard)
   assert all("lane" in h and "id" in h and "case" in h for h in hidden)
 
 def test_score_submission_blinds_and_aggregates():
@@ -13,8 +13,7 @@ def test_score_submission_blinds_and_aggregates():
   fake = lambda case, answer, lane: 1.0
   card = score_submission(transcripts, scorer=fake, system_alias="SubmittedModel")
   assert card["system"] == "SubmittedModel"
-  assert set(card["per_lane"]) == {"golden", "freshness", "hallucination", "halluhard", "calc"}
-  assert card["per_lane"]["calc"]["n"] == 8  # hidden calc count
+  assert set(card["per_lane"]) == {"golden", "freshness", "hallucination", "halluhard"}
   assert card["per_lane"]["golden"]["mean"] == 1.0
 
 def test_scorecard_contains_no_vendor_identities():
@@ -30,10 +29,11 @@ def test_scorecard_contains_no_vendor_identities():
 def test_none_score_treated_as_missing():
   hidden = load_hidden()
   transcripts = {h["id"]: "x" for h in hidden}
-  scorer = lambda c, a, l: (None if l == "calc" else 1.0)
+  # Score everything; halluhard lane returns None
+  scorer = lambda c, a, l: (None if l == "halluhard" else 1.0)
   card = score_submission(transcripts, scorer=scorer, system_alias="X")
-  assert card["missing_count"] == 8           # all 8 hidden calc cases scored None -> missing
-  assert card["per_lane"]["calc"]["mean"] is None
+  assert card["missing_count"] == 12   # all 12 hidden halluhard cases scored None -> missing
+  assert card["per_lane"]["halluhard"]["mean"] is None
   assert card["per_lane"]["golden"]["mean"] == 1.0
 
 def test_scorer_exception_is_tagged_with_case_id():

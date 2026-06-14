@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # scripts/release/build_explainer.py
-"""Interactive HTML explainer + readable Markdown render of the 29 public cds-bench cases.
+"""Interactive HTML explainer + readable Markdown render of the 27 public cds-bench cases.
 
 Run:  python -m scripts.release.build_explainer
 Writes:
   index.html         — self-contained interactive explainer (repo root)
-  docs/PUBLIC_CASES.md — git-diffable plain-text render of the 29 cases
+  docs/PUBLIC_CASES.md — git-diffable plain-text render of the 27 cases
 """
 from __future__ import annotations
 
@@ -13,13 +13,17 @@ import html
 import json
 from pathlib import Path
 
-from scripts.release.canary import CANARY, DO_NOT_TRAIN_NOTICE
 from scripts.release.lanes import BENCH_DIR, LANES
 
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
 RUBRIC_CLEAN_DIR = "release_clean/rubrics"
+
+_DATA_USE_REQUEST = (
+  "Please don't use the public sample as training data; note this is a request, "
+  "not a technical control — see the held-back set below."
+)
 
 # Concise timeline data for evolution section (no markdown-parser needed).
 TIMELINE: list[dict] = [
@@ -29,7 +33,7 @@ TIMELINE: list[dict] = [
     "body": (
       "<code>golden_60</code>: 60 bread-and-butter clinical queries scored on a "
       "four-dimension rubric (Clinical Accuracy /30, Completeness /30, Specificity /25, "
-      "Citation Quality /15), with dual-gold scoring. Serious tools cluster at 85–90%; "
+      "Citation Quality /15), with dual-gold scoring. Serious tools cluster at 85&ndash;90%; "
       "adversarial lanes added to separate them."
     ),
   },
@@ -38,10 +42,11 @@ TIMELINE: list[dict] = [
     "title": "Adversarial lanes",
     "body": (
       "<code>freshness_30</code>: queries on guidelines that changed in ~12 months, each "
-      "with a hand-curated <em>old_answer → new_answer (source)</em> triple anchored to "
+      "with a hand-curated <em>old_answer &rarr; new_answer (source)</em> triple anchored to "
       "real ACIP/CDC, USPSTF, ADA, ACC/AHA, and AAP updates. "
-      "<code>hallucination_30</code>: adversarial prompts that bait fabricated citations "
-      "and false premises (pass / partial / fail). Sharpest clinical-safety discriminator."
+      "<code>hallucination_30</code>: clinical-safety traps (false premises, dangerous "
+      "reassurance, missed-diagnosis vignettes the model must catch). Sharpest clinical-safety "
+      "discriminator."
     ),
   },
   {
@@ -55,23 +60,22 @@ TIMELINE: list[dict] = [
   },
   {
     "date": "May 2026",
-    "title": "HalluHard lane + calculators",
+    "title": "HalluHard lane",
     "body": (
       "<code>halluhard_15</code> derived from Fan et al. (2026): reference-vs-content "
       "grounding split, rarity stratification, multi-turn self-conditioning. Orthogonal "
-      "to <code>hallucination_30</code> (active vs. passive hallucination). "
-      "<code>calc_micro_10</code>: deterministic calculator/dosing checks scored against "
-      "exact expected behavior, not by judge."
+      "to <code>hallucination_30</code>: HalluHard tests active fabrication; "
+      "<code>hallucination_30</code> tests accepting unsafe premises / missing red flags."
     ),
   },
   {
     "date": "Jun 2026",
-    "title": "Publishable release",
+    "title": "Working release",
     "body": (
-      "29 public / 116 held-out (proportional ~20%/lane, fixed-seed stratified). "
-      "BIG-bench canary GUID + do-not-train notice on every artifact; "
-      "SHA-256 + Merkle-root manifest of the never-distributed hidden set; "
-      "eval-as-a-service for hidden-set scoring."
+      "27 public / 108 held-out (proportional ~20%/lane, fixed-seed stratified). "
+      "SHA-256 + Merkle-root manifest of the held-out set; "
+      "eval-as-a-service for hidden-set scoring. "
+      "This is a working internal benchmark, not a formally peer-reviewed publication."
     ),
   },
 ]
@@ -81,29 +85,32 @@ REFERENCES: list[dict] = [
     "key": "Fan2026",
     "cite": (
       "Fan, Z., Delsad, J., Flammarion, N., &amp; Andriushchenko, M. (2026). "
-      "<em>HalluHard: A Hard Multi-Turn Hallucination Benchmark.</em> arXiv:2602.01031."
-    ),
-  },
-  {
-    "key": "Wang2026",
-    "cite": (
-      "Wang et al. (2026). "
-      "<em>HeavySkill: Heavy Thinking as the Inner Skill in Agentic Harness.</em> arXiv:2605.02396."
-    ),
-  },
-  {
-    "key": "BIGbench2022",
-    "cite": (
-      "Srivastava, A., et al. (2022). "
-      "<em>Beyond the Imitation Game (BIG-bench).</em> arXiv:2206.04615. "
-      "— canary-GUID / do-not-train convention."
+      "<em>HalluHard: A Hard Multi-Turn Hallucination Benchmark.</em> arXiv:2602.01031. "
+      "&mdash; halluhard lane. (2026 preprint.)"
     ),
   },
   {
     "key": "Zheng2023",
     "cite": (
       "Zheng, L., et al. (2023). "
-      "<em>Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.</em> arXiv:2306.05685."
+      "<em>Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.</em> arXiv:2306.05685. "
+      "&mdash; judge protocol."
+    ),
+  },
+  {
+    "key": "Jimenez2024",
+    "cite": (
+      "Jimenez, C. E., et al. (2024). "
+      "<em>SWE-bench: Can Language Models Resolve Real-World GitHub Issues?</em> arXiv:2310.06770. "
+      "&mdash; held-out test-set precedent."
+    ),
+  },
+  {
+    "key": "Rein2023",
+    "cite": (
+      "Rein, D., et al. (2023). "
+      "<em>GPQA: A Graduate-Level Google-Proof Q&amp;A Benchmark.</em> arXiv:2311.12022. "
+      "&mdash; held-out / google-proof precedent."
     ),
   },
   {
@@ -111,7 +118,7 @@ REFERENCES: list[dict] = [
     "cite": (
       "Arora, R. K., Wei, J., et al. (OpenAI) (2025). "
       "<em>HealthBench: Evaluating Large Language Models Towards Improved Human Health.</em> "
-      "arXiv:2505.08775."
+      "arXiv:2505.08775. &mdash; clinical-eval lineage."
     ),
   },
   {
@@ -119,7 +126,7 @@ REFERENCES: list[dict] = [
     "cite": (
       "Pimpale et al. (2025). "
       "<em>How Can I Publish My LLM Benchmark Without Giving the True Answers Away?</em> "
-      "arXiv:2505.18102."
+      "arXiv:2505.18102. &mdash; publish-without-leakage."
     ),
   },
 ]
@@ -140,7 +147,7 @@ LANE_META: list[dict] = [
     "label": "Freshness",
     "n_total": 30,
     "n_public": 6,
-    "tests": "Currency of guideline knowledge vs. curated old→new triples",
+    "tests": "Currency of guideline knowledge vs. curated old&rarr;new triples",
     "judge": "PASS / PARTIAL / FAIL verdict",
     "color": "blue",
   },
@@ -149,7 +156,7 @@ LANE_META: list[dict] = [
     "label": "Hallucination",
     "n_total": 30,
     "n_public": 6,
-    "tests": "Passive hallucination — does the model accept dangerous false premises?",
+    "tests": "Clinical-safety traps: false premises, dangerous reassurance, and missed-diagnosis vignettes the model must catch",
     "judge": "PASS / PARTIAL / FAIL + clinical_safety",
     "color": "coral",
   },
@@ -161,15 +168,6 @@ LANE_META: list[dict] = [
     "tests": "Active hallucination under rarity stress; reference + content grounding axes",
     "judge": "PASS / PARTIAL / FAIL + grounding axes",
     "color": "amber",
-  },
-  {
-    "id": "calc",
-    "label": "Calc",
-    "n_total": 10,
-    "n_public": 2,
-    "tests": "Deterministic calculator / dosing checks — must refuse to compute",
-    "judge": "Deterministic (exact match vs. expected_behavior)",
-    "color": "green",
   },
 ]
 
@@ -216,7 +214,7 @@ _CSS = """
   --card:#FFFDF7;
   --ink:#1C2733;
   --ink-soft:#54616F;
-  --ink-faint:#9AA4AD;
+  --ink-faint:#5E6A75;
   --line:#DCD2C0;
   --line-soft:#EAE2D2;
   --teal:#0E6F66;
@@ -247,6 +245,9 @@ body{
   background-size:22px 22px;
 }
 ::selection{background:var(--teal);color:#fff}
+
+/* visible focus for keyboard users */
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 
 /* progress bar */
 #progress{position:fixed;top:0;left:0;height:3px;background:var(--teal);width:0%;z-index:99;transition:width .1s linear}
@@ -294,7 +295,6 @@ header.hero{padding:84px 0 64px;border-bottom:1px solid var(--line)}
 .stat .n{font-family:var(--mono);font-size:34px;font-weight:700;color:var(--teal-deep);line-height:1.1}
 .stat .l{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:5px}
 .hero .notice{margin-top:34px;font-size:14.5px;color:var(--ink-soft);border-left:3px solid var(--coral);padding:8px 0 8px 16px;background:var(--coral-wash)}
-.hero .canary{margin-top:14px;font-size:13px;font-family:var(--mono);color:var(--ink-soft);border-left:3px solid var(--amber);padding:6px 0 6px 14px;background:var(--amber-wash);word-break:break-all}
 
 /* cards & callouts */
 .card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:24px 26px;margin:22px 0}
@@ -353,6 +353,9 @@ td.num,th.num{text-align:right;font-family:var(--mono);font-size:14px;font-varia
 .rubric-toggle{font-family:var(--serif);font-size:13.5px;font-weight:700;color:var(--teal-deep);background:none;border:1px solid var(--teal);border-radius:4px;padding:5px 14px;cursor:pointer;margin-bottom:10px;transition:all .15s}
 .rubric-toggle:hover{background:var(--teal-wash)}
 
+/* results table */
+.results-table td.score{text-align:right;font-family:var(--mono);font-weight:700;color:var(--teal-deep)}
+
 /* timeline */
 #tl{display:flex;gap:0;overflow-x:auto;padding:26px 4px 18px;margin:18px -4px}
 .tlnode{flex:none;width:152px;position:relative;cursor:pointer;padding-top:26px}
@@ -389,89 +392,123 @@ showTl(0);
 """.strip()
 
 
-def _js_case_browser() -> str:
-  return """
-const cases = JSON.parse(document.getElementById('cases-data').textContent);
+def _static_case_card_html(c: dict, lane_name: str) -> str:
+  """Return the static HTML for one case card (mirrors JS buildCard logic)."""
+  pill_colors = {"golden": "teal", "freshness": "blue", "hallucination": "coral",
+                 "halluhard": "amber", "calc": "green"}
+  color = pill_colors.get(lane_name, "neutral")
+  lane_obj = LANES[lane_name]
+  cid = c[lane_obj.id_field]
+  query = c.get("query", "")
+  category = c.get("category", "")
+
+  # search text for data-text attr (JS uses this for keyword filter)
+  text_search = (query + " " + cid + " " + category).lower()
+
+  if lane_name == "golden":
+    gold_html = (
+      f'<div class="gf-row"><span class="gf-label">Category</span>'
+      f'<span class="gf-value">{html.escape(category)}</span></div>'
+      f'<div class="gf-row"><span class="gf-label">Query type</span>'
+      f'<span class="gf-value"><em>Bread-and-butter CDS query &mdash; scored on 4-dimension rubric '
+      f'(Accuracy / Completeness / Specificity / Citations)</em></span></div>'
+    )
+  elif lane_name == "freshness":
+    gold_html = (
+      f'<div class="gf-row"><span class="gf-label">Old answer</span>'
+      f'<span class="gf-value">{html.escape(c.get("old_answer", ""))}</span></div>'
+      f'<div class="gf-row"><span class="gf-label">New answer</span>'
+      f'<span class="gf-value"><strong>{html.escape(c.get("new_answer", ""))}</strong></span></div>'
+      f'<div class="gf-row"><span class="gf-label">Source</span>'
+      f'<span class="gf-value">{html.escape(c.get("source", ""))}</span></div>'
+    )
+  elif lane_name == "hallucination":
+    gold_html = (
+      f'<div class="gf-row"><span class="gf-label">Trap</span>'
+      f'<span class="gf-value"><code>{html.escape(c.get("trap", ""))}</code></span></div>'
+      f'<div class="gf-row"><span class="gf-label">Expected</span>'
+      f'<span class="gf-value">{html.escape(c.get("expected", ""))}</span></div>'
+    )
+  elif lane_name == "halluhard":
+    fms = " ".join(f"<code>{html.escape(f)}</code>" for f in (c.get("fail_modes") or []))
+    gold_html = (
+      f'<div class="gf-row"><span class="gf-label">Rarity</span>'
+      f'<span class="gf-value"><code>{html.escape(c.get("rarity", ""))}</code></span></div>'
+      f'<div class="gf-row"><span class="gf-label">Grounding axis</span>'
+      f'<span class="gf-value"><code>{html.escape(c.get("grounding_axis", ""))}</code></span></div>'
+      f'<div class="gf-row"><span class="gf-label">Fail modes</span>'
+      f'<span class="gf-value">{fms}</span></div>'
+      f'<div class="gf-row"><span class="gf-label">Ground truth</span>'
+      f'<span class="gf-value">{html.escape(c.get("ground_truth_source", ""))}</span></div>'
+    )
+  elif lane_name == "calc":
+    inputs = " &middot; ".join(f"<code>{html.escape(i)}</code>" for i in (c.get("inputs_in_query") or []))
+    gold_html = (
+      f'<div class="gf-row"><span class="gf-label">Calculator</span>'
+      f'<span class="gf-value"><code>{html.escape(c.get("calculator", ""))}</code></span></div>'
+      f'<div class="gf-row"><span class="gf-label">Inputs</span>'
+      f'<span class="gf-value">{inputs}</span></div>'
+      f'<div class="gf-row"><span class="gf-label">Expected</span>'
+      f'<span class="gf-value">{html.escape(c.get("expected_behavior", ""))}</span></div>'
+    )
+  else:
+    gold_html = ""
+
+  return (
+    f'<div class="case-card" data-lane="{html.escape(lane_name)}" '
+    f'data-text="{html.escape(text_search)}">\n'
+    f'  <div class="case-header">\n'
+    f'    <span class="case-id">{html.escape(cid)}</span>\n'
+    f'    <span class="pill {color}">{html.escape(lane_name)}</span>\n'
+    f'    <span class="case-cat">{html.escape(category)}</span>\n'
+    f'  </div>\n'
+    f'  <div class="query-block">{html.escape(query)}</div>\n'
+    f'  <div class="gold-fields">{gold_html}</div>\n'
+    f'</div>\n'
+  )
+
+
+def _js_case_browser(total: int) -> str:
+  return f"""
+// JS enhances the pre-rendered static cards for filter/search.
+// With JS off, all cards are visible (no .hidden class set).
 const grid = document.getElementById('case-grid');
+const cards = Array.from(grid.querySelectorAll('.case-card'));
 const countEl = document.getElementById('case-count');
 let activeFilter = 'all';
 let searchVal = '';
 
-function buildCard(c) {
-  const div = document.createElement('div');
-  div.className = 'case-card';
-  div.dataset.lane = c.lane;
-  div.dataset.text = (c.query + ' ' + c.id + ' ' + (c.category || '')).toLowerCase();
-
-  const pill_colors = {golden:'teal',freshness:'blue',hallucination:'coral',halluhard:'amber',calc:'green'};
-  const color = pill_colors[c.lane] || 'neutral';
-
-  let goldHtml = '';
-  if (c.lane === 'golden') {
-    goldHtml = `<div class="gf-row"><span class="gf-label">Category</span><span class="gf-value">${esc(c.category || '')}</span></div>
-<div class="gf-row"><span class="gf-label">Query type</span><span class="gf-value"><em>Bread-and-butter CDS query — scored on 4-dimension rubric (Accuracy / Completeness / Specificity / Citations)</em></span></div>`;
-  } else if (c.lane === 'freshness') {
-    goldHtml = `<div class="gf-row"><span class="gf-label">Old answer</span><span class="gf-value">${esc(c.old_answer || '')}</span></div>
-<div class="gf-row"><span class="gf-label">New answer</span><span class="gf-value"><strong>${esc(c.new_answer || '')}</strong></span></div>
-<div class="gf-row"><span class="gf-label">Source</span><span class="gf-value">${esc(c.source || '')}</span></div>`;
-  } else if (c.lane === 'hallucination') {
-    goldHtml = `<div class="gf-row"><span class="gf-label">Trap</span><span class="gf-value"><code>${esc(c.trap || '')}</code></span></div>
-<div class="gf-row"><span class="gf-label">Expected</span><span class="gf-value">${esc(c.expected || '')}</span></div>`;
-  } else if (c.lane === 'halluhard') {
-    const fms = (c.fail_modes || []).map(f => `<code>${esc(f)}</code>`).join(' ');
-    goldHtml = `<div class="gf-row"><span class="gf-label">Rarity</span><span class="gf-value"><code>${esc(c.rarity || '')}</code></span></div>
-<div class="gf-row"><span class="gf-label">Grounding axis</span><span class="gf-value"><code>${esc(c.grounding_axis || '')}</code></span></div>
-<div class="gf-row"><span class="gf-label">Fail modes</span><span class="gf-value">${fms}</span></div>
-<div class="gf-row"><span class="gf-label">Ground truth</span><span class="gf-value">${esc(c.ground_truth_source || '')}</span></div>`;
-  } else if (c.lane === 'calc') {
-    const inputs = (c.inputs_in_query || []).map(i => `<code>${esc(i)}</code>`).join(' · ');
-    goldHtml = `<div class="gf-row"><span class="gf-label">Calculator</span><span class="gf-value"><code>${esc(c.calculator || '')}</code></span></div>
-<div class="gf-row"><span class="gf-label">Inputs</span><span class="gf-value">${inputs}</span></div>
-<div class="gf-row"><span class="gf-label">Expected</span><span class="gf-value">${esc(c.expected_behavior || '')}</span></div>`;
-  }
-
-  div.innerHTML = `<div class="case-header">
-    <span class="case-id">${esc(c.id)}</span>
-    <span class="pill ${color}">${esc(c.lane)}</span>
-    <span class="case-cat">${esc(c.category || '')}</span>
-  </div>
-  <div class="query-block">${esc(c.query)}</div>
-  <div class="gold-fields">${goldHtml}</div>`;
-  return div;
-}
-
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function render() {
+function render() {{
   let shown = 0;
-  grid.innerHTML = '';
-  cases.forEach(c => {
-    const laneOk = activeFilter === 'all' || c.lane === activeFilter;
-    const searchOk = !searchVal || c.text_search.includes(searchVal);
-    if (laneOk && searchOk) {
-      grid.appendChild(buildCard(c));
-      shown++;
-    }
-  });
-  countEl.textContent = shown + ' of 29 cases';
-}
+  cards.forEach(card => {{
+    const laneOk = activeFilter === 'all' || card.dataset.lane === activeFilter;
+    const searchOk = !searchVal || card.dataset.text.includes(searchVal);
+    const visible = laneOk && searchOk;
+    card.classList.toggle('hidden', !visible);
+    if (visible) shown++;
+  }});
+  countEl.textContent = shown + ' of {total} cases';
+}}
 
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
+document.querySelectorAll('.filter-btn').forEach(btn => {{
+  btn.addEventListener('click', () => {{
     activeFilter = btn.dataset.lane;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.filter-btn').forEach(b => {{
+      const isActive = b === btn;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    }});
     render();
-  });
-});
+  }});
+}});
 
-document.getElementById('search-box').addEventListener('input', e => {
+document.getElementById('search-box').addEventListener('input', e => {{
   searchVal = e.target.value.toLowerCase();
   render();
-});
+}});
 
-render();
+// Initial count update (all visible on load)
+countEl.textContent = '{total} of {total} cases';
 """.strip()
 
 
@@ -482,36 +519,22 @@ render();
 def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
   """Return the full self-contained index.html string."""
 
-  # Build the JSON blob for the case browser (safe for embedding in <script type="application/json">).
-  cases_blob: list[dict] = []
-  for lane_name, cases in public.items():
-    lane = LANES[lane_name]
-    id_field = lane.id_field
-    for c in cases:
-      entry = dict(c)
-      entry["lane"] = lane_name
-      entry["id"] = c[id_field]
-      # query field varies by lane
-      if lane_name == "golden":
-        entry["query"] = c.get("original_query") or c.get("amboss_query", "")
-      entry["text_search"] = (
-        (entry.get("query") or "") + " " +
-        entry["id"] + " " +
-        (entry.get("category") or "")
-      ).lower()
-      cases_blob.append(entry)
+  total_public = sum(len(v) for v in public.values())
 
-  cases_json = json.dumps(cases_blob, ensure_ascii=False)
+  # Build static case cards HTML
+  static_cards_html = ""
+  for lane_name, cases in public.items():
+    for c in cases:
+      static_cards_html += _static_case_card_html(c, lane_name)
 
   # Lane filter buttons HTML
-  filter_btns = '<button class="filter-btn active" data-lane="all">All (29)</button>\n'
-  color_map = {"golden": "teal", "freshness": "blue", "hallucination": "coral",
-               "halluhard": "amber", "calc": "green"}
+  filter_btns = f'<button class="filter-btn active" data-lane="all" aria-pressed="true">All ({total_public})</button>\n'
   for m in LANE_META:
-    filter_btns += (
-      f'<button class="filter-btn" data-lane="{m["id"]}">'
-      f'{m["label"]} ({m["n_public"]})</button>\n'
-    )
+    if m["id"] in public:
+      filter_btns += (
+        f'<button class="filter-btn" data-lane="{m["id"]}" aria-pressed="false">'
+        f'{m["label"]} ({m["n_public"]})</button>\n'
+      )
 
   # Lane methodology table
   lane_rows = ""
@@ -522,7 +545,7 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
       f'<td><span class="pill {color}">{html.escape(m["label"])}</span></td>'
       f'<td class="num">{m["n_total"]}</td>'
       f'<td class="num"><strong>{m["n_public"]}</strong></td>'
-      f'<td>{html.escape(m["tests"])}</td>'
+      f'<td>{m["tests"]}</td>'
       f'<td class="muted small">{html.escape(m["judge"])}</td>'
       f'</tr>\n'
     )
@@ -531,10 +554,10 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
   tl_nodes = ""
   for i, e in enumerate(TIMELINE):
     tl_nodes += (
-      f'<div class="tlnode{" active" if i == 0 else ""}">'
+      f'<button class="tlnode{" active" if i == 0 else ""}" tabindex="0">'
       f'<div class="d">{html.escape(e["date"])}</div>'
       f'<div class="t">{html.escape(e["title"])}</div>'
-      f'</div>\n'
+      f'</button>\n'
     )
 
   # References
@@ -542,10 +565,10 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
   for r in REFERENCES:
     ref_items += f'<li>{r["cite"]}</li>\n'
 
-  # Worked examples (5 showcase cases; graceful if worked overlay absent)
+  # Worked examples
   worked_html = _build_worked_html(public, rubrics)
 
-  # Rubric summary for methodology section (first 10 lines of golden rubric for brevity)
+  # Rubric summary for methodology section (first 18 lines of golden rubric for brevity)
   golden_rubric_preview = rubrics.get("golden", "")
   rubric_preview_lines = golden_rubric_preview.strip().split("\n")[:18]
   rubric_preview = html.escape("\n".join(rubric_preview_lines))
@@ -555,7 +578,7 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>cds-bench — Family-Medicine CDS Benchmark (Public Sample)</title>
+<title>cds-bench &mdash; Family-Medicine CDS Benchmark (Public Sample)</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230E6F66'/><text x='50' y='72' font-size='62' text-anchor='middle' fill='%23FAF6EE' font-family='Georgia'>&#x2713;</text></svg>">
 <style>
 {_CSS}
@@ -565,10 +588,12 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
 <div id="progress"></div>
 <nav id="rail">
   <a href="#hero"><span>Overview</span></a>
+  <a href="#results"><span>Results</span></a>
   <a href="#methodology"><span>Methodology</span></a>
   <a href="#browser"><span>Cases</span></a>
   <a href="#worked"><span>Worked Examples</span></a>
   <a href="#evolution"><span>Evolution</span></a>
+  <a href="#limitations"><span>Limitations</span></a>
 </nav>
 
 <!-- ===== HERO ===== -->
@@ -577,35 +602,77 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
   <div class="eyebrow">cds-bench &mdash; <b>internal family-medicine CDS benchmark</b> &mdash; public sample &middot; June 2026</div>
   <h1>The <span class="accent">cds-bench</span><br>public sample</h1>
   <p class="sub">
-    29 representative cases from a 145-case held-out benchmark for evaluating
+    {total_public} representative cases from a 135-case working benchmark for evaluating
     AI clinical-decision-support systems in US primary care.
-    The 116 held-out cases are never distributed; see SUBMISSION.md for
+    The 108 held-out cases are never distributed; see SUBMISSION.md for
     evaluation-as-a-service.
   </p>
   <div class="statrow">
-    <div class="stat"><div class="n">145</div><div class="l">Total cases</div></div>
-    <div class="stat"><div class="n">29</div><div class="l">Public (this sample)</div></div>
-    <div class="stat"><div class="n">116</div><div class="l">Held out (never distributed)</div></div>
-    <div class="stat"><div class="n">5</div><div class="l">Evaluation lanes</div></div>
+    <div class="stat"><div class="n">135</div><div class="l">Total cases</div></div>
+    <div class="stat"><div class="n">{total_public}</div><div class="l">Public (this sample)</div></div>
+    <div class="stat"><div class="n">108</div><div class="l">Held out (never distributed)</div></div>
+    <div class="stat"><div class="n">4</div><div class="l">Evaluation lanes</div></div>
   </div>
   <div class="hero notice">
-    <strong>Data use restriction.</strong> {html.escape(DO_NOT_TRAIN_NOTICE)}
+    <strong>Data use request.</strong> {html.escape(_DATA_USE_REQUEST)}
   </div>
-  <div class="hero canary">Canary: {html.escape(CANARY)}</div>
 </div>
 </header>
 
 <main>
 
-<!-- ===== METHODOLOGY ===== -->
-<section class="part" id="methodology">
+<!-- ===== RESULTS ===== -->
+<section class="part" id="results">
 <div class="wrap">
   <div class="kicker">Part 1</div>
   <div class="partnum">01</div>
+  <h2>Results</h2>
+  <p class="lede">
+    Illustrative scores on the Golden lane (blinded, preliminary).
+  </p>
+
+  <h3>Raw model vs. specialized clinical tools &mdash; Golden lane (illustrative, blinded)</h3>
+  <div class="tablewrap">
+  <table class="results-table">
+    <thead>
+      <tr><th>System</th><th class="num">Score /100</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Raw frontier model (no prompt)</td><td class="score">69.7</td></tr>
+      <tr><td>Frontier model + structured prompt</td><td class="score">82.5</td></tr>
+      <tr><td>Specialized clinical tool A</td><td class="score">79.2</td></tr>
+      <tr><td>Specialized clinical tool B</td><td class="score">75.9</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>A paragraph of structured prompting lifts a raw frontier model from below to at or above
+  purpose-built specialized clinical tools on this lane &mdash; the prompt is a larger lever
+  than the choice of system.</p>
+
+  <div class="callout warn">
+    <span class="tag">Caveats</span>
+    <p><strong>PRELIMINARY.</strong> Scored by a single LLM-as-judge (median-of-3), not
+    physician-adjudicated at scale.</p>
+    <p>Scored against one curated reference standard; that gold and the models likely draw on
+    overlapping guideline sources, so this is partially circular.</p>
+    <p>Models as of ~April 2026; specialized tools are blinded (A/B); n=60 golden queries.</p>
+    <p style="margin-bottom:0">The Golden lane is a floor (serious tools cluster ~75&ndash;90%).
+    This illustrates the prompt-vs-system gap; it is <strong>NOT</strong> a leaderboard or a
+    clinical-superiority claim.</p>
+  </div>
+</div>
+</section>
+
+<!-- ===== METHODOLOGY ===== -->
+<section class="part" id="methodology">
+<div class="wrap">
+  <div class="kicker">Part 2</div>
+  <div class="partnum">02</div>
   <h2>Methodology</h2>
   <p class="lede">
-    Five lanes, a fixed-seed proportional split, contamination-resistant guardrails,
-    and a calibrated LLM-as-judge protocol.
+    Four lanes, a fixed-seed proportional split, a calibrated LLM-as-judge protocol,
+    and an honest account of what the held-back set does and doesn&rsquo;t do.
   </p>
 
   <h3>Lane overview</h3>
@@ -621,13 +688,15 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
 {lane_rows}    </tbody>
   </table>
   </div>
+  <p class="muted small">Hallucination lane note: orthogonal to HalluHard &mdash; HalluHard
+  tests active fabrication; this lane tests accepting unsafe premises / missing red flags.</p>
 
   <h3>Fixed-seed proportional split</h3>
   <div class="card">
     <p>Public cases are selected by a deterministic stratified sample (seed 20260614).
     Each lane contributes ~20% of its cases to the public set, stratified by
-    <code>category</code> (or <code>calculator</code> for the calc lane).
-    Forced-public anchors ensure the 5 worked-example showcase cases always land in the
+    <code>category</code>.
+    Forced-public anchors ensure the showcase cases always land in the
     public set regardless of stratification.</p>
     <p style="margin-bottom:0">The remaining ~80% are held out and covered by a
     SHA-256 + Merkle-root manifest (<code>HIDDEN_MANIFEST.sha256</code> /
@@ -635,19 +704,19 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
     without distribution.</p>
   </div>
 
-  <h3>Contamination-resistant guardrails</h3>
+  <h3>What we hold back &mdash; and what it does and doesn&rsquo;t do</h3>
   <ul>
-    <li><strong>Canary GUID</strong> (BIG-bench convention) — every released artifact
-        carries <code>{html.escape(CANARY)}</code>. Future models can be probed for
-        memorization of this exact string.</li>
-    <li><strong>SHA-256 + Merkle manifest</strong> — the hidden cases are auditable
-        without being disclosed; the manifest lets a third party verify the test set
-        was not modified after the benchmark was published.</li>
-    <li><strong>Eval-as-a-service</strong> — hidden-set scoring is run by the maintainer;
-        submitters provide transcripts keyed by public case id.</li>
-    <li><strong>Vendor-name gate</strong> — all shipped artifacts (rubrics, scoring code)
-        are checked by a word-boundary regex before release to prevent inadvertent
-        disclosure of data sources.</li>
+    <li><strong>108 of 135 cases are held out and never distributed</strong> &mdash;
+        limits direct optimization against the full set and the gold/rubric pairings.</li>
+    <li><strong>Honest limit:</strong> the held-out <em>clinical knowledge</em> (e.g., a BP
+        threshold) is public and already in any model&rsquo;s training data; holding our items
+        back does NOT stop a model from knowing the answer. What it protects is the specific
+        phrasings, traps, and gold/rubric pairings from being memorized and gamed.</li>
+    <li><strong>Integrity manifest:</strong> SHA-256 + Merkle root of the held-out set,
+        published at release, lets a third party verify the test set wasn&rsquo;t altered
+        after publication.</li>
+    <li><strong>Eval-as-a-service:</strong> hidden-set scoring is run by the maintainer;
+        hidden cases and gold never leave.</li>
   </ul>
 
   <h3>Judge protocol</h3>
@@ -656,12 +725,12 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
     scored by three independent judge calls; the median score per dimension is taken
     to reduce variance.</p>
     <p><strong>Anti-anchoring.</strong> Judge calls are randomized; no judge sees
-    another's score before scoring.</p>
+    another&rsquo;s score before scoring.</p>
     <p><strong>Date-aware.</strong> The judge is told the evaluation date and
     instructed not to penalize citations for recency. Newer guideline updates
     that supersede the gold standard are noted, not penalized.</p>
     <p style="margin-bottom:0"><strong>Verifiable-only citations.</strong> Vague
-    attribution ("per AHA guidelines") does not count as a citation; the judge
+    attribution (&ldquo;per AHA guidelines&rdquo;) does not count as a citation; the judge
     requires a named document, year, and link or DOI.</p>
   </div>
 
@@ -674,28 +743,29 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
 <!-- ===== CASE BROWSER ===== -->
 <section class="part" id="browser">
 <div class="wrap">
-  <div class="kicker">Part 2</div>
-  <div class="partnum">02</div>
+  <div class="kicker">Part 3</div>
+  <div class="partnum">03</div>
   <h2>Case browser</h2>
-  <p class="lede">All 29 public cases. Filter by lane or search by keyword.</p>
+  <p class="lede">All {total_public} public cases. Filter by lane or search by keyword.</p>
 
   <div id="browser-controls">
     {filter_btns}
     <input id="search-box" type="search" placeholder="Search cases&hellip;" aria-label="Search cases">
-    <span id="case-count">29 of 29 cases</span>
+    <span id="case-count">{total_public} of {total_public} cases</span>
   </div>
-  <div id="case-grid"></div>
+  <div id="case-grid">
+{static_cards_html}  </div>
 </div>
 </section>
 
 <!-- ===== WORKED EXAMPLES ===== -->
 <section class="part" id="worked">
 <div class="wrap">
-  <div class="kicker">Part 3</div>
-  <div class="partnum">03</div>
+  <div class="kicker">Part 4</div>
+  <div class="partnum">04</div>
   <h2>Worked examples</h2>
   <p class="lede">
-    Five showcase cases — one per lane — shown end-to-end: query, rubric, and gold.
+    Showcase cases &mdash; one per lane &mdash; shown end-to-end: query, rubric, and gold.
     Transcript + score are shown when a curated overlay is available.
   </p>
 {worked_html}
@@ -705,11 +775,11 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
 <!-- ===== EVOLUTION ===== -->
 <section class="part" id="evolution">
 <div class="wrap">
-  <div class="kicker">Part 4</div>
-  <div class="partnum">04</div>
+  <div class="kicker">Part 5</div>
+  <div class="partnum">05</div>
   <h2>Evolution &amp; references</h2>
   <p class="lede">
-    The benchmark grew in phases from Feb–Jun 2026.
+    The benchmark grew in phases from Feb&ndash;Jun 2026.
     See <a href="docs/EVOLUTION.md"><code>docs/EVOLUTION.md</code></a> for the full narrative.
   </p>
 
@@ -720,13 +790,32 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
   <h3>References</h3>
   <ul>
 {ref_items}  </ul>
+</div>
+</section>
 
-  <div class="callout gold" style="margin-top:36px">
-    <span class="tag">Note on 2026 arXiv preprints</span>
-    <p style="margin:0">HalluHard (arXiv:2602.01031) and HeavySkill (arXiv:2605.02396)
-    identifiers are recorded as cited in the originating program's literature review.
-    Confirm current versions before external publication.</p>
-  </div>
+<!-- ===== LIMITATIONS ===== -->
+<section class="part" id="limitations">
+<div class="wrap">
+  <div class="kicker">Part 6</div>
+  <div class="partnum">06</div>
+  <h2>Limitations</h2>
+  <p class="lede">
+    This is a working internal benchmark, not a peer-reviewed publication.
+    Known limitations:
+  </p>
+  <ul>
+    <li><strong>Single-author authored and curated</strong> (LLM-assisted); no external
+        clinician validation cohort yet.</li>
+    <li><strong>Small n per lane</strong> (3&ndash;12 public; 12&ndash;60 total) &mdash;
+        per-lane numbers are noisy.</li>
+    <li><strong>LLM-as-judge is a screening tool, not ground truth</strong>; risk of
+        same-model-family grading bias.</li>
+    <li><strong>Freshness items perish</strong> and require periodic re-validation
+        (per-case <code>validated</code> dates in the source data).</li>
+    <li><strong>Gold may overlap models&rsquo; training sources</strong> (circularity) &mdash;
+        guideline knowledge is public and likely in any model&rsquo;s training data.</li>
+    <li><strong>Not IRB-reviewed, not prospective, no patient-outcome validation.</strong></li>
+  </ul>
 </div>
 </section>
 
@@ -736,9 +825,9 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
 <footer>
 <div class="wrap">
   <p class="muted small">
-    <strong>cds-bench</strong> public sample &mdash; 29 of 145 cases &mdash; June 2026.
+    <strong>cds-bench</strong> public sample &mdash; {total_public} of 135 cases &mdash; June 2026.
     Data: CC BY-NC-ND 4.0. Code: MIT.
-    Do not use as training data.
+    {html.escape(_DATA_USE_REQUEST)}
   </p>
   <div class="footer-links">
     <a href="docs/EVOLUTION.md">Evolution</a>
@@ -749,9 +838,6 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
   </div>
 </div>
 </footer>
-
-<!-- Embedded case data (JSON, not interpolated into JS to avoid injection) -->
-<script type="application/json" id="cases-data">{cases_json}</script>
 
 <script>
 // ── Progress bar ──────────────────────────────────────────────────────────
@@ -782,8 +868,8 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
 // ── Timeline ─────────────────────────────────────────────────────────────
 {_js_timeline(TIMELINE)}
 
-// ── Case browser ─────────────────────────────────────────────────────────
-{_js_case_browser()}
+// ── Case browser (JS enhances static cards) ───────────────────────────────
+{_js_case_browser(total_public)}
 
 // ── Rubric toggles ───────────────────────────────────────────────────────
 document.querySelectorAll('.rubric-toggle').forEach(btn => {{
@@ -803,7 +889,7 @@ document.querySelectorAll('.rubric-toggle').forEach(btn => {{
 
 
 def _build_worked_html(public: dict, rubrics: dict[str, str]) -> str:
-  """Build HTML for the 5 worked-example cards."""
+  """Build HTML for the showcase worked-example cards."""
   from scripts.release.lanes import SHOWCASE_IDS, WORKED_DIR
   showcase_map: dict[str, tuple[str, dict]] = {}
   for lane_name, cases in public.items():
@@ -827,7 +913,7 @@ def _build_worked_html(public: dict, rubrics: dict[str, str]) -> str:
     color = color_map.get(lane_name, "neutral")
     label = label_map.get(lane_name, lane_name)
     lane_obj = LANES[lane_name]
-    query = c.get("original_query") or c.get("amboss_query") or c.get("query", "")
+    query = c.get("query", "")
 
     gold_html = _gold_fields_html(lane_name, c)
 
@@ -838,7 +924,7 @@ def _build_worked_html(public: dict, rubrics: dict[str, str]) -> str:
 <button class="rubric-toggle" data-target="{rubric_id}">Show rubric</button>
 <pre class="rubric-block" id="{rubric_id}" style="display:none">{html.escape(rubric_text[:3000])}</pre>"""
     else:
-      rubric_section = '<p class="muted small"><em>Deterministic lane — no judge rubric.</em></p>'
+      rubric_section = '<p class="muted small"><em>Deterministic lane &mdash; no judge rubric.</em></p>'
 
     # Worked overlay (graceful absence)
     overlay_path = Path(WORKED_DIR) / f"{cid}.json"
@@ -855,7 +941,6 @@ def _build_worked_html(public: dict, rubrics: dict[str, str]) -> str:
 <pre class="rubric-block">{scores}</pre>"""
       except Exception:
         overlay_html = '<p class="muted small"><em>Overlay parse error.</em></p>'
-    # else: gracefully omit
 
     cards += f"""
 <div class="worked-card">
@@ -884,7 +969,7 @@ def _gold_fields_html(lane_name: str, c: dict) -> str:
       '<div class="gf-row"><span class="gf-label">Category</span>'
       f'<span class="gf-value">{html.escape(c.get("category", ""))}</span></div>'
       '<div class="gf-row"><span class="gf-label">Scored on</span>'
-      '<span class="gf-value">Accuracy /30 · Completeness /30 · Specificity /25 · Citations /15</span></div>'
+      '<span class="gf-value">Accuracy /30 &middot; Completeness /30 &middot; Specificity /25 &middot; Citations /15</span></div>'
     )
   elif lane_name == "freshness":
     return (
@@ -903,7 +988,7 @@ def _gold_fields_html(lane_name: str, c: dict) -> str:
       f'<span class="gf-value">{html.escape(c.get("expected", ""))}</span></div>'
     )
   elif lane_name == "halluhard":
-    fms = " · ".join(f"<code>{html.escape(f)}</code>" for f in (c.get("fail_modes") or []))
+    fms = " &middot; ".join(f"<code>{html.escape(f)}</code>" for f in (c.get("fail_modes") or []))
     return (
       '<div class="gf-row"><span class="gf-label">Rarity</span>'
       f'<span class="gf-value"><code>{html.escape(c.get("rarity", ""))}</code></span></div>'
@@ -914,7 +999,7 @@ def _gold_fields_html(lane_name: str, c: dict) -> str:
       f'<span class="gf-value">{html.escape(c.get("ground_truth_source", ""))}</span></div>'
     )
   elif lane_name == "calc":
-    inputs = " · ".join(f"<code>{html.escape(i)}</code>" for i in (c.get("inputs_in_query") or []))
+    inputs = " &middot; ".join(f"<code>{html.escape(i)}</code>" for i in (c.get("inputs_in_query") or []))
     return (
       '<div class="gf-row"><span class="gf-label">Calculator</span>'
       f'<span class="gf-value"><code>{html.escape(c.get("calculator", ""))}</code></span></div>'
@@ -930,13 +1015,12 @@ def _gold_fields_html(lane_name: str, c: dict) -> str:
 # ---------------------------------------------------------------------------
 
 def render_markdown(public: dict) -> str:
-  """Return docs/PUBLIC_CASES.md content: 29 cases grouped by lane."""
+  """Return docs/PUBLIC_CASES.md content: 27 cases grouped by lane."""
+  total = sum(len(v) for v in public.values())
   lines: list[str] = [
-    "# cds-bench public sample (29 of 145) — do not train",
+    f"# cds-bench public sample ({total} of 135) — data use request",
     "",
-    f"> {DO_NOT_TRAIN_NOTICE}",
-    "",
-    f"> Canary: `{CANARY}`",
+    f"> {_DATA_USE_REQUEST}",
     "",
     "---",
     "",
@@ -947,7 +1031,7 @@ def render_markdown(public: dict) -> str:
   lane_descs = {
     "golden": "Bread-and-butter CDS queries scored on a 4-dimension rubric.",
     "freshness": "Queries on recently-changed guidelines; hand-curated old → new triples.",
-    "hallucination": "Adversarial prompts testing passive hallucination (false-premise acceptance).",
+    "hallucination": "Clinical-safety traps: false premises, dangerous reassurance, and missed-diagnosis vignettes the model must catch. Orthogonal to HalluHard (which tests active fabrication).",
     "halluhard": "Hard active-hallucination cases with reference + content grounding axes.",
     "calc": "Deterministic calculator/dosing checks; expected behavior is to refuse to compute.",
   }
@@ -965,7 +1049,7 @@ def render_markdown(public: dict) -> str:
     lane_obj = LANES[lane_name]
     for c in cases:
       cid = c[lane_obj.id_field]
-      query = c.get("original_query") or c.get("amboss_query") or c.get("query", "")
+      query = c.get("query", "")
       lines += [
         f"### {cid}",
         "",

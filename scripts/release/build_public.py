@@ -7,7 +7,6 @@ from __future__ import annotations
 import argparse, json, re, shutil
 from pathlib import Path
 from scripts.release.lanes import LANES, BENCH_DIR, WORKED_DIR
-from scripts.release.canary import stamp_case
 from scripts.release import assets
 from scripts.release.manifest import build_manifest
 from scripts.release.build_explainer import load_public, render_html, render_markdown
@@ -21,7 +20,9 @@ SCORING_SRCS = [
 ]
 
 # Vendor names: word-boundary match (avoids elation⊂correlation, wren⊂wrench, etc.)
-_VENDOR_NAME_RE = re.compile(r"\b(amboss|openevidence|lisa|glass|elation|wren)\b", re.IGNORECASE)
+_VENDOR_NAME_RE = re.compile(
+  r"\b(amboss|openevidence|lisa|glass|elation|wren|uptodate|utd)\b", re.IGNORECASE
+)
 _PATH_TOKENS = ("/users/", "/tmp/gemvenv")  # substrings: path fragments have no word boundaries
 
 def _assert_clean(text: str, label: str) -> None:
@@ -36,11 +37,16 @@ def _write_json(path: Path, obj) -> None:
   path.parent.mkdir(parents=True, exist_ok=True)
   path.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
+def _emit_public_case(c: dict) -> dict:
+  """Return a copy of the public case with release-management fields stripped."""
+  out = {k: v for k, v in c.items() if k not in ("split", "validated")}
+  return out
+
 def build_public(out_dir: str, seed: int, generated: str, bench_dir: str = BENCH_DIR, worked_dir: str = WORKED_DIR) -> dict:
   out = Path(out_dir)
   if out.exists():
     contents = {p.name for p in out.iterdir()}
-    markers = {"public", "rubrics", "scoring", "LICENSE", "SUBMISSION.md", "CANARY",
+    markers = {"public", "rubrics", "scoring", "LICENSE", "SUBMISSION.md",
                "README.md", "HIDDEN_MANIFEST.sha256", "HIDDEN_MANIFEST.meta.json"}
     if contents and not (markers & contents):
       raise ValueError(
@@ -55,7 +61,10 @@ def build_public(out_dir: str, seed: int, generated: str, bench_dir: str = BENCH
     public = [c for c in cases if c.get("split") == "public"]
     counts[lane.name] = len(public)
     for c in public:
-      _write_json(out / "public" / lane.name / f"{c[lane.id_field]}.json", stamp_case(c))
+      emitted = _emit_public_case(c)
+      emitted_json = json.dumps(emitted, indent=2, ensure_ascii=False)
+      _assert_clean(emitted_json, f"public/{lane.name}/{c[lane.id_field]}.json")
+      _write_json(out / "public" / lane.name / f"{c[lane.id_field]}.json", emitted)
     if lane.judge_rubric:
       src = Path(RUBRIC_CLEAN_DIR) / f"{lane.name}.txt"
       text = src.read_text(encoding="utf-8")
@@ -74,7 +83,6 @@ def build_public(out_dir: str, seed: int, generated: str, bench_dir: str = BENCH
   # static assets
   (out / "LICENSE").write_text(assets.LICENSE, encoding="utf-8")
   (out / "README.md").write_text(assets.README, encoding="utf-8")
-  (out / "CANARY").write_text(assets.CANARY_FILE, encoding="utf-8")
   (out / "SUBMISSION.md").write_text(assets.SUBMISSION, encoding="utf-8")
 
   # worked-example overlays (optional; curated by hand — see find_scored.py)

@@ -11,11 +11,11 @@ def test_canonical_is_key_order_independent():
   b = {"query": "q", "id": "X1"}
   assert canonical_bytes(a) == canonical_bytes(b)
 
-def test_canonical_excludes_canary_and_notice():
+def test_canonical_excludes_validated():
   bare = {"id": "X1", "query": "q"}
-  stamped = {"id": "X1", "query": "q", "canary": "CANARY-XYZ", "_notice": "do not train"}
-  assert canonical_bytes(bare) == canonical_bytes(stamped)
-  assert case_hash(bare) == case_hash(stamped)
+  with_validated = {"id": "X1", "query": "q", "validated": "2026-06-01"}
+  assert canonical_bytes(bare) == canonical_bytes(with_validated)
+  assert case_hash(bare) == case_hash(with_validated)
 
 def test_canonical_is_compact_utf8():
   out = canonical_bytes({"id": "X1", "q": "café"})
@@ -56,13 +56,13 @@ def test_build_manifest_hidden_only(tmp_path):
   out.mkdir()
   meta = build_manifest(str(out), seed=20260614, generated="2026-06-14")
   lines = (out / "HIDDEN_MANIFEST.sha256").read_text().strip().splitlines()
-  assert len(lines) == 116, f"expected 116 hidden, got {len(lines)}"
+  assert len(lines) == 108, f"expected 108 hidden, got {len(lines)}"
   # sha256sum format: "<64hex>  <lane>/<id>"
   for ln in lines:
     h, name = ln.split("  ", 1)
     assert len(h) == 64 and "/" in name
   m = _json.loads((out / "HIDDEN_MANIFEST.meta.json").read_text())
-  assert m["hidden_count"] == 116 and len(m["merkle_root"]) == 64
+  assert m["hidden_count"] == 108 and len(m["merkle_root"]) == 64
   assert m["seed"] == 20260614 and m["generated"] == "2026-06-14"
 
 def test_manifest_lists_no_public_ids(tmp_path):
@@ -71,5 +71,5 @@ def test_manifest_lists_no_public_ids(tmp_path):
   lines = (out / "HIDDEN_MANIFEST.sha256").read_text().strip().splitlines()
   # Extract exact id token (after the "<lane>/" prefix)
   names = {ln.split("  ", 1)[1].split("/", 1)[1] for ln in lines}
-  for fp_id in ("G52", "F19", "H11", "HH08", "C01"):
+  for fp_id in ("G52", "F19", "H11", "HH08"):
     assert fp_id not in names, f"forced-public {fp_id} appeared in hidden manifest"

@@ -1,7 +1,6 @@
 # tests/release/test_build_public.py
 import json, pathlib
 from scripts.release.lanes import LANES
-from scripts.release.canary import CANARY
 from scripts.release.build_public import build_public
 
 def _build(tmp_path):
@@ -9,10 +8,10 @@ def _build(tmp_path):
   build_public(str(out), seed=20260614, generated="2026-06-14")
   return out
 
-def test_emits_29_public_cases(tmp_path):
+def test_emits_27_public_cases(tmp_path):
   out = _build(tmp_path)
   n = sum(len(list((out / "public" / lane).glob("*.json"))) for lane in LANES)
-  assert n == 29
+  assert n == 27
 
 def test_per_lane_counts(tmp_path):
   out = _build(tmp_path)
@@ -20,19 +19,22 @@ def test_per_lane_counts(tmp_path):
     got = len(list((out / "public" / lane.name).glob("*.json")))
     assert got == lane.public_count, f"{lane.name}: {got}"
 
-def test_every_public_case_is_stamped(tmp_path):
+def test_no_canary_or_notice_in_public_cases(tmp_path):
+  """Public cases must NOT contain canary or _notice fields."""
   out = _build(tmp_path)
   for lane in LANES:
     for f in (out / "public" / lane).glob("*.json"):
       d = json.loads(f.read_text())
-      assert d["canary"] == CANARY
-      assert d["_notice"]  # do-not-train notice stamped too
+      assert "canary" not in d, f"{f.name} still contains 'canary'"
+      assert "_notice" not in d, f"{f.name} still contains '_notice'"
 
 def test_no_hidden_case_leaks_into_public(tmp_path):
   out = _build(tmp_path)
   for lane in LANES:
     for f in (out / "public" / lane).glob("*.json"):
-      assert json.loads(f.read_text())["split"] == "public"
+      d = json.loads(f.read_text())
+      # split field is stripped from emitted cases (not present)
+      assert "split" not in d, f"split field leaked into {f.name}"
 
 def test_rubrics_shipped_for_judge_lanes(tmp_path):
   out = _build(tmp_path)
@@ -42,9 +44,14 @@ def test_rubrics_shipped_for_judge_lanes(tmp_path):
 
 def test_static_assets_present(tmp_path):
   out = _build(tmp_path)
-  for name in ("LICENSE", "README.md", "CANARY", "SUBMISSION.md",
+  for name in ("LICENSE", "README.md", "SUBMISSION.md",
                "HIDDEN_MANIFEST.sha256", "HIDDEN_MANIFEST.meta.json"):
     assert (out / name).exists(), name
+
+def test_no_canary_file(tmp_path):
+  """CANARY file must not be emitted."""
+  out = _build(tmp_path)
+  assert not (out / "CANARY").exists(), "CANARY file should not be emitted"
 
 def test_scoring_artifacts_shipped(tmp_path):
   out = _build(tmp_path)
@@ -57,6 +64,14 @@ def test_shipped_methodology_is_vendor_clean(tmp_path):
   for sub in ("scoring", "rubrics"):
     for f in (out / sub).glob("*"):
       _assert_clean(f.read_text(encoding="utf-8"), f"{sub}/{f.name}")  # raises if any leak
+
+def test_public_cases_are_vendor_clean(tmp_path):
+  """Each emitted public case JSON must pass the vendor-clean gate."""
+  from scripts.release.build_public import _assert_clean
+  out = _build(tmp_path)
+  for lane in LANES:
+    for f in (out / "public" / lane).glob("*.json"):
+      _assert_clean(f.read_text(encoding="utf-8"), f"public/{lane}/{f.name}")
 
 def test_internal_calibration_runner_not_shipped(tmp_path):
   out = _build(tmp_path)
@@ -74,5 +89,5 @@ def test_build_refuses_non_cds_bench_dir(tmp_path):
 def test_manifest_is_wellformed(tmp_path):
   out = _build(tmp_path)
   meta = json.loads((out / "HIDDEN_MANIFEST.meta.json").read_text())
-  assert meta["hidden_count"] == 116
+  assert meta["hidden_count"] == 108
   assert len(meta["merkle_root"]) == 64 and all(c in "0123456789abcdef" for c in meta["merkle_root"])

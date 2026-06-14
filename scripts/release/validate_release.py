@@ -25,11 +25,11 @@ def checks() -> list[tuple[str, bool, list]]:
     if n != lane.public_count:
       wrong.append(f"{lane.name}:{n}!={lane.public_count}")
   results.append(("public_counts", not wrong, wrong))
-  # 3. totals are exactly 29 public / 116 hidden
+  # 3. totals are exactly 27 public / 108 hidden
   pub = sum(sum(c.get("split") == "public" for c in _cases(l)) for l in LANES.values())
   hid = sum(sum(c.get("split") == "hidden" for c in _cases(l)) for l in LANES.values())
-  ok = pub == 29 and hid == 116
-  results.append(("totals_29_116", ok, [] if ok else [f"public={pub}", f"hidden={hid}"]))
+  ok = pub == 27 and hid == 108
+  results.append(("totals_27_108", ok, [] if ok else [f"public={pub}", f"hidden={hid}"]))
   # 4. every forced-public/showcase id is labeled public
   miss = []
   for lane in LANES.values():

@@ -31,7 +31,7 @@ def test_catches_wrong_public_count(monkeypatch):
           break
   res = _checks_after(monkeypatch, mutate)
   assert not res["public_counts"]
-  assert not res["totals_29_116"]
+  assert not res["totals_27_108"]
 
 def test_catches_showcase_not_public(monkeypatch):
   def mutate(lane, cases):

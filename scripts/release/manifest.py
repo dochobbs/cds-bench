@@ -8,7 +8,7 @@ import argparse, hashlib, json
 from pathlib import Path
 
 # fields we add for release management — never part of the hashed case content
-HASH_EXCLUDE = ("split", "canary", "_notice")
+HASH_EXCLUDE = ("split", "validated")
 
 def canonical_bytes(case: dict, exclude: tuple[str, ...] = HASH_EXCLUDE) -> bytes:
   c = {k: v for k, v in case.items() if k not in exclude}
@@ -56,7 +56,7 @@ def build_manifest(out_dir: str, seed: int, generated: str, bench_dir: str = BEN
     "merkle_root": merkle_root([h for _, h in rows]),
     "seed": seed,
     "generated": generated,
-    "hash": "sha256 over canonical JSON, split/canary excluded",
+    "hash": "sha256 over canonical JSON, split/validated excluded",
   }
   (out / "HIDDEN_MANIFEST.meta.json").write_text(
     json.dumps(meta, indent=2) + "\n", encoding="utf-8")
