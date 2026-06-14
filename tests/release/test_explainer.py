@@ -160,10 +160,17 @@ def test_html_data_use_request_present(html_out):
 
 
 def test_html_results_section_present(html_out):
-  """Results section with blinded scores must be present."""
-  assert "82.5" in html_out, "Frontier model + prompt score missing"
-  assert "69.7" in html_out, "Raw frontier model score missing"
-  assert "Specialized clinical tool" in html_out, "Blinded tool label missing"
+  """Results section (six-source full-sample table) must be present."""
+  assert "92.6" in html_out, "top Core score missing"
+  assert "OpenEvidence" in html_out, "OpenEvidence row missing"
+  assert "ChatGPT for Clinicians" in html_out, "ChatGPT for Clinicians row missing"
+  assert "UpToDate" in html_out, "UpToDate row missing"
+
+def test_html_results_blinds_commercial_partners(html_out):
+  """Named public tools are allowed; commercial-partner gold/comparators must stay blinded."""
+  low = html_out.lower()
+  for forbidden in ("amboss", "lisa", "glass health", "clinical insights"):
+    assert forbidden not in low, f"commercial-partner name leaked: {forbidden}"
 
 
 def test_html_limitations_section_present(html_out):
