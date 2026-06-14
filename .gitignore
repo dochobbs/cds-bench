@@ -1,0 +1,11 @@
+# build output (public sample tree is generated, not committed here)
+dist/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# curated worked-example overlays are added at curation time
+benchmarks/internal/worked/
