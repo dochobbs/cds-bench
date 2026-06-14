@@ -47,6 +47,7 @@ python -m pytest tests/release/ -q                  # 59 tests
 - `scripts/release/` — the pipeline (lanes, split_selector, manifest, canary, assets, build_public, submit, validate_release, find_scored)
 - `release_clean/` — curated **blinded** methodology artifacts shipped into the public tree (vendor names redacted, no private paths)
 - `tests/release/` — 59 tests (counts, no-leak, determinism, blinding, gate-catches-violations)
+- `docs/EVOLUTION.md` — brief history of the benchmark + literature it builds on (HalluHard, BIG-bench canary, HealthBench, …)
 - `docs/superpowers/` — the design spec + implementation plan
 - `MIGRATION_MANIFEST.md` — how this repo was extracted from the cds-eval monorepo
 
