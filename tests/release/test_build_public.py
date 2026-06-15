@@ -33,8 +33,10 @@ def test_no_hidden_case_leaks_into_public(tmp_path):
   for lane in LANES:
     for f in (out / "public" / lane).glob("*.json"):
       d = json.loads(f.read_text())
-      # split field is stripped from emitted cases (not present)
-      assert "split" not in d, f"split field leaked into {f.name}"
+      # split field is kept in emitted cases and must always be "public"
+      assert d.get("split") == "public", (
+        f"emitted case {f.name} missing split=='public' (got {d.get('split')!r})"
+      )
 
 def test_rubrics_shipped_for_judge_lanes(tmp_path):
   out = _build(tmp_path)

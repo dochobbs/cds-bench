@@ -350,11 +350,14 @@ def test_html_contains_zero_hidden_ids_exhaustive(html_out):
 
   We scan the case-card blocks in the static HTML. Hidden ids in .case-card
   data attributes or content is a genuine data leak.
+  Skipped on a public clone where the hidden set is absent by design.
   """
   import json as _json
   import re as _re
   from pathlib import Path
   from scripts.release.lanes import HIDDEN_DIR
+  if not Path(HIDDEN_DIR).exists():
+    pytest.skip("hidden set not present (public clone)")
 
   hidden_ids: set[str] = set()
   for lane in LANES.values():

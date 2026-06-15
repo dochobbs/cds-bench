@@ -70,9 +70,13 @@ def _write_json(path: Path, obj) -> None:
   path.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 def _emit_public_case(c: dict) -> dict:
-  """Return a copy of the public case with release-management fields stripped."""
-  out = {k: v for k, v in c.items() if k not in ("split", "validated")}
-  return out
+  """Return a copy of the public case unchanged.
+
+  split and validated are harmless metadata kept so the emitted artifact
+  byte-matches the committed benchmarks/public/*.json source files.
+  Hashing of hidden cases (in manifest.py) excludes these fields independently.
+  """
+  return dict(c)
 
 def build_public(out_dir: str, seed: int, generated: str,
                  public_dir: str = PUBLIC_DIR, hidden_dir: str = HIDDEN_DIR,
@@ -129,7 +133,17 @@ def build_public(out_dir: str, seed: int, generated: str,
       shutil.copy(f, out / "worked_examples" / f.name)
 
   # hidden manifest
-  build_manifest(str(out), seed=seed, generated=generated, hidden_dir=hidden_dir)
+  if Path(hidden_dir).exists():
+    # Maintainer machine: regenerate from the live hidden set
+    build_manifest(str(out), seed=seed, generated=generated, hidden_dir=hidden_dir)
+  else:
+    # Public clone: hidden set is absent; copy committed manifests if present
+    for fname in ("HIDDEN_MANIFEST.sha256", "HIDDEN_MANIFEST.meta.json"):
+      src = Path(fname)
+      if src.exists():
+        (out / fname).write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+      else:
+        print(f"WARNING: {fname} not found; skipping manifest in output")
 
   # interactive explainer + readable markdown (shared renderers — no duplicated logic)
   pub = load_public(public_dir)

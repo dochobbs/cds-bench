@@ -1,7 +1,7 @@
 [project]
 name = "cds-bench"
 version = "0.1.0"
-description = "Internal family-medicine CDS benchmark + public-release tooling (145 cases; 29 public / 116 held out)"
+description = "A family-medicine CDS benchmark + public-release tooling (135 cases; 27 public / 108 held out)"
 requires-python = ">=3.11"
 
 [tool.pytest.ini_options]

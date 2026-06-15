@@ -1,8 +1,12 @@
 # tests/release/test_submit.py
 import pytest
+from pathlib import Path
 from scripts.release.submit import load_hidden, score_submission
+from scripts.release.lanes import HIDDEN_DIR
 
 def test_load_hidden_returns_108():
+  if not Path(HIDDEN_DIR).exists():
+    pytest.skip("hidden set not present (public clone)")
   hidden = load_hidden()
   assert len(hidden) == 108  # 48+24+24+12 (golden+freshness+hallucination+halluhard)
   assert all("lane" in h and "id" in h and "case" in h for h in hidden)
@@ -13,6 +17,8 @@ def test_load_hidden_raises_clear_error_when_dir_missing(tmp_path):
     load_hidden(hidden_dir=str(tmp_path / "nonexistent"))
 
 def test_score_submission_blinds_and_aggregates():
+  if not Path(HIDDEN_DIR).exists():
+    pytest.skip("hidden set not present (public clone)")
   hidden = load_hidden()
   transcripts = {h["id"]: "some answer" for h in hidden}
   # fake scorer: returns 1.0 for everything
@@ -37,6 +43,8 @@ def test_scorecard_contains_no_vendor_identities():
   assert all(isinstance(v["n"], int) for v in card["per_lane"].values())
 
 def test_none_score_treated_as_missing():
+  if not Path(HIDDEN_DIR).exists():
+    pytest.skip("hidden set not present (public clone)")
   hidden = load_hidden()
   transcripts = {h["id"]: "x" for h in hidden}
   # Score everything; halluhard lane returns None
@@ -47,7 +55,8 @@ def test_none_score_treated_as_missing():
   assert card["per_lane"]["golden"]["mean"] == 1.0
 
 def test_scorer_exception_is_tagged_with_case_id():
-  import pytest
+  if not Path(HIDDEN_DIR).exists():
+    pytest.skip("hidden set not present (public clone)")
   hidden = load_hidden()
   transcripts = {h["id"]: "x" for h in hidden}
   def boom(c, a, l): raise ValueError("judge down")

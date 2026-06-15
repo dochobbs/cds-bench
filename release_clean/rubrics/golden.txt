@@ -105,6 +105,10 @@ Evaluate based on whether a clinician could FIND and VERIFY the cited source.
 Does the response demonstrate the reasoning discipline a clinician needs at
 point of care? This dimension measures qualities beyond reference completeness.
 
+This score is REPORTED SEPARATELY for diagnostic purposes and is NOT included
+in total_score. The total_score field sums only clinical_accuracy +
+completeness + specificity + citation_quality (max 100).
+
 - 13-15: Demonstrates ALL of: (a) calibrated confidence — states certainty level
          and what would change it; (b) safety netting — specifies when to return,
          escalation triggers, expected clinical course; (c) epistemic honesty —

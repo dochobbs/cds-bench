@@ -12,15 +12,29 @@ from typing import Optional
 
 from anthropic import Anthropic
 
-JUDGE_RUBRIC_PATH = "eval/prompts/judge_rubric.txt"
+JUDGE_RUBRIC_PATH = "release_clean/rubrics/golden.txt"
 JUDGE_TEMPERATURE = 0.3
 JUDGE_RUNS = 3
 
 
 def _load_rubric() -> str:
-  with open(JUDGE_RUBRIC_PATH) as f:
-    rubric = f.read().strip()
-  return rubric.replace("{current_date}", date.today().isoformat())
+  """Load the judge rubric, trying JUDGE_RUBRIC_PATH first, then the in-tree fallback.
+
+  Fallback covers running the scorer from inside dist/public/ (a clean public clone),
+  where rubrics/ lives at the repo root rather than release_clean/rubrics/.
+  Raises FileNotFoundError naming both candidates if neither exists.
+  """
+  candidates = [JUDGE_RUBRIC_PATH, "rubrics/golden.txt"]
+  for path in candidates:
+    try:
+      with open(path) as f:
+        rubric = f.read().strip()
+      return rubric.replace("{current_date}", date.today().isoformat())
+    except FileNotFoundError:
+      continue
+  raise FileNotFoundError(
+    f"judge rubric not found; tried: {candidates[0]!r} and {candidates[1]!r}"
+  )
 
 
 def _format_references(references: list[dict]) -> str:
@@ -144,7 +158,7 @@ def judge_query(
   query: str,
   gold_content: str,
   candidate_content: str,
-  model: str = "claude-3-5-haiku-20241022",
+  model: str = "claude-sonnet-4-20250514",
   references: Optional[list[dict]] = None,
   web_citations: Optional[list[dict]] = None,
   gold_label: str = "the gold-standard reference",

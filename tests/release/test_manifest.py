@@ -49,10 +49,13 @@ def test_merkle_root_single_leaf_equals_leaf():
   assert merkle_root(["aa"*32]) == "aa"*32
 
 import json as _json, pathlib
+from pathlib import Path
 from scripts.release.manifest import build_manifest
 from scripts.release.lanes import HIDDEN_DIR
 
 def test_build_manifest_hidden_only(tmp_path):
+  if not Path(HIDDEN_DIR).exists():
+    import pytest; pytest.skip("hidden set not present (public clone)")
   out = tmp_path / "cds-bench"
   out.mkdir()
   meta = build_manifest(str(out), seed=20260614, generated="2026-06-14")
@@ -67,6 +70,8 @@ def test_build_manifest_hidden_only(tmp_path):
   assert m["seed"] == 20260614 and m["generated"] == "2026-06-14"
 
 def test_manifest_lists_no_public_ids(tmp_path):
+  if not Path(HIDDEN_DIR).exists():
+    import pytest; pytest.skip("hidden set not present (public clone)")
   out = tmp_path / "cds-bench"; out.mkdir()
   build_manifest(str(out), seed=20260614, generated="2026-06-14")
   lines = (out / "HIDDEN_MANIFEST.sha256").read_text().strip().splitlines()
