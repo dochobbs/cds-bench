@@ -6,7 +6,7 @@ methodology; the remaining **108 cases are held out** — never published — so
 held-out *phrasing*. (This protects the trap lanes most; the guideline facts behind Golden and
 Currency are public — see [Limitations](#limitations).)
 
-> This repository is a **cleaned public snapshot**, first published June 2026 — its git history begins at publication, not at the Feb–Jun 2026 work it describes (that development lived in an internal evaluation program). See [`docs/EVOLUTION.md`](docs/EVOLUTION.md).
+> This repository is a **cleaned public snapshot**, first published June 2026 — its git history begins at publication, not at the Feb–Jun 2026 work it describes (that development lived in an internal evaluation program). A redacted, dated **proof-of-work record** (a Feb 20 2026 run-log + the full commit log) is in [`docs/PROVENANCE.md`](docs/PROVENANCE.md); the narrative is in [`docs/EVOLUTION.md`](docs/EVOLUTION.md).
 
 **Start here:** open [`index.html`](index.html) (the interactive explainer), or browse
 [`docs/PUBLIC_CASES.md`](docs/PUBLIC_CASES.md).

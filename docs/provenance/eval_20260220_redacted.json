@@ -1,0 +1,143 @@
+{
+  "_note": "Redacted proof-of-work excerpt: metadata + aggregate summary only. Per-query results omitted (some queries are held-out cases). Vendor names redacted (NDA).",
+  "metadata": {
+    "timestamp": "2026-02-20T08:21:02",
+    "model": "claude-sonnet-4-6",
+    "fast_model": "claude-haiku-4-5-20251001",
+    "cds_prompt_path": "eval/prompts/cds_websearch.txt",
+    "cds_prompt_hash": "0f3c0fe2",
+    "total_queries": 10,
+    "golden_queries": 10,
+    "random_queries": 0,
+    "random_seed": 42,
+    "concurrency": 3,
+    "wall_clock_s": 300.8
+  },
+  "summary": {
+    "total_queries": 10,
+    "scored_queries": 10,
+    "reference_errors": 0,
+    "websearch_errors": 0,
+    "reference_empty": 0,
+    "skipped": 0,
+    "overall": {
+      "mean_score": 75.2,
+      "ci_90": [
+        71.23,
+        79.17
+      ],
+      "pass_rate_95": 0.0,
+      "pass_rate_90": 0.0,
+      "pass_rate_80": 0.4
+    },
+    "dimensions": {
+      "clinical_accuracy": {
+        "mean": 24.5,
+        "ci": [
+          23.17,
+          25.83
+        ]
+      },
+      "completeness": {
+        "mean": 21.5,
+        "ci": [
+          19.83,
+          23.17
+        ]
+      },
+      "specificity": {
+        "mean": 19.1,
+        "ci": [
+          17.91,
+          20.29
+        ]
+      },
+      "citation_quality": {
+        "mean": 10.1,
+        "ci": [
+          8.64,
+          11.56
+        ]
+      }
+    },
+    "facts": {
+      "mean_precision": 0.313,
+      "mean_recall": 0.577
+    },
+    "domain_breakdown": {
+      "drug_dosing": {
+        "n": 1,
+        "mean": 82.0,
+        "ci": [
+          82.0,
+          82.0
+        ],
+        "pass_rate_95": 0.0,
+        "pass_rate_90": 0.0,
+        "min": 82,
+        "max": 82
+      },
+      "hypertension": {
+        "n": 1,
+        "mean": 65.0,
+        "ci": [
+          65.0,
+          65.0
+        ],
+        "pass_rate_95": 0.0,
+        "pass_rate_90": 0.0,
+        "min": 65,
+        "max": 65
+      },
+      "immunizations": {
+        "n": 3,
+        "mean": 80.0,
+        "ci": [
+          79.05,
+          80.95
+        ],
+        "pass_rate_95": 0.0,
+        "pass_rate_90": 0.0,
+        "min": 79,
+        "max": 81
+      },
+      "infectious_disease": {
+        "n": 1,
+        "mean": 85.0,
+        "ci": [
+          85.0,
+          85.0
+        ],
+        "pass_rate_95": 0.0,
+        "pass_rate_90": 0.0,
+        "min": 85,
+        "max": 85
+      },
+      "pediatric_acute": {
+        "n": 3,
+        "mean": 72.67,
+        "ci": [
+          70.28,
+          75.06
+        ],
+        "pass_rate_95": 0.0,
+        "pass_rate_90": 0.0,
+        "min": 70,
+        "max": 75
+      },
+      "screening": {
+        "n": 1,
+        "mean": 62.0,
+        "ci": [
+          62.0,
+          62.0
+        ],
+        "pass_rate_95": 0.0,
+        "pass_rate_90": 0.0,
+        "min": 62,
+        "max": 62
+      }
+    },
+    "wall_clock_s": 300.8
+  }
+}

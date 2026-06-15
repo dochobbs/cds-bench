@@ -1,0 +1,129 @@
+2026-04-03  CHORE: Initial commit — [vendor] CDS evaluation pipeline
+2026-04-03  FEATURE: Add v19_epistemic prompt and canary comparison runner
+2026-04-03  FIX: Soften v19 unconfirmed labeling, increase judge truncation limit
+2026-04-03  FIX: Judge date-awareness and web citation verification
+2026-04-03  FEATURE: Add clinical_judgment dimension to judge rubric
+2026-04-03  FIX: Major judge overhaul — median-of-3, low temperature, anti-anchoring
+2026-04-05  CHORE: Archive session 2026-04-02 through 2026-04-05
+2026-04-05  CHORE: Archive session 2026-04-05b — raw Claude baseline + validation proposal
+2026-04-05  CHORE: Archive session 2026-04-05c + checkpoint docs
+2026-04-05  FEATURE: Add local judge benchmark runner — Ollama client + JSON repair
+2026-04-05  FEATURE: Add local judge benchmark comparison dashboard
+2026-04-05  FIX: Move num_ctx to options sub-object, remove unused import
+2026-04-05  FIX: Dashboard review fixes — CSS title, demo model name, hint filename, latency filter
+2026-04-05  FEATURE: Complete benchmark runner — test extraction, judge loop, orchestrator
+2026-04-05  FIX: Clean imports, skip all-failed cases in recommendation calc
+2026-04-05  FEATURE: Add checkpoint writes after each model completes
+2026-04-05  FIX: Bump NUM_CTX to 65536, surface HTTP error details for debugging
+2026-04-05  FIX: Strip Qwen think tags in JSON repair, add per-dimension score printing
+2026-04-05  FEATURE: Expand benchmark to 20 stratified cases across 18 categories
+2026-04-05  FIX: Add gemma4:26b, fix angle-bracket JSON from 26b output
+2026-04-05  DATA: Sync updated benchmark v2 to M3 Ultra for follow-up run
+2026-04-05  FIX: Drop Qwen from model list, run MedGemma + both Gemma4 models only
+2026-04-05  FIX: Narrow angle-bracket regex to JSON values only, guard median_scores against string types
+2026-04-06  FEATURE: Haiku+Exa CDS pipeline — validation suite, prompt evolution, production architecture
+2026-04-06  DOCS: Complete Haiku+Exa pipeline documentation + PHI stress tests
+2026-04-06  FIX: Guard all score arithmetic in median_scores against string types from 26b
+2026-04-06  DOCS: Haiku decontextualization architecture — full technical specification
+2026-04-06  FEATURE: v5 HTML dashboard — full Haiku+Exa evaluation with all source comparisons
+2026-04-06  DATA: All local judge benchmark results — MedGemma, Gemma4 31b/26b
+2026-04-06  chore: Archive session 2026-04-06
+2026-04-06  DOCS: CDS prompting strategy — structured reasoning with Challenger
+2026-04-07  FEATURE: v5 drill-down dashboard + session archive
+2026-04-11  DOCS: Archive session 2026-04-11 — 16-config CDS evaluation
+2026-04-12  DOCS: Archive session 2026-04-12 — 19-document report package
+2026-05-02  CHORE: Pre-migration checkpoint — stage all uncommitted work before consolidation
+2026-05-02  FEATURE: Consolidate [vendor] + healthbench → unified cds-eval/
+2026-05-02  FIX: Rewrite f-string paths missed by initial migration
+2026-05-02  DOCS: Add HISTORY, INTEGRATIONS, DECISIONS for cds-eval onboarding
+2026-05-06  FEATURE: Full CDS internal bench (6 sources, n=135) + ws4 prompt + v2 plan
+2026-05-07  FEATURE: [vendor] v1 vs v2 evaluation suite — 9 panels, judge comparison, [vendor] deliverable
+2026-05-07  DOCS: Continued peds testing plan for [vendor] v2
+2026-05-09  DOCS: Handoff, learnings, and worklist update for [vendor] v2 burst
+2026-05-10  FIX: clinical_quality grader robustness (max_tokens + regex fallback)
+2026-05-10  FEATURE: smoke harness for local-CDS quality measurement
+2026-05-10  FEATURE: local-CDS pipeline scaffolding (decon → search → RAG → synth → agent)
+2026-05-10  DOCS: 2026-05-10 local-CDS session findings + architecture map
+2026-05-10  FEATURE: regex pre-filter + decon parity test results
+2026-05-10  DOCS+TOOLS: MedGemma 27b raw hard-bench findings — fabrication & freshness gaps
+2026-05-10  FEATURE: broad decon test (~80 queries) + placeholder fix for double-tagging
+2026-05-10  FEATURE: synthesize 500-query decon test set + close SSN-no-dashes leak
+2026-05-10  FIX: word-boundary matching in decon leak detector (was false-positive)
+2026-05-10  DOCS: 500-q decon (0/737 leaks) + 4b-vs-27b full hard-bench matrix
+2026-05-10  FEATURE: import [vendor] decon stress data + scale combined test to n=1132
+2026-05-10  DOCS: combined 1132-q decon — inverse failure profile vs Haiku
+2026-05-10  FEATURE: cds_safe prompt — anti-fabrication scaffolding for halluhard
+2026-05-10  FEATURE: multilingual OpenMed default + MLX 27b speed-test launcher
+2026-05-10  FIX: revert decon default to SuperClinical English; multilingual regressed bulk
+2026-05-10  FIX: explicit User-Agent on Exa requests (default Python UA blocked)
+2026-05-10  DOCS+FIX: 27b prompt evolution findings + MLX speed test model-id fix
+2026-05-10  FEATURE: cds_with_search prompt + grader for local_cds_smoke results
+2026-05-10  DOCS: cds_safe on halluhard +46pp PASS; web-Exa hurts golden — router architecture locked
+2026-05-10  RESULT: web-Exa pipeline lifts freshness +20pts; MLX 27b is 2× tokens/sec
+2026-05-10  DECON v3: 17-pattern regex layer + methodology refinement
+2026-05-10  FEATURE: cds_v1 unified prompt + MLX-only full bench launcher
+2026-05-10  FEATURE: Exa date-filter for freshness lift (default 2024-01-01)
+2026-05-10  FEATURE: cds_v2 minimal prompt + path-bug fix for slashed model names
+2026-05-10  FEATURE: cds_v3 — positive frame + ONE narrow exception
+2026-05-10  DOCS: Archive session 2026-05-10
+2026-05-28  FEATURE: Peds benchmarks — freshness, hallucination, halluhard pilot, dosing calc
+2026-05-28  FEATURE: [vendor] v2.x + CDS prompt variants, smoke runners, tests
+2026-05-28  DOCS: Session handoffs, eval reports, evolution narrative, drafts
+2026-06-04  DOCS: Local peds CDS prompting+RAG improvement program — design spec
+2026-06-04  DOCS: Phase 0-1 implementation plan — harness + ceiling discovery
+2026-06-04  FIX: document SZR-04 reasoning_max_positive exclusion of unreachable MDBR-1 + FTS-2/MND-5 overlap note
+2026-06-04  FEATURE: bench-case schema + validator with 3 validation states
+2026-06-04  FIX: validate_all_benches reports unreadable files instead of raising
+2026-06-04  FEATURE: source-grounding helper ([vendor]/OE/[vendor] corroboration, injectable)
+2026-06-04  FIX: [vendor] grounding adds language=en (close fail-open), drop resolved TODOs, add exception-path test
+2026-06-04  FEATURE: dual-model adversarial case checker (consensus/flag routing)
+2026-06-04  FIX: fence-strip + fail-closed verdict parsing in check_case_live (reuse extract_score_block)
+2026-06-04  FEATURE: instrument psychometrics (judge agreement, difficulty, discrimination, dead-case)
+2026-06-04  FIX: psychometrics guards empty score lists + branch-coverage tests + docstrings
+2026-06-04  FEATURE: author-pipeline CLI + foundation lock report (pipeline complete; M0.1 scoring held)
+2026-06-04  FIX: author CLI preserves human validation flags, atomic with-context writes, dry-run no-write
+2026-06-04  FEATURE: grounding stack = [vendor] + [vendor] v2 + PubMed + Exa (drop OE)
+2026-06-04  FEATURE: validator accepts hallucination-case shape (ground_truth anchor)
+2026-06-04  FEATURE: hallucination lane +20 grounded false-premise cases (5→25)
+2026-06-04  FEATURE: hallucination lane complete 25→40 (CRIT/TRIAL expand + more DOSE/PHYS)
+2026-06-04  FEATURE: freshness lane 15→30 (+15 date-stamped current-guidance cases)
+2026-06-04  RESULT: Phase 0 calibration smoke — hallucination lane scores end-to-end ($0.71, ceiling effect found)
+2026-06-05  FEATURE: Phase 1a instrument-validation harness (strong vs weak, dual judge)
+2026-06-05  DOCS: instrument validation report — all 5 lanes discriminate (sep +0.12 to +0.45)
+2026-06-05  RESULT: Phase 3 closes abandoned single-turn scoring + Phase 2 consensus harness
+2026-06-05  RESULT: Phase 2 consensus — 54/70 freshness+halluc validated_consensus:true
+2026-06-07  FEATURE: Phase 4 leaderboard harness (real prompt files x Sonnet/GPT-5.5 x lane, dual judge, per-cell chunked)
+2026-06-07  FIX: harness variable audit — gen cap 1500->4000 (was truncating mega), temps->0, truncation->20K
+2026-06-07  FEATURE: recover + apply 19-public / hidden split from scenario-list.md
+2026-06-07  REFACTOR: merge NB-JAUND-01 into canonical public NB-01 (dedupe jaundice; keep bias variant)
+2026-06-08  REFACTOR: keep mild NB-01 public anchor; re-home severe jaundice as distinct NB-13 (ABE)
+2026-06-11  FEATURE: interactive HTML teaching explainer of Feb-May CDS evals shared with [vendor]
+2026-06-11  FIX: correct [vendor] freshness/score framing — bench harness attached web search, production does not
+2026-06-14  DOCS: design spec — public release of internal fam-med CDS bench
+2026-06-14  DOCS: resolve repo target + worked-example showcase in release spec
+2026-06-14  PLAN: implementation plan for CDS bench public release
+2026-06-14  FEATURE: release lane registry (single source of truth for 29/116 split)
+2026-06-14  FEATURE: deterministic stratified public-sample selector (forced worked-example ids pinned)
+2026-06-14  FIX: drop unused glob import; derive hidden count from lane registry
+2026-06-14  FEATURE: apply public/hidden split to internal bench (29 public / 116 hidden, seed 20260614)
+2026-06-14  TEST: strengthen idempotency check to compare on-disk split assignments
+2026-06-14  FEATURE: content-only canonicalization + SHA-256 case hashing
+2026-06-14  TEST: split canonicalization assertions + cover canary/_notice exclusion
+2026-06-14  FEATURE: deterministic Merkle root over hidden-case hashes
+2026-06-14  REFACTOR: address Task 5 review — top-level import, order/single-leaf tests, Merkle convention note
+2026-06-14  FEATURE: hidden-only SHA-256 manifest + Merkle meta (116 cases, no public ids leaked)
+2026-06-14  FIX: harden no-public-ids manifest test with exact id-token membership (all 5 forced-public)
+2026-06-14  FEATURE: canary GUID + do-not-train notice stamping
+2026-06-14  REFACTOR: pin exact canary GUID in test; clarify shallow-copy docstring
+2026-06-14  FEATURE: static release assets (CC-BY-NC-ND license, README, CANARY, SUBMISSION)
+2026-06-14  FIX: README notice heading + canary-in-README test + tighten SUBMISSION assertions
+2026-06-14  FEATURE: public-tree builder (29 stamped cases, rubrics, scoring, assets, manifest)
+2026-06-14  FIX: guard public-tree builder against rmtree of non-cds-bench dirs
+2026-06-14  FEATURE: worked-example overlays + scored-run curation helper
+2026-06-14  REFACTOR: hermetic worked-example test + word-boundary curation match
+2026-06-14  FEATURE: eval-as-a-service harness (hidden loader + injectable scorer + blinded scorecard)
+2026-06-14  FIX: harden eval-as-a-service harness (None-score=missing, tagged scorer errors, internal-only docstring)
+2026-06-14  FEATURE: release invariants validator (split present, counts, totals, showcase public)
+2026-06-14  REFACTOR: address Task 12 review — assert hidden==116, align FAIL line, add negative gate tests
+2026-06-14  FIX: cleanliness gate + blinded methodology artifacts (close vendor/private-path leak in public build)
+2026-06-14  FIX: harden cleanliness gate to word-boundary vendor matching + fix golden.txt grammar (Task 14 review)
