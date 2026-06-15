@@ -12,6 +12,8 @@ from typing import Optional
 
 from anthropic import Anthropic
 
+from release_clean.scoring.base import DEFAULT_JUDGE_MODEL
+
 JUDGE_RUBRIC_PATH = "release_clean/rubrics/golden.txt"
 JUDGE_TEMPERATURE = 0.3
 JUDGE_RUNS = 3
@@ -158,7 +160,7 @@ def judge_query(
   query: str,
   gold_content: str,
   candidate_content: str,
-  model: str = "claude-sonnet-4-20250514",
+  model: str = DEFAULT_JUDGE_MODEL,
   references: Optional[list[dict]] = None,
   web_citations: Optional[list[dict]] = None,
   gold_label: str = "the gold-standard reference",

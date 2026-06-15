@@ -43,20 +43,34 @@ def test_score_halluhard_importable():
 # 2. Model constants
 # ---------------------------------------------------------------------------
 
-def test_golden_judge_model_constant():
-  from release_clean.scoring.base import GOLDEN_JUDGE_MODEL
-  assert GOLDEN_JUDGE_MODEL == "claude-sonnet-4-20250514"
+def test_default_judge_model_constant():
+  """The unified default judge is claude-sonnet-4-6 across all four lanes."""
+  from release_clean.scoring.base import DEFAULT_JUDGE_MODEL
+  assert DEFAULT_JUDGE_MODEL == "claude-sonnet-4-6"
 
 
-def test_trap_judge_model_constant():
-  from release_clean.scoring.base import TRAP_JUDGE_MODEL
+def test_golden_judge_model_is_unified():
+  """GOLDEN_JUDGE_MODEL is now an alias of DEFAULT_JUDGE_MODEL (= claude-sonnet-4-6).
+  Golden originally used claude-sonnet-4-20250514 (Sonnet 4) and moved to 4.6."""
+  from release_clean.scoring.base import GOLDEN_JUDGE_MODEL, DEFAULT_JUDGE_MODEL
+  assert GOLDEN_JUDGE_MODEL == DEFAULT_JUDGE_MODEL
+  assert GOLDEN_JUDGE_MODEL == "claude-sonnet-4-6"
+
+
+def test_trap_judge_model_is_unified():
+  """TRAP_JUDGE_MODEL is an alias of DEFAULT_JUDGE_MODEL (= claude-sonnet-4-6)."""
+  from release_clean.scoring.base import TRAP_JUDGE_MODEL, DEFAULT_JUDGE_MODEL
+  assert TRAP_JUDGE_MODEL == DEFAULT_JUDGE_MODEL
   assert TRAP_JUDGE_MODEL == "claude-sonnet-4-6"
 
 
-def test_models_differ():
-  """The two model constants must be different (they document a real historical difference)."""
-  from release_clean.scoring.base import GOLDEN_JUDGE_MODEL, TRAP_JUDGE_MODEL
-  assert GOLDEN_JUDGE_MODEL != TRAP_JUDGE_MODEL
+def test_no_scorer_defaults_to_old_sonnet4():
+  """No scorer should default to the old claude-sonnet-4-20250514 model."""
+  from release_clean.scoring.base import GOLDEN_JUDGE_MODEL, TRAP_JUDGE_MODEL, DEFAULT_JUDGE_MODEL
+  for const in (DEFAULT_JUDGE_MODEL, GOLDEN_JUDGE_MODEL, TRAP_JUDGE_MODEL):
+    assert const != "claude-sonnet-4-20250514", (
+      f"A model constant still points to the old Sonnet 4 judge: {const!r}"
+    )
 
 
 # ---------------------------------------------------------------------------

@@ -1,11 +1,12 @@
 """Shared helpers for cds-bench lane scorers.
 
 Provides:
-  - make_client()     — returns anthropic.Anthropic()
-  - load_rubric()     — reads a rubric file, substitutes {current_date}
-  - extract_json()    — strips markdown fences, extracts first {...} block
-  - GOLDEN_JUDGE_MODEL — model used by the golden scorer (claude-sonnet-4-20250514)
-  - TRAP_JUDGE_MODEL   — model used by the trap lanes (claude-sonnet-4-6)
+  - make_client()       — returns anthropic.Anthropic()
+  - load_rubric()       — reads a rubric file, substitutes {current_date}
+  - extract_json()      — strips markdown fences, extracts first {...} block
+  - DEFAULT_JUDGE_MODEL — unified judge model for all four lanes (claude-sonnet-4-6)
+  - GOLDEN_JUDGE_MODEL  — alias of DEFAULT_JUDGE_MODEL (golden moved from Sonnet 4 to 4.6)
+  - TRAP_JUDGE_MODEL    — alias of DEFAULT_JUDGE_MODEL (Currency, Hallucination, HalluHard)
 
 Requires ANTHROPIC_API_KEY in the environment. No vendor-specific logic here.
 """
@@ -22,12 +23,15 @@ from anthropic import Anthropic
 # Model constants — keep these accurate; they drive reproducible scoring.
 # ---------------------------------------------------------------------------
 
-# Golden lane: scored by Claude Sonnet 4 (the judge used in the published run).
-GOLDEN_JUDGE_MODEL = "claude-sonnet-4-20250514"
+# All four lanes are judged by Claude Sonnet 4.6.
+# Historical note: the Golden lane originally used Claude Sonnet 4
+# (claude-sonnet-4-20250514) and moved to Sonnet 4.6 recently. The physician
+# blind-review calibration was performed on the earlier Sonnet 4 golden judge.
+DEFAULT_JUDGE_MODEL = "claude-sonnet-4-6"
 
-# Currency, Hallucination, and HalluHard lanes: scored by Claude Sonnet 4.6
-# (the model used in the internal evaluation program; do NOT unify with golden).
-TRAP_JUDGE_MODEL = "claude-sonnet-4-6"
+# Backward-compatible aliases — both resolve to the unified DEFAULT_JUDGE_MODEL.
+GOLDEN_JUDGE_MODEL = DEFAULT_JUDGE_MODEL
+TRAP_JUDGE_MODEL = DEFAULT_JUDGE_MODEL
 
 
 # ---------------------------------------------------------------------------

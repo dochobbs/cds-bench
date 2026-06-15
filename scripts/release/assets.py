@@ -69,12 +69,12 @@ cannot be disclosed, and the comparator rows — like your hidden-set score — 
 fixed at release time, but it does not, and cannot, independently verify the scores.
 For an auditable result, run the 27 public cases yourself with the shipped per-lane scorers in `release_clean/scoring/` (with `ANTHROPIC_API_KEY` set):
 
-- **Golden** (12 cases): `judge.py` — uses Claude Sonnet 4 (`claude-sonnet-4-20250514`).
+- **Golden** (12 cases): `judge.py` — uses Claude Sonnet 4.6 (`claude-sonnet-4-6`).
 - **Currency** (6 cases): `score_freshness.py` — uses Claude Sonnet 4.6 (`claude-sonnet-4-6`).
 - **Hallucination** (6 cases): `score_hallucination.py` — uses Claude Sonnet 4.6 (`claude-sonnet-4-6`).
 - **HalluHard** (3 cases): `score_halluhard.py` — uses Claude Sonnet 4.6 (`claude-sonnet-4-6`), 3-run plurality.
 
-All four lanes are now independently scorable from this repo. Shared helpers live in `base.py`. Per-lane judge models differ intentionally — the published numbers used this mix, and the code constants match the documentation exactly.
+All four lanes are independently scorable from this repo with a uniform Claude Sonnet 4.6 (`claude-sonnet-4-6`) judge. Shared helpers live in `base.py`. Note: Golden originally used Sonnet 4 (`claude-sonnet-4-20250514`) and moved to 4.6 recently; the physician blind-review calibration predates this change.
 
 The per-case hashes in `HIDDEN_MANIFEST.sha256` are salted with a per-release secret
 held by the maintainer. The salt is revealed when results are scored and published, at

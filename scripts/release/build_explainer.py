@@ -57,9 +57,10 @@ TIMELINE: list[dict] = [
       "+ date-awareness + verifiable-only citations. The shipped scorers are automated LLM judges, "
       "with physician review used for calibration, <strong>not</strong> as a per-run arbiter "
       "(LLM-as-judge as a screening tool, per Zheng et al.). "
-      "<strong>Per-lane judge models:</strong> Golden is judged by <strong>Claude Sonnet 4</strong> "
-      "(<code>claude-sonnet-4-20250514</code>); Currency, Hallucination, and HalluHard lanes by "
-      "<strong>Claude Sonnet 4.6</strong> (<code>claude-sonnet-4-6</code>). "
+      "The shipped scorers use <strong>Claude Sonnet 4.6</strong> (<code>claude-sonnet-4-6</code>) "
+      "across all four lanes. Golden originally used Sonnet 4 (<code>claude-sonnet-4-20250514</code>) "
+      "and moved to 4.6 recently; the physician blind-review calibration was performed on the earlier "
+      "Sonnet 4 golden judge. "
       "All four public lanes are runnable with the shipped scorers in <code>release_clean/scoring/</code>. "
       "Calibration ships as <code>calibrate_judge.py</code>."
     ),
@@ -846,6 +847,7 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
     <li><strong>Maintainer-attested results.</strong> Hidden-set scores and comparator rows are attested by the maintainer; only the question set is cryptographically fixed by the manifest.</li>
     <li><strong>Minor schema drift.</strong> Lanes were assembled at different times: Golden uses <code>search_id</code>; other lanes use <code>id</code>; HalluHard adds <code>rarity</code>/<code>grounding_axis</code>/<code>fail_modes</code>.</li>
     <li><strong>Physician calibration is qualitative.</strong> The physician blind-review shaped the judge protocol but no formal physician-agreement statistics (MAE / Pearson r / n) are published in this sample; <code>calibrate_judge.py</code> is a reference harness with no bundled calibration data.</li>
+    <li><strong>Judge-model drift.</strong> Golden&rsquo;s physician calibration was done on the earlier Sonnet 4 judge (<code>claude-sonnet-4-20250514</code>), while the shipped harness now uses Sonnet 4.6 (<code>claude-sonnet-4-6</code>) across all lanes &mdash; the calibration predates the current judge.</li>
   </ul>
 </div>
 </section>
