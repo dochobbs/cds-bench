@@ -54,9 +54,13 @@ TIMELINE: list[dict] = [
     "title": "LLM-as-judge protocol",
     "body": (
       "Physician blind review reshaped judging: median-of-3 (temp 0.3) + anti-anchoring "
-      "+ date-awareness + verifiable-only citations. The shipped scorer is the automated LLM judge "
-      "(<strong>Claude Sonnet 4</strong>, <code>claude-sonnet-4-20250514</code>), with physician review used for calibration, "
-      "<strong>not</strong> as a per-run arbiter (LLM-as-judge as a screening tool, per Zheng et al.). "
+      "+ date-awareness + verifiable-only citations. The shipped scorers are automated LLM judges, "
+      "with physician review used for calibration, <strong>not</strong> as a per-run arbiter "
+      "(LLM-as-judge as a screening tool, per Zheng et al.). "
+      "<strong>Per-lane judge models:</strong> Golden is judged by <strong>Claude Sonnet 4</strong> "
+      "(<code>claude-sonnet-4-20250514</code>); Currency, Hallucination, and HalluHard lanes by "
+      "<strong>Claude Sonnet 4.6</strong> (<code>claude-sonnet-4-6</code>). "
+      "All four public lanes are runnable with the shipped scorers in <code>release_clean/scoring/</code>. "
       "Calibration ships as <code>calibrate_judge.py</code>."
     ),
   },

@@ -14,10 +14,14 @@ from scripts.release.build_explainer import load_public, render_html, render_mar
 # MIT-shipped methodology artifacts (spec §8): reference scorer, prompt template, calibration runner
 RUBRIC_CLEAN_DIR = "release_clean/rubrics"
 SCORING_SRCS = [
-  "release_clean/scoring/cds_ws2.txt",          # prompt template (already clean)
-  "release_clean/scoring/cds_ws5_parallel.txt", # parallel-search prompt template (already clean)
-  "release_clean/scoring/judge.py",             # blinded copy
+  "release_clean/scoring/cds_ws2.txt",              # prompt template (already clean)
+  "release_clean/scoring/cds_ws5_parallel.txt",     # parallel-search prompt template (already clean)
+  "release_clean/scoring/judge.py",                 # golden lane scorer (claude-sonnet-4-20250514)
   "release_clean/scoring/calibrate_judge.py",
+  "release_clean/scoring/base.py",                  # shared helpers for trap-lane scorers
+  "release_clean/scoring/score_freshness.py",       # currency lane scorer (claude-sonnet-4-6)
+  "release_clean/scoring/score_hallucination.py",   # hallucination lane scorer (claude-sonnet-4-6)
+  "release_clean/scoring/score_halluhard.py",       # halluhard lane scorer (claude-sonnet-4-6)
 ]
 
 # Path tokens are always enforced (no word boundaries — path fragments have none).

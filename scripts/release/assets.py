@@ -67,7 +67,14 @@ Comparator tools are evaluated under NDA. Their identities and the A/B/C mapping
 cannot be disclosed, and the comparator rows — like your hidden-set score — are
 **maintainer-attested**: the published `HIDDEN_MANIFEST` proves the question set was
 fixed at release time, but it does not, and cannot, independently verify the scores.
-For an auditable result, run the 12 public **Golden** cases yourself with the shipped golden scorer (`release_clean/scoring/judge.py`). The Currency, Hallucination, and HalluHard lanes ship their rubric *criteria* under `release_clean/rubrics/` but not a runnable harness in this sample — their scoring is documented, not yet executable from this repo alone.
+For an auditable result, run the 27 public cases yourself with the shipped per-lane scorers in `release_clean/scoring/` (with `ANTHROPIC_API_KEY` set):
+
+- **Golden** (12 cases): `judge.py` — uses Claude Sonnet 4 (`claude-sonnet-4-20250514`).
+- **Currency** (6 cases): `score_freshness.py` — uses Claude Sonnet 4.6 (`claude-sonnet-4-6`).
+- **Hallucination** (6 cases): `score_hallucination.py` — uses Claude Sonnet 4.6 (`claude-sonnet-4-6`).
+- **HalluHard** (3 cases): `score_halluhard.py` — uses Claude Sonnet 4.6 (`claude-sonnet-4-6`), 3-run plurality.
+
+All four lanes are now independently scorable from this repo. Shared helpers live in `base.py`. Per-lane judge models differ intentionally — the published numbers used this mix, and the code constants match the documentation exactly.
 
 The per-case hashes in `HIDDEN_MANIFEST.sha256` are salted with a per-release secret
 held by the maintainer. The salt is revealed when results are scored and published, at
