@@ -34,7 +34,11 @@ methodology of a 135-case clinical-decision-support benchmark. The remaining
 - `worked_examples/` — showcase cases shown end-to-end (query → rubric → gold → transcript → score)
 - `rubrics/` — the judge rubrics used to score each lane
 - `scoring/` — the scoring harness (MIT)
-- `HIDDEN_MANIFEST.sha256` / `.meta.json` — SHA-256 + Merkle root of the 108 hidden cases
+- `HIDDEN_MANIFEST.sha256` / `.meta.json` — per-case **salted** SHA-256 + Merkle root of the
+  108 hidden cases; the secret salt is maintainer-held and **revealed at scoring time**;
+  `HIDDEN_MANIFEST.meta.json` publishes a `salt_commitment` that binds the maintainer to one
+  fixed salt without revealing it. This prevents guess-and-confirm reconstruction of held-out
+  cases before scoring.
 - `SUBMISSION.md` — how to evaluate against the hidden set (eval-as-a-service)
 
 ## Data use request
@@ -65,4 +69,11 @@ cannot be disclosed, and the comparator rows — like your hidden-set score — 
 fixed at release time, but it does not, and cannot, independently verify the scores.
 For a fully auditable result, run the 27 public cases yourself with the shipped
 rubrics and judge (`release_clean/`).
+
+The per-case hashes in `HIDDEN_MANIFEST.sha256` are salted with a per-release secret
+held by the maintainer. The salt is revealed when results are scored and published, at
+which point anyone can verify `sha256(salt) == salt_commitment` (published in
+`HIDDEN_MANIFEST.meta.json`) and recompute the per-case hashes to confirm the
+held-out set was fixed at release time. This prevents guess-and-confirm reconstruction
+of held-out answers before scoring.
 """

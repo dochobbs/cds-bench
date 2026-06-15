@@ -20,3 +20,4 @@ benchmarks/internal/
 MIGRATION_MANIFEST.md
 docs/superpowers/
 release_clean/vendor_denylist.txt
+release_clean/manifest_salt.txt

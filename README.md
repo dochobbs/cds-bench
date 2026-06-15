@@ -11,8 +11,11 @@ Currency are public — see [Limitations](#limitations).)
 
 - `benchmarks/public/` — the 27 public cases (4 lanes)
 - **held-out set** — 108 cases, never published; their existence is verifiable via the committed
-  `HIDDEN_MANIFEST.sha256` (per-case SHA-256 + Merkle root). To score against the held-out set,
-  see [`SUBMISSION.md`](SUBMISSION.md) (eval-as-a-service).
+  `HIDDEN_MANIFEST.sha256` (per-case **salted** SHA-256 + Merkle root). The secret salt is
+  maintainer-held and **revealed at scoring time**; `HIDDEN_MANIFEST.meta.json` publishes a
+  `salt_commitment` that binds the maintainer to one fixed salt without revealing it. This
+  prevents guess-and-confirm reconstruction of held-out cases. To score against the held-out
+  set, see [`SUBMISSION.md`](SUBMISSION.md) (eval-as-a-service).
 
 > A working benchmark, **not** a peer-reviewed publication — see [Limitations](#limitations).
 
@@ -38,7 +41,7 @@ This repository **is** the public artifact — these are committed at the root:
 - `benchmarks/public/` — the 27 public cases (JSON)
 - `release_clean/` — the 4 blinded judge rubrics + scoring harness
 - `LICENSE` (CC-BY-NC-ND data / MIT code) · `SUBMISSION.md` (eval-as-a-service)
-- `HIDDEN_MANIFEST.sha256` + `.meta.json` — SHA-256 + Merkle root of the 108 held-out cases
+- `HIDDEN_MANIFEST.sha256` + `.meta.json` — per-case **salted** SHA-256 + Merkle root of the 108 held-out cases; `salt_commitment` in the meta binds the maintainer to the fixed salt (revealed at scoring time)
 
 To regenerate these (after editing rubrics/cases), or to produce a standalone copy:
 
@@ -58,7 +61,7 @@ python -m pytest tests/release/ -q                  # test suite
 
 ## Layout
 
-- root — `index.html`, `LICENSE`, `SUBMISSION.md`, `HIDDEN_MANIFEST.sha256` + `.meta.json` (the published artifact)
+- root — `index.html`, `LICENSE`, `SUBMISSION.md`, `HIDDEN_MANIFEST.sha256` + `.meta.json` (per-case salted SHA-256 + Merkle root; `salt_commitment` binds the maintainer-held salt)
 - `benchmarks/public/` — committed; 27 public cases across 4 lane files
 - held-out set — 108 cases kept private (not in this repository)
 - `scripts/release/` — the pipeline (lanes, manifest, assets, build_public, build_explainer, submit, validate_release)

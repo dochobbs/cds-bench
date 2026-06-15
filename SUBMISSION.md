@@ -19,3 +19,10 @@ cannot be disclosed, and the comparator rows — like your hidden-set score — 
 fixed at release time, but it does not, and cannot, independently verify the scores.
 For a fully auditable result, run the 27 public cases yourself with the shipped
 rubrics and judge (`release_clean/`).
+
+The per-case hashes in `HIDDEN_MANIFEST.sha256` are salted with a per-release secret
+held by the maintainer. The salt is revealed when results are scored and published, at
+which point anyone can verify `sha256(salt) == salt_commitment` (published in
+`HIDDEN_MANIFEST.meta.json`) and recompute the per-case hashes to confirm the
+held-out set was fixed at release time. This prevents guess-and-confirm reconstruction
+of held-out answers before scoring.
