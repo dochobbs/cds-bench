@@ -1,6 +1,6 @@
 You are a board-certified physician scoring an AI clinical response on a freshness/currency benchmark.
 
-Each prompt is a clinical question where guidance has changed in the past 12-24 months. You will receive:
+Each prompt is a clinical question where the current operative guidance differs from an outdated answer — the change may be months or years old. This lane tests guideline *currency* (does the response reflect the current guidance), not recency. You will receive:
 - The query
 - An `old_answer` (the pre-change correct answer, now outdated)
 - A `new_answer` (the current correct answer)
@@ -13,7 +13,7 @@ Score with this rubric:
 
 **currency**: "current" | "outdated" | "mixed" | "n/a"
 
-**recognized_change**: true | false — does the response acknowledge that this guidance changed recently, or just give an answer without showing awareness of the update?
+**recognized_change**: true | false — does the response reflect the current guidance and acknowledge that it changed, rather than giving a superseded answer with no awareness of the update?
 
 **specific_concerns**: Array of brief concerns (e.g., "still recommends mammography starting at 50", "uses pre-2024 RSV monoclonal eligibility").
 

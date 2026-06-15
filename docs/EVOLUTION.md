@@ -12,7 +12,7 @@
   - `freshness_30` (**guideline currency**): queries where the current operative guideline differs from an outdated answer — the change may be months or years old, so this lane tests *currency*, not recency. Anchored to real updates from **ACIP/CDC** (incl. the 2026 schedule litigation and stay), **USPSTF**, **ADA**, **ACC/AHA**, and **AAP**. Separates retrieval-augmented from parametric systems.
   - `hallucination_30`: clinical-safety traps — false premises, dangerous reassurance, and missed-diagnosis vignettes the model must catch (PASS / PARTIAL / FAIL). Designed as the clinical-safety discriminator (n=30; per-lane numbers are noisy — see Limitations). **Orthogonal to HalluHard**: HalluHard tests active fabrication; this lane tests accepting unsafe premises / missing red flags.
 
-- **April 2026 — LLM-as-judge protocol evolved.** A physician blind review reshaped the judging approach: the judge moved to **median-of-3 (temp 0.3) + anti-anchoring + date-awareness + verifiable-only citations**. A physician blind-review **calibrated** the judge — the shipped scorer is the automated LLM judge (**Claude Sonnet 4.6**), with physician review used for calibration, **not** as a per-run arbiter (LLM-as-judge as a screening tool, per Zheng et al.). This calibration discipline ships as `calibrate_judge.py`.
+- **April 2026 — LLM-as-judge protocol evolved.** A physician blind review reshaped the judging approach: the judge moved to **median-of-3 (temp 0.3) + anti-anchoring + date-awareness + verifiable-only citations**. A physician blind-review **calibrated** the judge — the shipped scorer is the automated LLM judge (**Claude Sonnet 4** (`claude-sonnet-4-20250514`)), with physician review used for calibration, **not** as a per-run arbiter (LLM-as-judge as a screening tool, per Zheng et al.). This calibration discipline ships as `calibrate_judge.py`. Note: the physician review was a qualitative blind-review that shaped the judge protocol; formal physician-agreement statistics (MAE / Pearson r / n) are not published in this sample.
 
 - **Prompt methodology.** In our runs (a single internal run, not a controlled multi-seed study), the `ws2` prompt (~2.8K chars) added roughly **17–20 Core points** over no prompt and reduced hallucination failures on frontier models. Because the prompt moves scores this much, the bench measures the **system+prompt configuration**, not raw model capability — see Limitations (construct validity). Both `ws2` and the parallel-search `ws5` ship under `release_clean/scoring/` so you can judge the scaffolding directly.
 
@@ -24,7 +24,7 @@
 
 - **Lineage.** Register (parent- vs clinician-facing) and rubric design were informed by **HealthBench** and **HealthBench Professional** (Arora, Wei et al., OpenAI, 2025). cds-bench is the narrow, freshness- and safety-opinionated, held-out counterpart.
 
-- **June 2026 — working release.** Split **27 public / 108 held-out** (proportional ~20%/lane, fixed-seed stratified, 4 lanes; calc lane removed). This is a working internal benchmark, not a formally peer-reviewed publication. SHA-256 + Merkle-root manifest of the held-out set; eval-as-a-service for hidden-set scoring. The public/hidden split was a fixed-seed (20260614) stratified ~20%/lane carve, now frozen as the `benchmarks/public/` and `benchmarks/hidden/` directories (previously encoded by a `split` field in a single mixed-case file; `split_selector.py` generated it but is no longer needed).
+- **June 2026 — working release.** Split **27 public / 108 held-out** (proportional ~20%/lane, fixed-seed stratified, 4 lanes; calc lane removed). This is a working benchmark, not a formally peer-reviewed publication. salted SHA-256 + Merkle-root manifest of the held-out set (salt revealed at scoring); eval-as-a-service for hidden-set scoring. The public/hidden split was a fixed-seed (20260614) stratified ~20%/lane carve, now frozen as the `benchmarks/public/` and `benchmarks/hidden/` directories (previously encoded by a `split` field in a single mixed-case file; `split_selector.py` generated it but is no longer needed).
 
 ---
 
@@ -41,6 +41,7 @@
 - Construct validity: a structured prompt moves scores ~17–20 Core points, so results reflect the system+prompt configuration, not raw model capability.
 - Verifiability: hidden-set scores and comparator rows are maintainer-attested; only the question set is cryptographically fixed. Comparator tools are under NDA, so per-vendor identities cannot be disclosed.
 - Minor schema drift across lanes (Golden uses `search_id`; others use `id`).
+- Physician calibration was qualitative: it shaped the judge protocol, but no formal physician-agreement statistics (MAE / r / n) are published in this sample (`calibrate_judge.py` is a reference harness with no bundled data).
 
 ---
 

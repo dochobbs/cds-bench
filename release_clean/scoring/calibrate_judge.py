@@ -1,7 +1,15 @@
 # calibrate_judge.py
-"""Reference implementation of the cds-bench judge-calibration protocol.
+"""Reference harness for computing judge-vs-reference agreement (e.g. MAE, Pearson r) on a labeled set.
 
-Calibrate a candidate LLM judge against a frozen reference judge before trusting it:
+This is a reference implementation of the cds-bench judge-calibration protocol.
+NO calibration dataset or physician-agreement numbers are bundled in this public sample;
+thresholds and agreement floors are left to the user to set based on their own labeled data.
+
+The physician review used during cds-bench development was a qualitative blind-review
+that shaped the judge protocol — formal physician-agreement statistics (MAE / Pearson r / n)
+are not published in this sample.
+
+To use: calibrate a candidate LLM judge against a frozen reference judge before trusting it:
   - median-of-3 sampling at temperature ~0.3 (anti-anchoring)
   - per-dimension MAE + Pearson r vs the reference scores
 A candidate judge is only usable if its Pearson r against the reference is high enough

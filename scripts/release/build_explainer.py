@@ -55,7 +55,7 @@ TIMELINE: list[dict] = [
     "body": (
       "Physician blind review reshaped judging: median-of-3 (temp 0.3) + anti-anchoring "
       "+ date-awareness + verifiable-only citations. The shipped scorer is the automated LLM judge "
-      "(<strong>Claude Sonnet 4.6</strong>), with physician review used for calibration, "
+      "(<strong>Claude Sonnet 4</strong>, <code>claude-sonnet-4-20250514</code>), with physician review used for calibration, "
       "<strong>not</strong> as a per-run arbiter (LLM-as-judge as a screening tool, per Zheng et al.). "
       "Calibration ships as <code>calibrate_judge.py</code>."
     ),
@@ -75,9 +75,9 @@ TIMELINE: list[dict] = [
     "title": "Working release",
     "body": (
       "27 public / 108 held-out (proportional ~20%/lane, fixed-seed stratified). "
-      "SHA-256 + Merkle-root manifest of the held-out set; "
+      "salted SHA-256 + Merkle-root manifest of the held-out set (salt revealed at scoring); "
       "eval-as-a-service for hidden-set scoring. "
-      "This is a working internal benchmark, not a formally peer-reviewed publication."
+      "This is a working benchmark, not a formally peer-reviewed publication."
     ),
   },
 ]
@@ -679,7 +679,7 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
     <span class="tag">Caveats</span>
     <p>May-2026 snapshot; models, harnesses, and guidelines all move &mdash; rankings shift on re-run.</p>
     <p>n=30 on freshness/hallucination: differences of 5+ on Core or 0.10+ on Freshness are reliable; tighter ones aren't. The hallucination set is 30 constructed traps &mdash; a relative comparison, not a generic lie-rate.</p>
-    <p>Single frontier-model judge (~93% physician-panel agreement) against a prose-style curated reference &mdash; this favors prose tools and penalizes a concise-bullet tool's output (tool C). Web tools tested through one personal subscription each.</p>
+    <p>Single frontier-model judge (calibrated against a physician blind-review; formal agreement statistics are not published in this sample) against a prose-style curated reference &mdash; this favors prose tools and penalizes a concise-bullet tool's output (tool C). Web tools tested through one personal subscription each.</p>
     <p style="margin-bottom:0">These results come from the internal eval program cds-bench derives from (its suite included an Edge set); the public cds-bench sample ships the Golden, Currency, Hallucination, and HalluHard lanes.</p>
   </div>
 </div>
@@ -720,7 +720,7 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
     Forced-public anchors ensure the showcase cases always land in the
     public set regardless of stratification.</p>
     <p style="margin-bottom:0">The remaining ~80% are held out and covered by a
-    SHA-256 + Merkle-root manifest (<code>HIDDEN_MANIFEST.sha256</code> /
+    salted SHA-256 + Merkle-root manifest (<code>HIDDEN_MANIFEST.sha256</code> /
     <code>HIDDEN_MANIFEST.meta.json</code>), enabling verifiable integrity
     without distribution.</p>
   </div>
@@ -733,7 +733,7 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
         threshold) is public and already in any model&rsquo;s training data; holding our items
         back does NOT stop a model from knowing the answer. What it protects is the specific
         phrasings, traps, and gold/rubric pairings from being memorized and gamed. The held-out design protects the trap lanes (Hallucination, HalluHard) most; for Golden and Currency the underlying guideline facts are public, so holding out the phrasing is closer to open-book.</li>
-    <li><strong>Integrity manifest:</strong> SHA-256 + Merkle root of the held-out set,
+    <li><strong>Integrity manifest:</strong> salted SHA-256 + Merkle root of the held-out set,
         published at release, lets a third party verify the test set wasn&rsquo;t altered
         after publication.</li>
     <li><strong>Eval-as-a-service:</strong> hidden-set scoring is run by the maintainer;
@@ -841,6 +841,7 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
     <li><strong>Construct validity.</strong> A structured prompt moves scores substantially (in our runs ~17&ndash;20 Core points), so the bench measures the system+prompt configuration, not raw model capability in isolation. Both prompts ship under <code>release_clean/scoring/</code> so you can see the scaffolding: <code>ws2</code> is a single structured pass over one web search, while <code>ws5</code> issues three independent searches in parallel (distinct retrieval frames) and synthesizes across them &mdash; compare them directly.</li>
     <li><strong>Maintainer-attested results.</strong> Hidden-set scores and comparator rows are attested by the maintainer; only the question set is cryptographically fixed by the manifest.</li>
     <li><strong>Minor schema drift.</strong> Lanes were assembled at different times: Golden uses <code>search_id</code>; other lanes use <code>id</code>; HalluHard adds <code>rarity</code>/<code>grounding_axis</code>/<code>fail_modes</code>.</li>
+    <li><strong>Physician calibration is qualitative.</strong> The physician blind-review shaped the judge protocol but no formal physician-agreement statistics (MAE / Pearson r / n) are published in this sample; <code>calibrate_judge.py</code> is a reference harness with no bundled calibration data.</li>
   </ul>
 </div>
 </section>

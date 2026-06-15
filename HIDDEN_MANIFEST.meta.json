@@ -1,10 +1,11 @@
 {
-  "benchmark": "cds-bench (internal fam-med CDS)",
+  "benchmark": "cds-bench (family-medicine CDS)",
   "hidden_count": 108,
   "merkle_root": "3d114c5498ced8e6d0909ab66dc60e77e384d0d609f9600c3c60a8d80b42c016",
   "seed": 20260614,
   "generated": "2026-06-14",
   "algorithm": "salted-SHA256 (per-release secret salt; salt revealed at scoring time)",
   "salt_commitment": "edc46a07f61dbe04f870105e3e74b62d155fce8437352dffaee8f61dba61412e",
+  "salt_entropy": "32 random bytes (openssl rand -hex 32; 256-bit)",
   "hash": "sha256 over canonical JSON, split/validated excluded"
 }

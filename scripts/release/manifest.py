@@ -93,13 +93,14 @@ def build_manifest(out_dir: str, seed: int, generated: str, hidden_dir: str = HI
   (out / "HIDDEN_MANIFEST.sha256").write_text(
     "".join(f"{h}  {name}\n" for name, h in rows), encoding="utf-8")
   meta = {
-    "benchmark": "cds-bench (internal fam-med CDS)",
+    "benchmark": "cds-bench (family-medicine CDS)",
     "hidden_count": len(rows),
     "merkle_root": merkle_root([h for _, h in rows]),
     "seed": seed,
     "generated": generated,
     "algorithm": "salted-SHA256 (per-release secret salt; salt revealed at scoring time)",
     "salt_commitment": salt_commitment,
+    "salt_entropy": "32 random bytes (openssl rand -hex 32; 256-bit)",
     "hash": "sha256 over canonical JSON, split/validated excluded",
   }
   (out / "HIDDEN_MANIFEST.meta.json").write_text(
