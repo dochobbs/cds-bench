@@ -33,7 +33,7 @@ TIMELINE: list[dict] = [
     "body": (
       "<code>golden_60</code>: 60 bread-and-butter clinical queries scored on a "
       "four-dimension rubric (Clinical Accuracy /30, Completeness /30, Specificity /25, "
-      "Citation Quality /15), with dual-gold scoring. Serious tools cluster at 85&ndash;90%; "
+      "Citation Quality /15), scored by an LLM judge against a curated rubric (judge-parametric &mdash; see Limitations). Serious tools cluster at 85&ndash;90%; "
       "adversarial lanes added to separate them."
     ),
   },
@@ -41,12 +41,12 @@ TIMELINE: list[dict] = [
     "date": "Mar 2026",
     "title": "Adversarial lanes",
     "body": (
-      "<code>freshness_30</code>: queries on guidelines that changed in ~12 months, each "
+      "<code>freshness_30</code>: a guideline-<em>currency</em> lane &mdash; queries where the current operative guidance differs from what an outdated system would answer (the change may be months or years old), each "
       "with a hand-curated <em>old_answer &rarr; new_answer (source)</em> triple anchored to "
       "real ACIP/CDC, USPSTF, ADA, ACC/AHA, and AAP updates. "
       "<code>hallucination_30</code>: clinical-safety traps (false premises, dangerous "
-      "reassurance, missed-diagnosis vignettes the model must catch). Sharpest clinical-safety "
-      "discriminator."
+      "reassurance, missed-diagnosis vignettes the model must catch). "
+      "Designed as the clinical-safety discriminator (n=30; per-lane numbers are noisy &mdash; see Limitations)."
     ),
   },
   {
@@ -54,8 +54,10 @@ TIMELINE: list[dict] = [
     "title": "LLM-as-judge protocol",
     "body": (
       "Physician blind review reshaped judging: median-of-3 (temp 0.3) + anti-anchoring "
-      "+ date-awareness + verifiable-only citations. Physician review adopted as arbiter "
-      "over automated scores (Zheng et al.). Calibration ships as <code>calibrate_judge.py</code>."
+      "+ date-awareness + verifiable-only citations. The shipped scorer is the automated LLM judge "
+      "(<strong>Claude Sonnet 4.6</strong>), with physician review used for calibration, "
+      "<strong>not</strong> as a per-run arbiter (LLM-as-judge as a screening tool, per Zheng et al.). "
+      "Calibration ships as <code>calibrate_judge.py</code>."
     ),
   },
   {
@@ -144,7 +146,7 @@ LANE_META: list[dict] = [
   },
   {
     "id": "freshness",
-    "label": "Freshness",
+    "label": "Currency",
     "n_total": 30,
     "n_public": 6,
     "tests": "Currency of guideline knowledge vs. curated old&rarr;new triples",
@@ -639,14 +641,14 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
   <h2>Results</h2>
   <p class="lede">
     Six clinical-decision-support tools at full sample on one internal suite
-    (Core / Edge / Freshness / Hallucination) &mdash; a May 2026 snapshot.
+    (Core / Edge / Currency / Hallucination) &mdash; a May 2026 snapshot.
   </p>
 
   <h3>Six CDS tools, full sample</h3>
   <div class="tablewrap">
   <table class="results-table">
     <thead>
-      <tr><th>Source</th><th class="num">Core /100</th><th class="num">Edge /100</th><th class="num">Fresh /2</th><th class="num">Halluc P/PR/F</th></tr>
+      <tr><th>Source</th><th class="num">Core /100</th><th class="num">Edge /100</th><th class="num">Currency /2</th><th class="num">Halluc P/PR/F</th></tr>
     </thead>
     <tbody>
       <tr><td>Frontier model &mdash; no prompt (baseline)</td><td class="score">72.0</td><td class="score">&mdash;</td><td class="score">&mdash;</td><td class="score">&mdash;</td></tr>
@@ -660,8 +662,8 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
   </table>
   </div>
   <p class="muted small">Core/Edge: independent frontier-model judge vs a curated reference (0&ndash;115 normalized to 100).
-  Freshness 0&ndash;2. Hallucination = PASS / PARTIAL / FAIL over 30 false-premise traps. Higher is better except FAIL.
-  Commercial tools are anonymized (A/B/C); the A/B/C assignment is fixed but undisclosed.
+  Currency 0&ndash;2. Hallucination = PASS / PARTIAL / FAIL over 30 false-premise traps. Higher is better except FAIL.
+  Commercial tools are evaluated under NDA, so they are anonymized (A/B/C) and the mapping cannot be disclosed; these comparator rows are maintainer-attested, not independently verifiable.
   The no-prompt baseline was scored on Core only.</p>
 
   <h4>What it shows</h4>
@@ -678,7 +680,7 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
     <p>May-2026 snapshot; models, harnesses, and guidelines all move &mdash; rankings shift on re-run.</p>
     <p>n=30 on freshness/hallucination: differences of 5+ on Core or 0.10+ on Freshness are reliable; tighter ones aren't. The hallucination set is 30 constructed traps &mdash; a relative comparison, not a generic lie-rate.</p>
     <p>Single frontier-model judge (~93% physician-panel agreement) against a prose-style curated reference &mdash; this favors prose tools and penalizes a concise-bullet tool's output (tool C). Web tools tested through one personal subscription each.</p>
-    <p style="margin-bottom:0">These results come from the internal eval program cds-bench derives from (its suite included an Edge set); the public cds-bench sample ships the Golden, Freshness, Hallucination, and HalluHard lanes.</p>
+    <p style="margin-bottom:0">These results come from the internal eval program cds-bench derives from (its suite included an Edge set); the public cds-bench sample ships the Golden, Currency, Hallucination, and HalluHard lanes.</p>
   </div>
 </div>
 </section>
@@ -730,12 +732,12 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
     <li><strong>Honest limit:</strong> the held-out <em>clinical knowledge</em> (e.g., a BP
         threshold) is public and already in any model&rsquo;s training data; holding our items
         back does NOT stop a model from knowing the answer. What it protects is the specific
-        phrasings, traps, and gold/rubric pairings from being memorized and gamed.</li>
+        phrasings, traps, and gold/rubric pairings from being memorized and gamed. The held-out design protects the trap lanes (Hallucination, HalluHard) most; for Golden and Currency the underlying guideline facts are public, so holding out the phrasing is closer to open-book.</li>
     <li><strong>Integrity manifest:</strong> SHA-256 + Merkle root of the held-out set,
         published at release, lets a third party verify the test set wasn&rsquo;t altered
         after publication.</li>
     <li><strong>Eval-as-a-service:</strong> hidden-set scoring is run by the maintainer;
-        hidden cases and gold never leave.</li>
+        hidden cases and gold never leave &mdash; so hidden-set scores and comparator rows are <em>maintainer-attested, not independently verifiable</em>: the manifest proves the questions were fixed at release time, not that the scores are correct.</li>
   </ul>
 
   <h3>Judge protocol</h3>
@@ -834,6 +836,11 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
     <li><strong>Gold may overlap models&rsquo; training sources</strong> (circularity) &mdash;
         guideline knowledge is public and likely in any model&rsquo;s training data.</li>
     <li><strong>Not IRB-reviewed, not prospective, no patient-outcome validation.</strong></li>
+    <li><strong>Golden is judge-parametric.</strong> The public Golden sample ships no fixed reference answer, and the rubric directs the judge to defer to current US guidelines where the reference is stale &mdash; so Golden scores depend on the judge model's knowledge and are not independently reproducible from this repo alone.</li>
+    <li><strong>Pediatric skew.</strong> The clinical-safety lanes over-weight pediatrics (the author is a pediatrician) &mdash; e.g. infant croup, pediatric UTI, infant RSV &mdash; so "family medicine" here is not a representative US primary-care case mix.</li>
+    <li><strong>Construct validity.</strong> A structured prompt moves scores substantially (in our runs ~17&ndash;20 Core points), so the bench measures the system+prompt configuration, not raw model capability in isolation. The prompts (<code>ws2</code>, <code>ws5</code>) ship so you can see the scaffolding.</li>
+    <li><strong>Maintainer-attested results.</strong> Hidden-set scores and comparator rows are attested by the maintainer; only the question set is cryptographically fixed by the manifest.</li>
+    <li><strong>Minor schema drift.</strong> Lanes were assembled at different times: Golden uses <code>search_id</code>; other lanes use <code>id</code>; HalluHard adds <code>rarity</code>/<code>grounding_axis</code>/<code>fail_modes</code>.</li>
   </ul>
 </div>
 </section>
@@ -920,7 +927,7 @@ def _build_worked_html(public: dict, rubrics: dict[str, str]) -> str:
 
   color_map = {"golden": "teal", "freshness": "blue", "hallucination": "coral",
                "halluhard": "amber", "calc": "green"}
-  label_map = {"golden": "Golden", "freshness": "Freshness",
+  label_map = {"golden": "Golden", "freshness": "Currency",
                "hallucination": "Hallucination", "halluhard": "HalluHard", "calc": "Calc"}
 
   cards = ""
@@ -1045,11 +1052,11 @@ def render_markdown(public: dict) -> str:
     "",
   ]
 
-  lane_labels = {"golden": "Golden", "freshness": "Freshness",
+  lane_labels = {"golden": "Golden", "freshness": "Currency",
                  "hallucination": "Hallucination", "halluhard": "HalluHard", "calc": "Calc"}
   lane_descs = {
     "golden": "Bread-and-butter CDS queries scored on a 4-dimension rubric.",
-    "freshness": "Queries on recently-changed guidelines; hand-curated old → new triples.",
+    "freshness": "Guideline-currency queries (current operative guidance vs an outdated answer); hand-curated old → new triples — the change may be months or years old.",
     "hallucination": "Clinical-safety traps: false premises, dangerous reassurance, and missed-diagnosis vignettes the model must catch. Orthogonal to HalluHard (which tests active fabrication).",
     "halluhard": "Hard active-hallucination cases with reference + content grounding axes.",
     "calc": "Deterministic calculator/dosing checks; expected behavior is to refuse to compute.",

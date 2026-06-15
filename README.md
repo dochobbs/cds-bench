@@ -2,8 +2,9 @@
 
 A working benchmark for evaluating AI clinical-decision-support (CDS) systems in US primary care.
 This repository publishes a **representative 27-case public sample** plus the full scoring
-methodology; the remaining **108 cases are held out** — never published — so models can't train
-on the test set.
+methodology; the remaining **108 cases are held out** — never published — so models can't train on the
+held-out *phrasing*. (This protects the trap lanes most; the guideline facts behind Golden and
+Currency are public — see [Limitations](#limitations).)
 
 **Start here:** open [`index.html`](index.html) (the interactive explainer), or browse
 [`docs/PUBLIC_CASES.md`](docs/PUBLIC_CASES.md).
@@ -46,7 +47,7 @@ python -m scripts.release.build_explainer                                   # in
 python -m scripts.release.build_public --out dist/public --date YYYY-MM-DD  # standalone public tree
 ```
 
-A cleanliness gate refuses to emit any artifact containing a vendor name or private path.
+A maintainer-side cleanliness gate runs at build time against a local vendor denylist (kept private — the comparators are under NDA) and refuses to emit any artifact containing a vendor name or private path. The denylist is not part of this repo, so this is a maintainer build control, not something a clone re-runs; the artifacts published here are already cleaned.
 
 ## Other commands
 
@@ -71,10 +72,10 @@ python -m pytest tests/release/ -q                  # test suite
 The 108 hidden cases are never published. Submitters get a hidden-set score via the
 eval-as-a-service protocol in `SUBMISSION.md` (maintainer runs the model, returns a blinded
 scorecard). The published hash manifest lets anyone verify the held-out set was fixed at
-release time.
+release time. Hidden-set scores and comparator rows are maintainer-attested — the manifest proves the question set was fixed at release time, not that the scores are correct.
 
 ## Limitations
 
 This is a working benchmark with known limitations — see `docs/EVOLUTION.md` for
 the full list. Key ones: single-author curation, small n per lane, LLM-as-judge is a screening
-tool, freshness items perish, gold may overlap models' training sources.
+tool, freshness items perish, gold may overlap models' training sources; golden is judge-parametric (no fixed public reference answer); the safety lanes skew pediatric; a structured prompt moves scores ~17–20 points (the bench measures system+prompt, not raw model); hidden-set and comparator scores are maintainer-attested.

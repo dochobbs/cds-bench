@@ -22,10 +22,10 @@ class Lane:
 
 LANES: dict[str, Lane] = {
   "golden":        Lane("golden",        "golden_60.json",        "search_id", "category", 60, 12, "G52",  "release_clean/rubrics/golden.txt"),
-  "freshness":     Lane("freshness",     "freshness_30.json",     "id",        "category", 30,  6, "F19",  "release_clean/rubrics/freshness.txt"),
+  "freshness":     Lane("freshness",     "freshness_30.json",     "id",        "category", 30,  6, "F03",  "release_clean/rubrics/freshness.txt"),
   "hallucination": Lane("hallucination", "hallucination_30.json", "id",        "category", 30,  6, "H11",  "release_clean/rubrics/hallucination.txt"),
   "halluhard":     Lane("halluhard",     "halluhard_15.json",     "id",        "category", 15,  3, "HH08", "release_clean/rubrics/halluhard.txt"),
 }
 
 WORKED_DIR = "benchmarks/internal/worked"  # optional curated overlays: <ID>.json {transcript, scores, system}
-SHOWCASE_IDS = ("G52", "F19", "H11", "HH08")  # forced-public showcase ids; worked-example files are copied wholesale from WORKED_DIR (not filtered by this tuple)
+SHOWCASE_IDS = ("G52", "F03", "H11", "HH08")  # forced-public showcase ids; worked-example files are copied wholesale from WORKED_DIR (not filtered by this tuple)

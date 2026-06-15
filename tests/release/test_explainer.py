@@ -136,7 +136,7 @@ def test_html_contains_no_hidden_ids(html_out):
 # ---------------------------------------------------------------------------
 
 def test_html_four_lane_labels_present(html_out):
-  for label in ("Golden", "Freshness", "Hallucination", "HalluHard"):
+  for label in ("Golden", "Currency", "Hallucination", "HalluHard"):
     assert label in html_out, f"Lane label {label!r} missing from HTML"
 
 
@@ -321,7 +321,7 @@ def test_md_no_canary(md_out):
 
 
 def test_md_has_four_lane_sections(md_out):
-  for label in ("Golden", "Freshness", "Hallucination", "HalluHard"):
+  for label in ("Golden", "Currency", "Hallucination", "HalluHard"):
     assert f"## {label}" in md_out, f"Lane section ## {label} missing from Markdown"
 
 

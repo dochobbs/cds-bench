@@ -14,8 +14,9 @@ from scripts.release.build_explainer import load_public, render_html, render_mar
 # MIT-shipped methodology artifacts (spec §8): reference scorer, prompt template, calibration runner
 RUBRIC_CLEAN_DIR = "release_clean/rubrics"
 SCORING_SRCS = [
-  "release_clean/scoring/cds_ws2.txt",   # prompt template (already clean)
-  "release_clean/scoring/judge.py",      # blinded copy
+  "release_clean/scoring/cds_ws2.txt",          # prompt template (already clean)
+  "release_clean/scoring/cds_ws5_parallel.txt", # parallel-search prompt template (already clean)
+  "release_clean/scoring/judge.py",             # blinded copy
   "release_clean/scoring/calibrate_judge.py",
 ]
 

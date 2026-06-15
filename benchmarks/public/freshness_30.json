@@ -1,10 +1,10 @@
 [
   {
     "id": "F01",
-    "query": "How many diseases are on the CDC universal childhood immunization schedule?",
-    "old_answer": "17 diseases on the universal schedule including HepA, HepB, RSV, MenACWY, MenB",
-    "new_answer": "11 diseases on the universal schedule; HepA, HepB, RSV, dengue, MenACWY, MenB moved to risk-based/shared decision-making",
-    "source": "CDC/ACIP January 2026",
+    "query": "What is the current status of the routinely recommended US childhood immunization schedule after the 2026 federal changes?",
+    "old_answer": "A January 2026 CDC memo cut the routinely recommended childhood schedule from ~17 to ~11 diseases (HepA, HepB, RSV, MenACWY, MenB downgraded to risk-based / shared decision-making).",
+    "new_answer": "Those January 2026 changes are NOT operative: the US District Court for Massachusetts (Mar 16, 2026) blocked the memo, stayed the reconstituted ACIP appointments, and invalidated its votes, reverting the federal schedule to the pre-2026 (~17-disease) schedule. The AAP's 2026 schedule (endorsed by AMA, ACOG, IDSA) independently maintains routine immunization against ~18 diseases and no longer endorses the CDC schedule. A current answer must reflect the stay, not the stayed memo.",
+    "source": "US District Court, D. Mass. (stay, Mar 16 2026); AAP 2026 immunization schedule (Pediatrics 2026)",
     "category": "immunizations",
     "split": "public",
     "validated": "2026-06-14"

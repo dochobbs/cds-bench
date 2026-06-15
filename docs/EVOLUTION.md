@@ -6,15 +6,15 @@
 
 ## Timeline
 
-- **Feb 2026 — Golden set.** `golden_60`: 60 bread-and-butter clinical queries scored on a four-dimension rubric (Clinical Accuracy /30, Completeness /30, Specificity /25, Citation Quality /15), with **dual-gold scoring** (each candidate judged against two independent reference standards). Golden serves as a floor — serious tools cluster at ~75–90% — so adversarial lanes were added to actually separate them.
+- **Feb 2026 — Golden set.** `golden_60`: 60 bread-and-butter clinical queries scored on a four-dimension rubric (Clinical Accuracy /30, Completeness /30, Specificity /25, Citation Quality /15), scored by an LLM judge against a curated rubric (the judge defers to current US guidelines where the reference is stale — see Limitations). Golden serves as a floor — serious tools cluster at ~75–90% — so adversarial lanes were added to actually separate them.
 
 - **March 2026 — adversarial lanes.**
-  - `freshness_30`: queries on guidelines that changed in ~12 months, each with a hand-curated `{old_answer, new_answer, source}` triple; anchored to real updates from **ACIP/CDC**, **USPSTF**, **ADA**, **ACC/AHA**, and **AAP**. Separates retrieval-augmented from parametric systems.
-  - `hallucination_30`: clinical-safety traps — false premises, dangerous reassurance, and missed-diagnosis vignettes the model must catch (PASS / PARTIAL / FAIL). The sharpest clinical-safety discriminator in the bench. **Orthogonal to HalluHard**: HalluHard tests active fabrication; this lane tests accepting unsafe premises / missing red flags.
+  - `freshness_30` (**guideline currency**): queries where the current operative guideline differs from an outdated answer — the change may be months or years old, so this lane tests *currency*, not recency. Anchored to real updates from **ACIP/CDC** (incl. the 2026 schedule litigation and stay), **USPSTF**, **ADA**, **ACC/AHA**, and **AAP**. Separates retrieval-augmented from parametric systems.
+  - `hallucination_30`: clinical-safety traps — false premises, dangerous reassurance, and missed-diagnosis vignettes the model must catch (PASS / PARTIAL / FAIL). Designed as the clinical-safety discriminator (n=30; per-lane numbers are noisy — see Limitations). **Orthogonal to HalluHard**: HalluHard tests active fabrication; this lane tests accepting unsafe premises / missing red flags.
 
-- **April 2026 — LLM-as-judge protocol evolved.** A physician blind review reshaped the judging approach: the judge moved to **median-of-3 (temp 0.3) + anti-anchoring + date-awareness + verifiable-only citations**, and **physician review was adopted as the arbiter over automated scores** (LLM-as-judge as a screening tool, per Zheng et al.). This calibration discipline ships as `calibrate_judge.py`.
+- **April 2026 — LLM-as-judge protocol evolved.** A physician blind review reshaped the judging approach: the judge moved to **median-of-3 (temp 0.3) + anti-anchoring + date-awareness + verifiable-only citations**. A physician blind-review **calibrated** the judge — the shipped scorer is the automated LLM judge (**Claude Sonnet 4.6**), with physician review used for calibration, **not** as a per-run arbiter (LLM-as-judge as a screening tool, per Zheng et al.). This calibration discipline ships as `calibrate_judge.py`.
 
-- **Prompt methodology.** `ws2` (~2.8K chars) lifts every model 17–20 points over no prompt and substantially reduces hallucination failures on frontier models — establishing that the rubric and prompt move the score more than the base model.
+- **Prompt methodology.** In our runs (a single internal run, not a controlled multi-seed study), the `ws2` prompt (~2.8K chars) added roughly **17–20 Core points** over no prompt and reduced hallucination failures on frontier models. Because the prompt moves scores this much, the bench measures the **system+prompt configuration**, not raw model capability — see Limitations (construct validity). Both `ws2` and the parallel-search `ws5` ship under `release_clean/scoring/` so you can judge the scaffolding directly.
 
 - **May 2026 — hard hallucination lane.** `halluhard_15`, derived from **HalluHard** (Fan et al., 2026). Adopted into the schema (`rarity`, `grounding_axis`, `ground_truth_source`, `fail_modes`):
   - **reference-vs-content grounding split** — does the cited source exist, and does it actually support the claim? (Correct-cite/wrong-dose is only caught by the content axis.)
@@ -36,6 +36,11 @@
 - Freshness items perish and require periodic re-validation (per-case `validated` dates in the source data).
 - Gold may overlap models' training sources (circularity) — guideline knowledge is public and likely in any model's training data.
 - Not IRB-reviewed, not prospective, no patient-outcome validation.
+- Golden is judge-parametric: the public sample ships no fixed reference answer, and the rubric defers to current guidelines, so Golden scores depend on the judge model and are not independently reproducible from this repo alone.
+- Pediatric skew: the clinical-safety lanes over-weight peds (author is a pediatrician); not a representative US primary-care case mix.
+- Construct validity: a structured prompt moves scores ~17–20 Core points, so results reflect the system+prompt configuration, not raw model capability.
+- Verifiability: hidden-set scores and comparator rows are maintainer-attested; only the question set is cryptographically fixed. Comparator tools are under NDA, so per-vendor identities cannot be disclosed.
+- Minor schema drift across lanes (Golden uses `search_id`; others use `id`).
 
 ---
 
