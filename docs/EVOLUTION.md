@@ -1,6 +1,8 @@
 # Evolution of cds-bench
 
-*Postmarks in the development of this family-medicine CDS working benchmark (Feb–Jun 2026), and the prior work it builds on. The full field report lives in the originating internal evaluation program.*
+*Postmarks in the development of this family-medicine CDS working benchmark (Feb–Jun 2026), and the prior work it builds on.*
+
+> **Note:** This repository is a *cleaned public snapshot*, first published June 2026 — so its git history begins at publication, not at the work below. The Feb–Jun 2026 development (and the full run logs) happened in the originating internal evaluation program and is not in this repo's commit history.
 
 ---
 

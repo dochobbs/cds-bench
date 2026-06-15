@@ -807,6 +807,7 @@ def render_html(public: dict, *, rubrics: dict[str, str]) -> str:
   <p class="lede">
     The benchmark grew in phases from Feb&ndash;Jun 2026.
     See <a href="docs/EVOLUTION.md"><code>docs/EVOLUTION.md</code></a> for the full narrative.
+    <br><span style="font-size:0.88em;opacity:0.78">This repository is a cleaned public snapshot, first published June 2026 &mdash; its git history begins at publication, not at the work below; the Feb&ndash;Jun development happened in the originating internal program.</span>
   </p>
 
   <div id="tl">
